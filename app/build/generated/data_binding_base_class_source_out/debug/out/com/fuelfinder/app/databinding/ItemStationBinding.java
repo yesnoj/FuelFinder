@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.fuelfinder.app.R;
+import com.google.android.material.button.MaterialButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -18,6 +19,9 @@ import java.lang.String;
 public final class ItemStationBinding implements ViewBinding {
   @NonNull
   private final CardView rootView;
+
+  @NonNull
+  public final MaterialButton btnNavigate;
 
   @NonNull
   public final TextView tvStationAddress;
@@ -31,10 +35,11 @@ public final class ItemStationBinding implements ViewBinding {
   @NonNull
   public final TextView tvStationPrice;
 
-  private ItemStationBinding(@NonNull CardView rootView, @NonNull TextView tvStationAddress,
-      @NonNull TextView tvStationDistance, @NonNull TextView tvStationName,
-      @NonNull TextView tvStationPrice) {
+  private ItemStationBinding(@NonNull CardView rootView, @NonNull MaterialButton btnNavigate,
+      @NonNull TextView tvStationAddress, @NonNull TextView tvStationDistance,
+      @NonNull TextView tvStationName, @NonNull TextView tvStationPrice) {
     this.rootView = rootView;
+    this.btnNavigate = btnNavigate;
     this.tvStationAddress = tvStationAddress;
     this.tvStationDistance = tvStationDistance;
     this.tvStationName = tvStationName;
@@ -68,6 +73,12 @@ public final class ItemStationBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btnNavigate;
+      MaterialButton btnNavigate = ViewBindings.findChildViewById(rootView, id);
+      if (btnNavigate == null) {
+        break missingId;
+      }
+
       id = R.id.tvStationAddress;
       TextView tvStationAddress = ViewBindings.findChildViewById(rootView, id);
       if (tvStationAddress == null) {
@@ -92,8 +103,8 @@ public final class ItemStationBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemStationBinding((CardView) rootView, tvStationAddress, tvStationDistance,
-          tvStationName, tvStationPrice);
+      return new ItemStationBinding((CardView) rootView, btnNavigate, tvStationAddress,
+          tvStationDistance, tvStationName, tvStationPrice);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

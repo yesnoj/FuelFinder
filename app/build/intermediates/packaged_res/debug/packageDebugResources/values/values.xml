@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="divider">#E0E0E0</color>
-    <color name="green">#2E7D32</color>
+    <color name="accent">#FF6F00</color>
+    <color name="background">#FAFAFA</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="green">#4CAF50</color>
     <color name="primary">#1E88E5</color>
+    <color name="primary_dark">#1565C0</color>
+    <color name="red">#F44336</color>
     <color name="text_primary">#212121</color>
-    <color name="text_secondary">#616161</color>
+    <color name="text_secondary">#757575</color>
     <string name="app_name">FuelFinder</string>
     <style name="Theme.FuelFinder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondaryVariant">@color/accent</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
     </style>
 </resources>

@@ -1,4 +1,4 @@
-#Sat Dec 27 22:55:40 CET 2025
+#Sat Dec 27 23:37:52 CET 2025
 base.0=/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
 base.2=/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/build/intermediates/dex/debug/mergeProjectDexDebug/6/classes.dex

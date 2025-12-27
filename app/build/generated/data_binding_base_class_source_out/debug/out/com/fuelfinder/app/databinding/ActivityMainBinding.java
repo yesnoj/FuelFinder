@@ -16,10 +16,10 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.fuelfinder.app.R;
 import com.google.android.gms.maps.MapView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -32,7 +32,7 @@ public final class ActivityMainBinding implements ViewBinding {
   public final LinearLayout bottomSheet;
 
   @NonNull
-  public final ExtendedFloatingActionButton btnFindFuel;
+  public final MaterialButton btnFindFuel;
 
   @NonNull
   public final ImageButton btnSettings;
@@ -41,7 +41,22 @@ public final class ActivityMainBinding implements ViewBinding {
   public final MaterialCardView cardTopInfo;
 
   @NonNull
+  public final Chip chipBenzina;
+
+  @NonNull
+  public final Chip chipGasolio;
+
+  @NonNull
+  public final Chip chipGpl;
+
+  @NonNull
+  public final ChipGroup chipGroupFuel;
+
+  @NonNull
   public final ChipGroup chipGroupSort;
+
+  @NonNull
+  public final Chip chipMetano;
 
   @NonNull
   public final Chip chipSortDistance;
@@ -50,10 +65,10 @@ public final class ActivityMainBinding implements ViewBinding {
   public final Chip chipSortPrice;
 
   @NonNull
-  public final ImageView ivLoc;
+  public final LinearLayout fuelControlsLayout;
 
   @NonNull
-  public final LinearLayout layoutStats;
+  public final ImageView ivLoc;
 
   @NonNull
   public final LinearLayout liveIndicator;
@@ -65,16 +80,7 @@ public final class ActivityMainBinding implements ViewBinding {
   public final RecyclerView recyclerViewStations;
 
   @NonNull
-  public final TextView tvDistance;
-
-  @NonNull
-  public final TextView tvSpeed;
-
-  @NonNull
   public final TextView tvSubtitle;
-
-  @NonNull
-  public final TextView tvTime;
 
   @NonNull
   public final TextView tvTitle;
@@ -83,31 +89,34 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvUpdateStatus;
 
   private ActivityMainBinding(@NonNull CoordinatorLayout rootView,
-      @NonNull LinearLayout bottomSheet, @NonNull ExtendedFloatingActionButton btnFindFuel,
+      @NonNull LinearLayout bottomSheet, @NonNull MaterialButton btnFindFuel,
       @NonNull ImageButton btnSettings, @NonNull MaterialCardView cardTopInfo,
-      @NonNull ChipGroup chipGroupSort, @NonNull Chip chipSortDistance, @NonNull Chip chipSortPrice,
-      @NonNull ImageView ivLoc, @NonNull LinearLayout layoutStats,
+      @NonNull Chip chipBenzina, @NonNull Chip chipGasolio, @NonNull Chip chipGpl,
+      @NonNull ChipGroup chipGroupFuel, @NonNull ChipGroup chipGroupSort, @NonNull Chip chipMetano,
+      @NonNull Chip chipSortDistance, @NonNull Chip chipSortPrice,
+      @NonNull LinearLayout fuelControlsLayout, @NonNull ImageView ivLoc,
       @NonNull LinearLayout liveIndicator, @NonNull MapView mapView,
-      @NonNull RecyclerView recyclerViewStations, @NonNull TextView tvDistance,
-      @NonNull TextView tvSpeed, @NonNull TextView tvSubtitle, @NonNull TextView tvTime,
+      @NonNull RecyclerView recyclerViewStations, @NonNull TextView tvSubtitle,
       @NonNull TextView tvTitle, @NonNull TextView tvUpdateStatus) {
     this.rootView = rootView;
     this.bottomSheet = bottomSheet;
     this.btnFindFuel = btnFindFuel;
     this.btnSettings = btnSettings;
     this.cardTopInfo = cardTopInfo;
+    this.chipBenzina = chipBenzina;
+    this.chipGasolio = chipGasolio;
+    this.chipGpl = chipGpl;
+    this.chipGroupFuel = chipGroupFuel;
     this.chipGroupSort = chipGroupSort;
+    this.chipMetano = chipMetano;
     this.chipSortDistance = chipSortDistance;
     this.chipSortPrice = chipSortPrice;
+    this.fuelControlsLayout = fuelControlsLayout;
     this.ivLoc = ivLoc;
-    this.layoutStats = layoutStats;
     this.liveIndicator = liveIndicator;
     this.mapView = mapView;
     this.recyclerViewStations = recyclerViewStations;
-    this.tvDistance = tvDistance;
-    this.tvSpeed = tvSpeed;
     this.tvSubtitle = tvSubtitle;
-    this.tvTime = tvTime;
     this.tvTitle = tvTitle;
     this.tvUpdateStatus = tvUpdateStatus;
   }
@@ -146,7 +155,7 @@ public final class ActivityMainBinding implements ViewBinding {
       }
 
       id = R.id.btnFindFuel;
-      ExtendedFloatingActionButton btnFindFuel = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnFindFuel = ViewBindings.findChildViewById(rootView, id);
       if (btnFindFuel == null) {
         break missingId;
       }
@@ -163,9 +172,39 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.chipBenzina;
+      Chip chipBenzina = ViewBindings.findChildViewById(rootView, id);
+      if (chipBenzina == null) {
+        break missingId;
+      }
+
+      id = R.id.chipGasolio;
+      Chip chipGasolio = ViewBindings.findChildViewById(rootView, id);
+      if (chipGasolio == null) {
+        break missingId;
+      }
+
+      id = R.id.chipGpl;
+      Chip chipGpl = ViewBindings.findChildViewById(rootView, id);
+      if (chipGpl == null) {
+        break missingId;
+      }
+
+      id = R.id.chipGroupFuel;
+      ChipGroup chipGroupFuel = ViewBindings.findChildViewById(rootView, id);
+      if (chipGroupFuel == null) {
+        break missingId;
+      }
+
       id = R.id.chipGroupSort;
       ChipGroup chipGroupSort = ViewBindings.findChildViewById(rootView, id);
       if (chipGroupSort == null) {
+        break missingId;
+      }
+
+      id = R.id.chipMetano;
+      Chip chipMetano = ViewBindings.findChildViewById(rootView, id);
+      if (chipMetano == null) {
         break missingId;
       }
 
@@ -181,15 +220,15 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.ivLoc;
-      ImageView ivLoc = ViewBindings.findChildViewById(rootView, id);
-      if (ivLoc == null) {
+      id = R.id.fuelControlsLayout;
+      LinearLayout fuelControlsLayout = ViewBindings.findChildViewById(rootView, id);
+      if (fuelControlsLayout == null) {
         break missingId;
       }
 
-      id = R.id.layoutStats;
-      LinearLayout layoutStats = ViewBindings.findChildViewById(rootView, id);
-      if (layoutStats == null) {
+      id = R.id.ivLoc;
+      ImageView ivLoc = ViewBindings.findChildViewById(rootView, id);
+      if (ivLoc == null) {
         break missingId;
       }
 
@@ -211,27 +250,9 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvDistance;
-      TextView tvDistance = ViewBindings.findChildViewById(rootView, id);
-      if (tvDistance == null) {
-        break missingId;
-      }
-
-      id = R.id.tvSpeed;
-      TextView tvSpeed = ViewBindings.findChildViewById(rootView, id);
-      if (tvSpeed == null) {
-        break missingId;
-      }
-
       id = R.id.tvSubtitle;
       TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
       if (tvSubtitle == null) {
-        break missingId;
-      }
-
-      id = R.id.tvTime;
-      TextView tvTime = ViewBindings.findChildViewById(rootView, id);
-      if (tvTime == null) {
         break missingId;
       }
 
@@ -248,9 +269,9 @@ public final class ActivityMainBinding implements ViewBinding {
       }
 
       return new ActivityMainBinding((CoordinatorLayout) rootView, bottomSheet, btnFindFuel,
-          btnSettings, cardTopInfo, chipGroupSort, chipSortDistance, chipSortPrice, ivLoc,
-          layoutStats, liveIndicator, mapView, recyclerViewStations, tvDistance, tvSpeed,
-          tvSubtitle, tvTime, tvTitle, tvUpdateStatus);
+          btnSettings, cardTopInfo, chipBenzina, chipGasolio, chipGpl, chipGroupFuel, chipGroupSort,
+          chipMetano, chipSortDistance, chipSortPrice, fuelControlsLayout, ivLoc, liveIndicator,
+          mapView, recyclerViewStations, tvSubtitle, tvTitle, tvUpdateStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <!-- Map -->
@@ -22,9 +23,7 @@
         android:layout_gravity="top"
         app:cardElevation="8dp"
         app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="#CC1E1E1E"
-        app:strokeColor="#33FFFFFF"
-        app:strokeWidth="1dp">
+        app:cardBackgroundColor="@color/card_background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,7 +48,7 @@
                 android:text="Posizione attuale"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
+                android:textColor="@color/text_primary"
                 app:layout_constraintStart_toEndOf="@id/ivLoc"
                 app:layout_constraintTop_toTopOf="@id/ivLoc"
                 app:layout_constraintEnd_toStartOf="@id/btnSettings"
@@ -61,20 +60,20 @@
                 android:layout_height="wrap_content"
                 android:text="Monitoraggio GPS attivo"
                 android:textSize="12sp"
-                android:textColor="@android:color/white"
+                android:textColor="@color/text_secondary"
                 app:layout_constraintStart_toStartOf="@id/tvTitle"
                 app:layout_constraintTop_toBottomOf="@id/tvTitle"
                 app:layout_constraintEnd_toStartOf="@id/btnSettings" />
 
-            <!-- Settings button inside the card (always visible, non-overlapping) -->
+            <!-- Settings button -->
             <ImageButton
                 android:id="@+id/btnSettings"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/circle_button"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_settings"
-                app:tint="@android:color/white"
-                android:elevation="4dp"
+                app:tint="@color/text_primary"
+                android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,12 +85,12 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:background="@drawable/live_badge"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
                 android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@id/btnSettings"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="10dp">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/fuelControlsLayout"
+                android:layout_marginBottom="8dp">
 
                 <View
                     android:layout_width="8dp"
@@ -102,136 +101,89 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="LIVE"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    android:layout_marginStart="6dp" />
+                    android:textColor="@color/green"
+                    android:layout_marginStart="4dp" />
             </LinearLayout>
 
-            <!-- Trip stats row -->
+            <!-- Fuel type selection and search controls -->
             <LinearLayout
-                android:id="@+id/layoutStats"
+                android:id="@+id/fuelControlsLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:background="@drawable/stats_background"
                 android:padding="12dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivLoc">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <!-- Fuel type chips -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupFuel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    app:chipSpacingHorizontal="8dp">
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGasolio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Velocità"
-                        android:textSize="11sp"
-                        android:textColor="@android:color/white" />
+                        android:text="Diesel"
+                        android:checked="true"
+                        style="@style/Widget.MaterialComponents.Chip.Choice" />
 
-                    <TextView
-                        android:id="@+id/tvSpeed"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBenzina"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0 km/h"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white" />
-                </LinearLayout>
+                        android:text="Benzina"
+                        style="@style/Widget.MaterialComponents.Chip.Choice" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/divider" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGpl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GPL"
+                        style="@style/Widget.MaterialComponents.Chip.Choice" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipMetano"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Metano"
+                        style="@style/Widget.MaterialComponents.Chip.Choice" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <!-- Search button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFindFuel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_marginTop="8dp"
+                    android:text="Avvia ricerca"
+                    app:icon="@drawable/ic_fuel"
+                    app:iconGravity="textStart"
+                    app:backgroundTint="@color/primary" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Percorsi"
-                        android:textSize="11sp"
-                        android:textColor="@android:color/white" />
-
-                    <TextView
-                        android:id="@+id/tvDistance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0,0 km"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/divider" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tempo"
-                        android:textSize="11sp"
-                        android:textColor="@android:color/white" />
-
-                    <TextView
-                        android:id="@+id/tvTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 min"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white" />
-                </LinearLayout>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Start/Stop search button (top, under info card) -->
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnFindFuel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_gravity="top"
-        android:text="Avvia ricerca"
-        app:icon="@drawable/ic_fuel"
-        app:backgroundTint="@color/primary"
-        app:layout_anchor="@id/cardTopInfo"
-        app:layout_anchorGravity="bottom" />
-
-    <!-- Bottom Sheet for Results (always available) -->
+    <!-- Bottom Sheet for Results -->
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="200dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/bottom_sheet_background"
         android:elevation="16dp"
-        app:behavior_peekHeight="200dp"
+        app:behavior_peekHeight="80dp"
         app:behavior_hideable="false"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -239,7 +191,7 @@
             android:layout_width="40dp"
             android:layout_height="4dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/handle" />
 
         <LinearLayout
@@ -254,7 +206,7 @@
                 android:text="Benzinai nelle vicinanze"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/text_primary" />
 
             <TextView
                 android:id="@+id/tvUpdateStatus"
@@ -262,13 +214,14 @@
                 android:layout_height="wrap_content"
                 android:text="In attesa ricerca…"
                 android:textSize="12sp"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupSort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 app:singleSelection="true"
                 app:checkedChip="@id/chipSortPrice">
 
@@ -292,8 +245,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewStations"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:clipToPadding="false" />
 
     </LinearLayout>
 

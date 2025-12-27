@@ -4,14 +4,16 @@ package com.fuelfinder.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.fuelfinder.app.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.slider.Slider;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -19,37 +21,60 @@ import java.lang.String;
 
 public final class DialogSettingsBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final ScrollView rootView;
 
   @NonNull
-  public final Slider seekFrequency;
+  public final MaterialButton btnCancel;
+
+  @NonNull
+  public final MaterialButton btnOk;
+
+  @NonNull
+  public final RadioButton radioFreq1;
+
+  @NonNull
+  public final RadioButton radioFreq3;
+
+  @NonNull
+  public final RadioButton radioFreq5;
+
+  @NonNull
+  public final RadioGroup radioGroupFrequency;
+
+  @NonNull
+  public final Slider seekMaxResults;
 
   @NonNull
   public final Slider seekRadius;
 
   @NonNull
-  public final Spinner spinnerFuelType;
-
-  @NonNull
-  public final TextView tvFrequencyValue;
+  public final TextView tvMaxResultsValue;
 
   @NonNull
   public final TextView tvRadiusValue;
 
-  private DialogSettingsBinding(@NonNull LinearLayout rootView, @NonNull Slider seekFrequency,
-      @NonNull Slider seekRadius, @NonNull Spinner spinnerFuelType,
-      @NonNull TextView tvFrequencyValue, @NonNull TextView tvRadiusValue) {
+  private DialogSettingsBinding(@NonNull ScrollView rootView, @NonNull MaterialButton btnCancel,
+      @NonNull MaterialButton btnOk, @NonNull RadioButton radioFreq1,
+      @NonNull RadioButton radioFreq3, @NonNull RadioButton radioFreq5,
+      @NonNull RadioGroup radioGroupFrequency, @NonNull Slider seekMaxResults,
+      @NonNull Slider seekRadius, @NonNull TextView tvMaxResultsValue,
+      @NonNull TextView tvRadiusValue) {
     this.rootView = rootView;
-    this.seekFrequency = seekFrequency;
+    this.btnCancel = btnCancel;
+    this.btnOk = btnOk;
+    this.radioFreq1 = radioFreq1;
+    this.radioFreq3 = radioFreq3;
+    this.radioFreq5 = radioFreq5;
+    this.radioGroupFrequency = radioGroupFrequency;
+    this.seekMaxResults = seekMaxResults;
     this.seekRadius = seekRadius;
-    this.spinnerFuelType = spinnerFuelType;
-    this.tvFrequencyValue = tvFrequencyValue;
+    this.tvMaxResultsValue = tvMaxResultsValue;
     this.tvRadiusValue = tvRadiusValue;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public ScrollView getRoot() {
     return rootView;
   }
 
@@ -74,9 +99,45 @@ public final class DialogSettingsBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.seekFrequency;
-      Slider seekFrequency = ViewBindings.findChildViewById(rootView, id);
-      if (seekFrequency == null) {
+      id = R.id.btnCancel;
+      MaterialButton btnCancel = ViewBindings.findChildViewById(rootView, id);
+      if (btnCancel == null) {
+        break missingId;
+      }
+
+      id = R.id.btnOk;
+      MaterialButton btnOk = ViewBindings.findChildViewById(rootView, id);
+      if (btnOk == null) {
+        break missingId;
+      }
+
+      id = R.id.radioFreq1;
+      RadioButton radioFreq1 = ViewBindings.findChildViewById(rootView, id);
+      if (radioFreq1 == null) {
+        break missingId;
+      }
+
+      id = R.id.radioFreq3;
+      RadioButton radioFreq3 = ViewBindings.findChildViewById(rootView, id);
+      if (radioFreq3 == null) {
+        break missingId;
+      }
+
+      id = R.id.radioFreq5;
+      RadioButton radioFreq5 = ViewBindings.findChildViewById(rootView, id);
+      if (radioFreq5 == null) {
+        break missingId;
+      }
+
+      id = R.id.radioGroupFrequency;
+      RadioGroup radioGroupFrequency = ViewBindings.findChildViewById(rootView, id);
+      if (radioGroupFrequency == null) {
+        break missingId;
+      }
+
+      id = R.id.seekMaxResults;
+      Slider seekMaxResults = ViewBindings.findChildViewById(rootView, id);
+      if (seekMaxResults == null) {
         break missingId;
       }
 
@@ -86,15 +147,9 @@ public final class DialogSettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.spinnerFuelType;
-      Spinner spinnerFuelType = ViewBindings.findChildViewById(rootView, id);
-      if (spinnerFuelType == null) {
-        break missingId;
-      }
-
-      id = R.id.tvFrequencyValue;
-      TextView tvFrequencyValue = ViewBindings.findChildViewById(rootView, id);
-      if (tvFrequencyValue == null) {
+      id = R.id.tvMaxResultsValue;
+      TextView tvMaxResultsValue = ViewBindings.findChildViewById(rootView, id);
+      if (tvMaxResultsValue == null) {
         break missingId;
       }
 
@@ -104,8 +159,9 @@ public final class DialogSettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new DialogSettingsBinding((LinearLayout) rootView, seekFrequency, seekRadius,
-          spinnerFuelType, tvFrequencyValue, tvRadiusValue);
+      return new DialogSettingsBinding((ScrollView) rootView, btnCancel, btnOk, radioFreq1,
+          radioFreq3, radioFreq5, radioGroupFrequency, seekMaxResults, seekRadius,
+          tvMaxResultsValue, tvRadiusValue);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

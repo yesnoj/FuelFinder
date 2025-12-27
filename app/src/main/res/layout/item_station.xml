@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:foreground="?attr/selectableItemBackground"
-    android:elevation="4dp">
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="12dp">
 
         <TextView
             android:id="@+id/tvStationName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:text="Station" />
+            android:text="Station"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnNavigate" />
 
         <TextView
             android:id="@+id/tvStationAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="13sp"
-            android:text="Address" />
+            android:text="Address"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStationName"
+            app:layout_constraintEnd_toStartOf="@id/btnNavigate" />
 
-        
         <TextView
             android:id="@+id/tvStationDistance"
             android:layout_width="wrap_content"
@@ -35,16 +41,35 @@
             android:textSize="13sp"
             android:textColor="@android:color/darker_gray"
             android:text="-- km"
-            android:paddingTop="4dp" />
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStationAddress" />
 
         <TextView
             android:id="@+id/tvStationPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:text="€ 1.799 / L"
-            android:paddingTop="6dp" />
-    </LinearLayout>
+            android:textColor="@color/primary"
+            android:text="€ 1.799"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStationDistance" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavigate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VAI"
+            app:icon="@drawable/ic_navigation"
+            app:iconGravity="textStart"
+            app:backgroundTint="@color/green"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -9,13 +9,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
-/**
- * API Client per gestire le chiamate al backend
- */
 object ApiClient {
-    
-    private const val BASE_URL = BuildConfig.BASE_URL
-    
+
+    // Try the correct endpoint format
+    private const val BASE_URL = "https://prezzi-carburante.onrender.com/"
+
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor.Level.BODY
@@ -23,7 +21,7 @@ object ApiClient {
             HttpLoggingInterceptor.Level.NONE
         }
     }
-    
+
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor { chain ->
@@ -31,7 +29,8 @@ object ApiClient {
             val request = original.newBuilder()
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
-                                .method(original.method, original.body)
+                .header("User-Agent", "FuelFinder-Android/1.0")
+                .method(original.method, original.body)
                 .build()
             chain.proceed(request)
         }
@@ -39,31 +38,41 @@ object ApiClient {
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .build()
-    
+
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
         .build()
-    
+
     val fuelService: FuelService = retrofit.create(FuelService::class.java)
     val directionsService: DirectionsService = retrofit.create(DirectionsService::class.java)
 }
 
 /**
- * Service per l'API prezzi-carburante (open data MIMIT)
- * Repo: https://github.com/dstmrk/prezzi-carburante
- * Endpoint live: https://prezzi-carburante.onrender.com
+ * Service per l'API prezzi-carburante
+ * Trying different endpoint formats based on the API documentation
  */
 interface FuelService {
 
+    // Try different endpoint variations
     @GET("api/distributori")
     fun getNearbyStations(
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double,
         @Query("distance") distanceKm: Int,
         @Query("fuel") fuel: String,
-        @Query("results") results: Int = 20
+        @Query("results") results: Int = 50 // Increased default
+    ): Call<List<DistributorDto>>
+
+    // Alternative endpoint format
+    @GET("distributori")
+    fun getNearbyStationsAlt(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("radius") radiusKm: Int,
+        @Query("carburante") carburante: String,
+        @Query("limit") limit: Int = 50
     ): Call<List<DistributorDto>>
 }
 
@@ -79,12 +88,8 @@ data class DistributorDto(
     val longitudine: Double? = null
 )
 
-
-/**
- * Service per Google Directions API
- */
 interface DirectionsService {
-    
+
     @GET("https://maps.googleapis.com/maps/api/directions/json")
     fun getDirections(
         @Query("origin") origin: String,
@@ -93,7 +98,7 @@ interface DirectionsService {
         @Query("key") apiKey: String = BuildConfig.GOOGLE_MAPS_API_KEY,
         @Query("language") language: String = "it"
     ): Call<DirectionsResponse>
-    
+
     @GET("https://maps.googleapis.com/maps/api/distancematrix/json")
     fun getDistanceMatrix(
         @Query("origins") origins: String,
@@ -104,18 +109,6 @@ interface DirectionsService {
     ): Call<DistanceMatrixResponse>
 }
 
-/**
- * Request/Response models
- */
-data class SearchRequest(
-    val latitude: Double,
-    val longitude: Double,
-    val radius: Int,
-    val fuelType: String,
-    val maxResults: Int = 20,
-    val sortBy: String = "price" // "price", "distance"
-)
-
 data class DirectionsResponse(
     val routes: List<Route>,
     val status: String
@@ -124,7 +117,7 @@ data class DirectionsResponse(
         val legs: List<Leg>,
         val overview_polyline: Polyline
     )
-    
+
     data class Leg(
         val distance: Distance,
         val duration: Duration,
@@ -132,28 +125,28 @@ data class DirectionsResponse(
         val end_location: LatLng,
         val steps: List<Step>
     )
-    
+
     data class Distance(
         val text: String,
-        val value: Int // meters
+        val value: Int
     )
-    
+
     data class Duration(
         val text: String,
-        val value: Int // seconds
+        val value: Int
     )
-    
+
     data class LatLng(
         val lat: Double,
         val lng: Double
     )
-    
+
     data class Step(
         val distance: Distance,
         val duration: Duration,
         val polyline: Polyline
     )
-    
+
     data class Polyline(
         val points: String
     )
@@ -166,32 +159,26 @@ data class DistanceMatrixResponse(
     data class Row(
         val elements: List<Element>
     )
-    
+
     data class Element(
         val distance: Distance?,
         val duration: Duration?,
         val status: String
     )
-    
+
     data class Distance(
         val text: String,
-        val value: Int // meters
+        val value: Int
     )
-    
+
     data class Duration(
         val text: String,
-        val value: Int // seconds
+        val value: Int
     )
 }
 
-/**
- * Utility per calcolare distanze reali usando Google Directions
- */
 class RealDistanceCalculator {
-    
-    /**
-     * Calcola la distanza stradale reale tra due punti
-     */
+
     suspend fun getRealDistance(
         originLat: Double,
         originLon: Double,
@@ -201,16 +188,16 @@ class RealDistanceCalculator {
         return try {
             val origin = "$originLat,$originLon"
             val destination = "$destLat,$destLon"
-            
+
             val response = ApiClient.directionsService.getDirections(
                 origin = origin,
                 destination = destination
             ).execute()
-            
+
             if (response.isSuccessful && response.body()?.routes?.isNotEmpty() == true) {
                 val route = response.body()!!.routes[0]
                 val leg = route.legs[0]
-                
+
                 RealDistanceResult(
                     distanceKm = leg.distance.value / 1000.0,
                     distanceText = leg.distance.text,
@@ -226,25 +213,22 @@ class RealDistanceCalculator {
             null
         }
     }
-    
-    /**
-     * Calcola distanze multiple in batch (più efficiente)
-     */
+
     suspend fun getBatchDistances(
         origin: Pair<Double, Double>,
         destinations: List<Pair<Double, Double>>
     ): List<RealDistanceResult?> {
         return try {
             val originStr = "${origin.first},${origin.second}"
-            val destinationsStr = destinations.joinToString("|") { 
-                "${it.first},${it.second}" 
+            val destinationsStr = destinations.joinToString("|") {
+                "${it.first},${it.second}"
             }
-            
+
             val response = ApiClient.directionsService.getDistanceMatrix(
                 origins = originStr,
                 destinations = destinationsStr
             ).execute()
-            
+
             if (response.isSuccessful && response.body()?.rows?.isNotEmpty() == true) {
                 response.body()!!.rows[0].elements.map { element ->
                     if (element.status == "OK" && element.distance != null && element.duration != null) {
@@ -253,7 +237,7 @@ class RealDistanceCalculator {
                             distanceText = element.distance.text,
                             durationMinutes = element.duration.value / 60,
                             durationText = element.duration.text,
-                            polyline = null // Not available in distance matrix
+                            polyline = null
                         )
                     } else {
                         null
@@ -267,7 +251,7 @@ class RealDistanceCalculator {
             destinations.map { null }
         }
     }
-    
+
     data class RealDistanceResult(
         val distanceKm: Double,
         val distanceText: String,

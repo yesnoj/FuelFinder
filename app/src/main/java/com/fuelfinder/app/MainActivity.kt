@@ -33,8 +33,8 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,21 +42,20 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.math.min
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // UI
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
-    private lateinit var btnFindFuel: ExtendedFloatingActionButton
+    private lateinit var btnFindFuel: MaterialButton
     private lateinit var btnSettings: ImageButton
     private lateinit var chipGroupSort: ChipGroup
+    private lateinit var chipGroupFuel: ChipGroup
     private lateinit var stationRecyclerView: RecyclerView
     private lateinit var bottomSheet: View
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    private lateinit var tvSpeed: TextView
-    private lateinit var tvDistance: TextView
-    private lateinit var tvTime: TextView
     private lateinit var tvUpdateStatus: TextView
     private lateinit var liveIndicator: View
 
@@ -64,19 +63,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var currentLocation: Location? = null
-    private var lastLocation: Location? = null
     private var userMarker: Marker? = null
-
-    // Trip stats
-    private var tripStartTime = System.currentTimeMillis()
-    private var tripDistanceKm = 0.0
 
     // Search state
     private var isLiveSearchActive = false
-    private var selectedFuelType = FuelType.DIESEL
-    private var searchRadiusKm = 10 // used ONLY to limit results we fetch
-    private var updateFrequencySec = 30
+    private var selectedFuelType = FuelType.GASOLIO
+    private var searchRadiusKm = 10
+    private var maxResults = 20
+    private var updateFrequencyMin = 1
     private var sortMode = SortMode.PRICE
+    private var originalSearchRadius = 10
 
     // Stations
     private val stationMarkers = mutableListOf<Marker>()
@@ -86,11 +82,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     // Update handler
     private val updateHandler = Handler(Looper.getMainLooper())
     private var updateRunnable: Runnable? = null
+    private var locationRetryCount = 0
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST = 1001
         private const val DEFAULT_ZOOM = 13f
-        private const val MAX_DIRECTIONS_REQUESTS = 12 // keep quota under control
+        private const val MAX_LOCATION_RETRIES = 5
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +97,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         initViews()
         initMap(savedInstanceState)
         initLocation()
-
         setupListeners()
         checkLocationPermission()
     }
@@ -110,11 +106,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         btnFindFuel = findViewById(R.id.btnFindFuel)
         btnSettings = findViewById(R.id.btnSettings)
         chipGroupSort = findViewById(R.id.chipGroupSort)
+        chipGroupFuel = findViewById(R.id.chipGroupFuel)
         stationRecyclerView = findViewById(R.id.recyclerViewStations)
         bottomSheet = findViewById(R.id.bottomSheet)
-        tvSpeed = findViewById(R.id.tvSpeed)
-        tvDistance = findViewById(R.id.tvDistance)
-        tvTime = findViewById(R.id.tvTime)
         tvUpdateStatus = findViewById(R.id.tvUpdateStatus)
         liveIndicator = findViewById(R.id.liveIndicator)
 
@@ -139,16 +133,35 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                locationResult.lastLocation?.let { updateUserLocation(it) }
+                locationResult.lastLocation?.let {
+                    updateUserLocation(it)
+                    locationRetryCount = 0
+                }
             }
         }
     }
 
     private fun setupListeners() {
         btnFindFuel.setOnClickListener { toggleLiveSearch() }
-
         btnSettings.setOnClickListener { openSettings() }
 
+        // Fuel type selection
+        chipGroupFuel.setOnCheckedChangeListener { _, checkedId ->
+            selectedFuelType = when (checkedId) {
+                R.id.chipGasolio -> FuelType.GASOLIO
+                R.id.chipBenzina -> FuelType.BENZINA
+                R.id.chipGpl -> FuelType.GPL
+                R.id.chipMetano -> FuelType.METANO
+                else -> FuelType.GASOLIO
+            }
+
+            // If search is active, update immediately
+            if (isLiveSearchActive) {
+                searchAndUpdate()
+            }
+        }
+
+        // Sort mode selection
         chipGroupSort.setOnCheckedChangeListener { _, checkedId ->
             sortMode = when (checkedId) {
                 R.id.chipSortDistance -> SortMode.DISTANCE
@@ -172,9 +185,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         enableMyLocation()
     }
 
-    // --------------------
-    // Permissions & location
-    // --------------------
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
@@ -193,7 +203,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
         ) {
-            googleMap.isMyLocationEnabled = false // we draw our own marker
+            googleMap.isMyLocationEnabled = false
             getLastKnownLocation()
         }
     }
@@ -230,15 +240,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun updateUserLocation(location: Location) {
         currentLocation = location
 
-        // Trip stats
-        lastLocation?.let { prev ->
-            val deltaM = prev.distanceTo(location).toDouble()
-            if (deltaM.isFinite() && deltaM >= 0) tripDistanceKm += deltaM / 1000.0
-        }
-        lastLocation = location
-        updateTripStats(location.speed)
-
-        // Marker
+        // Update marker
         val latLng = LatLng(location.latitude, location.longitude)
         userMarker?.remove()
         userMarker = googleMap.addMarker(
@@ -248,24 +250,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         )
 
-        // If live search is active, we refresh distances (route-based) for shown stations
+        // Update distances if searching - this happens automatically when location changes
         if (isLiveSearchActive && currentStations.isNotEmpty()) {
-            // update air distances first (cheap), then fetch directions on a limited subset
             updateAirDistances()
-            fetchRouteDistancesForTopStations()
+            // Update the displayed distances in the list
+            applySortAndRefresh()
+            // Update marker snippets with new distances
+            updateMarkerSnippets()
         }
     }
 
-    private fun updateTripStats(speedMps: Float) {
-        val elapsedMin = ((System.currentTimeMillis() - tripStartTime) / 60000).coerceAtLeast(0)
-        tvSpeed.text = "${(speedMps * 3.6f).toInt()} km/h"
-        tvDistance.text = String.format("%.1f km", tripDistanceKm)
-        tvTime.text = "$elapsedMin min"
-    }
-
-    // --------------------
-    // Live search
-    // --------------------
     private fun toggleLiveSearch() {
         if (isLiveSearchActive) stopLiveSearch() else startLiveSearch()
     }
@@ -273,33 +267,51 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun startLiveSearch() {
         if (currentLocation == null) {
             showToast("Attendo la posizione GPS…")
+
+            if (locationRetryCount < MAX_LOCATION_RETRIES) {
+                locationRetryCount++
+                updateHandler.postDelayed({
+                    if (currentLocation != null) {
+                        startLiveSearch()
+                    } else {
+                        showToast("GPS non ancora disponibile. Riprovo...")
+                        startLiveSearch()
+                    }
+                }, 2000)
+            } else {
+                showToast("Impossibile ottenere la posizione GPS")
+                locationRetryCount = 0
+            }
             return
         }
 
+        locationRetryCount = 0
         isLiveSearchActive = true
         liveIndicator.visibility = View.VISIBLE
+
+        searchRadiusKm = originalSearchRadius
 
         btnFindFuel.apply {
             text = "Stop ricerca"
             setIconResource(R.drawable.ic_stop)
-            setBackgroundColor(ContextCompat.getColor(context, R.color.green))
+            setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.red))
         }
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        // immediate search
+        // Immediate search
         searchAndUpdate()
 
-        // periodic updates
+        // Periodic updates
         updateRunnable = object : Runnable {
             override fun run() {
                 if (isLiveSearchActive) {
                     searchAndUpdate()
-                    updateHandler.postDelayed(this, updateFrequencySec * 1000L)
+                    updateHandler.postDelayed(this, updateFrequencyMin * 60000L)
                 }
             }
         }
-        updateHandler.postDelayed(updateRunnable!!, updateFrequencySec * 1000L)
+        updateHandler.postDelayed(updateRunnable!!, updateFrequencyMin * 60000L)
     }
 
     private fun stopLiveSearch() {
@@ -309,17 +321,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         btnFindFuel.apply {
             text = "Avvia ricerca"
             setIconResource(R.drawable.ic_fuel)
-            setBackgroundColor(ContextCompat.getColor(context, R.color.primary))
+            setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.primary))
         }
 
         updateRunnable?.let { updateHandler.removeCallbacks(it) }
 
-        // clear markers + list
         stationMarkers.forEach { it.remove() }
         stationMarkers.clear()
         currentStations.clear()
         stationAdapter.updateStations(emptyList())
         tvUpdateStatus.text = "In attesa ricerca…"
+
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     private fun searchAndUpdate() {
@@ -327,12 +340,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         tvUpdateStatus.text = "Ricerca in corso…"
 
+        println("DEBUG: Searching - lat: ${loc.latitude}, lon: ${loc.longitude}, radius: $searchRadiusKm km, fuel: ${selectedFuelType.value}, max: $maxResults")
+
         ApiClient.fuelService.getNearbyStations(
             latitude = loc.latitude,
             longitude = loc.longitude,
             distanceKm = searchRadiusKm,
             fuel = selectedFuelType.value,
-            results = 20
+            results = maxResults
         ).enqueue(object : Callback<List<DistributorDto>> {
             override fun onResponse(
                 call: Call<List<DistributorDto>>,
@@ -340,19 +355,39 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             ) {
                 if (!response.isSuccessful) {
                     tvUpdateStatus.text = "Errore API: ${response.code()}"
+                    showToast("Errore nel recupero dei dati: ${response.code()}")
                     return
                 }
 
-                val stations = (response.body() ?: emptyList()).mapNotNull { dto ->
+                val body = response.body()
+                println("DEBUG: API Response - ${body?.size ?: 0} stations found")
+
+                if (body.isNullOrEmpty()) {
+                    tvUpdateStatus.text = "Nessun distributore trovato"
+                    if (searchRadiusKm < 50) {
+                        showToast("Amplio il raggio di ricerca a ${min(searchRadiusKm * 2, 50)} km...")
+                        searchRadiusKm = min(searchRadiusKm * 2, 50)
+                        searchAndUpdate()
+                    } else {
+                        showToast("Nessun distributore trovato nel raggio massimo")
+                        currentStations.clear()
+                        stationAdapter.updateStations(emptyList())
+                        stationMarkers.forEach { it.remove() }
+                        stationMarkers.clear()
+                    }
+                    return
+                }
+
+                val stations = body.mapNotNull { dto ->
                     val lat = dto.latitudine ?: return@mapNotNull null
                     val lon = dto.longitudine ?: return@mapNotNull null
-                    val price = (dto.prezzo ?: return@mapNotNull null).toDouble()
+                    val price = dto.prezzo ?: return@mapNotNull null
 
                     FuelStation(
-                        id = (dto.ranking?.toString() ?: "0") + "_" + lat + "_" + lon,
+                        id = "${dto.ranking ?: 0}_${lat}_${lon}",
                         name = dto.gestore ?: "Distributore",
                         brand = dto.gestore ?: "",
-                        address = dto.indirizzo ?: "",
+                        address = dto.indirizzo ?: "Indirizzo non disponibile",
                         latitude = lat,
                         longitude = lon,
                         prices = mapOf(selectedFuelType.value to price),
@@ -363,34 +398,37 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 updateStationDisplay(stations)
-                tvUpdateStatus.text = "Trovati: ${stations.size} • ${getCurrentTime()}"
+                tvUpdateStatus.text = "Trovati: ${stations.size} • Aggiornato: ${getCurrentTime()}"
 
-                // Update distances
                 updateAirDistances()
-                fetchRouteDistancesForTopStations()
             }
 
             override fun onFailure(call: Call<List<DistributorDto>>, t: Throwable) {
-                tvUpdateStatus.text = "Errore rete: ${t.message ?: "sconosciuto"}"
+                tvUpdateStatus.text = "Errore rete"
+                showToast("Errore di connessione: ${t.message}")
+                println("DEBUG: Network error - ${t.message}")
             }
         })
     }
 
     private fun updateStationDisplay(stations: List<FuelStation>) {
-        // clear old station markers
         stationMarkers.forEach { it.remove() }
         stationMarkers.clear()
 
         currentStations.clear()
         currentStations.addAll(stations)
 
-        // add markers
+        // Add new markers with distance info
         stations.forEachIndexed { index, st ->
+            val distanceText = st.airDistanceKm?.let {
+                String.format("%.1f km", it)
+            } ?: ""
+
             val marker = googleMap.addMarker(
                 MarkerOptions()
                     .position(LatLng(st.latitude, st.longitude))
-                    .title(st.name)
-                    .snippet(st.address)
+                    .title("${st.name} - €${String.format("%.3f", st.prices.values.firstOrNull() ?: 0.0)}/L")
+                    .snippet(distanceText)
                     .icon(getMarkerIcon(index))
             )
             if (marker != null) {
@@ -401,28 +439,43 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         applySortAndRefresh()
 
-        // adjust bounds
         if (stations.isNotEmpty()) {
             val b = LatLngBounds.Builder()
             currentLocation?.let { b.include(LatLng(it.latitude, it.longitude)) }
             stations.forEach { b.include(LatLng(it.latitude, it.longitude)) }
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(b.build(), 100))
+
+            try {
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(b.build(), 100))
+            } catch (e: Exception) {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    LatLng(currentLocation?.latitude ?: 42.5, currentLocation?.longitude ?: 12.5),
+                    DEFAULT_ZOOM
+                ))
+            }
+        }
+    }
+
+    private fun updateMarkerSnippets() {
+        stationMarkers.forEach { marker ->
+            val station = marker.tag as? FuelStation
+            station?.airDistanceKm?.let {
+                marker.snippet = String.format("%.1f km", it)
+            }
         }
     }
 
     private fun applySortAndRefresh() {
         val sorted = when (sortMode) {
-            SortMode.PRICE -> currentStations.sortedBy { it.prices.values.firstOrNull() ?: Double.MAX_VALUE }
+            SortMode.PRICE -> currentStations.sortedBy {
+                it.prices.values.firstOrNull() ?: Double.MAX_VALUE
+            }
             SortMode.DISTANCE -> currentStations.sortedBy {
-                it.routeDistanceKm ?: it.airDistanceKm ?: Double.MAX_VALUE
+                it.airDistanceKm ?: Double.MAX_VALUE
             }
         }
         stationAdapter.updateStations(sorted)
     }
 
-    // --------------------
-    // Distances
-    // --------------------
     private fun updateAirDistances() {
         val loc = currentLocation ?: return
         val lat1 = loc.latitude
@@ -434,54 +487,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         applySortAndRefresh()
     }
 
-    private fun fetchRouteDistancesForTopStations() {
-        val loc = currentLocation ?: return
-
-        // pick a subset (closest by air distance) to keep API calls limited
-        val subset = currentStations
-            .sortedBy { it.airDistanceKm ?: Double.MAX_VALUE }
-            .take(MAX_DIRECTIONS_REQUESTS)
-
-        subset.forEach { st ->
-            val origin = "${loc.latitude},${loc.longitude}"
-            val dest = "${st.latitude},${st.longitude}"
-            ApiClient.directionsService.getDirections(
-                origin = origin,
-                destination = dest,
-                mode = "driving",
-                apiKey = BuildConfig.GOOGLE_MAPS_API_KEY
-            ).enqueue(object : Callback<DirectionsResponse> {
-                override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
-                    val body = response.body()
-                    val leg = body?.routes?.firstOrNull()?.legs?.firstOrNull()
-                    val distMeters = leg?.distance?.value
-                    val durSec = leg?.duration?.value
-                    if (distMeters != null) st.routeDistanceKm = distMeters / 1000.0
-                    if (durSec != null) st.routeDurationSec = durSec
-                    applySortAndRefresh()
-                }
-
-                override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
-                    // keep air distance fallback
-                }
-            })
-        }
-    }
-
     private fun haversineKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val r = 6371.0
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
         val a = sin(dLat / 2) * sin(dLat / 2) +
-            cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
-            sin(dLon / 2) * sin(dLon / 2)
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return r * c
     }
 
-    // --------------------
-    // Navigation + marker icons
-    // --------------------
     private fun navigateToStation(station: FuelStation) {
         val uri = Uri.parse("google.navigation:q=${station.latitude},${station.longitude}&mode=d")
         val intent = Intent(Intent.ACTION_VIEW, uri).apply {
@@ -499,10 +515,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getMarkerIcon(index: Int): BitmapDescriptor {
-        return if (index == 0) {
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
-        } else {
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+        return when (index) {
+            0 -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+            1, 2 -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+            else -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
         }
     }
 
@@ -514,29 +530,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun openSettings() {
         SettingsDialog(
             context = this,
-            initialFuelType = selectedFuelType,
             initialRadiusKm = searchRadiusKm,
-            initialFrequencySec = updateFrequencySec
-        ) { fuelType, radiusKm, frequencySec ->
-            selectedFuelType = fuelType
+            initialMaxResults = maxResults,
+            initialFrequencyMin = updateFrequencyMin
+        ) { radiusKm, maxRes, frequencyMin ->
+            originalSearchRadius = radiusKm
             searchRadiusKm = radiusKm
-            updateFrequencySec = frequencySec
+            maxResults = maxRes
+            updateFrequencyMin = frequencyMin
 
-            showToast("Impostazioni aggiornate: ${fuelType.value}")
+            showToast("Impostazioni salvate")
 
             if (isLiveSearchActive) {
-                // restart timer + refresh now
                 updateRunnable?.let { updateHandler.removeCallbacks(it) }
                 searchAndUpdate()
+
                 updateRunnable = object : Runnable {
                     override fun run() {
                         if (isLiveSearchActive) {
                             searchAndUpdate()
-                            updateHandler.postDelayed(this, updateFrequencySec * 1000L)
+                            updateHandler.postDelayed(this, updateFrequencyMin * 60000L)
                         }
                     }
                 }
-                updateHandler.postDelayed(updateRunnable!!, updateFrequencySec * 1000L)
+                updateHandler.postDelayed(updateRunnable!!, updateFrequencyMin * 60000L)
             }
         }.show()
     }
@@ -556,7 +573,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 enableMyLocation()
                 startLocationUpdates()
             } else {
-                showToast("Permesso posizione necessario")
+                showToast("Permesso posizione necessario per il funzionamento dell'app")
             }
         }
     }
@@ -571,7 +588,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onPause() {
         super.onPause()
         mapView.onPause()
-        if (::fusedLocationClient.isInitialized) fusedLocationClient.removeLocationUpdates(locationCallback)
+        if (::fusedLocationClient.isInitialized) {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+        }
     }
 
     override fun onDestroy() {
@@ -593,9 +612,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private enum class SortMode { PRICE, DISTANCE }
 }
 
-// --------------------
 // Models
-// --------------------
 data class FuelStation(
     val id: String,
     val name: String,
@@ -610,7 +627,7 @@ data class FuelStation(
 )
 
 enum class FuelType(val value: String) {
-    DIESEL("diesel"),
+    GASOLIO("gasolio"),  // Fixed: using "gasolio" instead of "diesel"
     BENZINA("benzina"),
     GPL("gpl"),
     METANO("metano")

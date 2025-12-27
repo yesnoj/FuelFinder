@@ -1452,10 +1452,12 @@ color abc_tint_edittext
 color abc_tint_seek_thumb
 color abc_tint_spinner
 color abc_tint_switch_track
+color accent
 color accent_material_dark
 color accent_material_light
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
+color background
 color background_floating_material_dark
 color background_floating_material_light
 color background_material_dark
@@ -1470,6 +1472,7 @@ color button_material_dark
 color button_material_light
 color call_notification_answer_color
 color call_notification_decline_color
+color card_background
 color cardview_dark_background
 color cardview_light_background
 color cardview_shadow_end_color
@@ -2190,6 +2193,7 @@ color notification_action_color_filter
 color notification_icon_bg_color
 color preference_fallback_accent_color
 color primary
+color primary_dark
 color primary_dark_material_dark
 color primary_dark_material_light
 color primary_material_dark
@@ -2198,6 +2202,7 @@ color primary_text_default_material_dark
 color primary_text_default_material_light
 color primary_text_disabled_material_dark
 color primary_text_disabled_material_light
+color red
 color ripple_material_dark
 color ripple_material_light
 color secondary_text_default_material_dark
@@ -3158,6 +3163,7 @@ drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_navigation
 drawable ic_search_black_24
 drawable ic_settings
 drawable ic_stop
@@ -3344,7 +3350,10 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
+id btnCancel
 id btnFindFuel
+id btnNavigate
+id btnOk
 id btnSettings
 id buttonPanel
 id cache_measures
@@ -3362,7 +3371,12 @@ id chain2
 id chains
 id checkbox
 id checked
+id chipBenzina
+id chipGasolio
+id chipGpl
+id chipGroupFuel
 id chipGroupSort
+id chipMetano
 id chipSortDistance
 id chipSortPrice
 id chronometer
@@ -3451,6 +3465,7 @@ id floating
 id forever
 id fragment_container_view_tag
 id frost
+id fuelControlsLayout
 id fullscreen_header
 id ghost_view
 id ghost_view_holder
@@ -3491,7 +3506,6 @@ id jumpToEnd
 id jumpToStart
 id labeled
 id layout
-id layoutStats
 id left
 id leftToRight
 id legacy
@@ -3625,6 +3639,10 @@ id pressed
 id progress_circular
 id progress_horizontal
 id radio
+id radioFreq1
+id radioFreq3
+id radioFreq5
+id radioGroupFrequency
 id ratio
 id rectangles
 id recyclerViewStations
@@ -3659,7 +3677,7 @@ id search_mag_icon
 id search_plate
 id search_src_text
 id search_voice_btn
-id seekFrequency
+id seekMaxResults
 id seekRadius
 id seekbar
 id seekbar_value
@@ -3684,7 +3702,6 @@ id south
 id spacer
 id special_effects_controller_view_tag
 id spinner
-id spinnerFuelType
 id spline
 id split_action_bar
 id spread
@@ -3754,16 +3771,13 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
-id tvDistance
-id tvFrequencyValue
+id tvMaxResultsValue
 id tvRadiusValue
-id tvSpeed
 id tvStationAddress
 id tvStationDistance
 id tvStationName
 id tvStationPrice
 id tvSubtitle
-id tvTime
 id tvTitle
 id tvUpdateStatus
 id unchecked
