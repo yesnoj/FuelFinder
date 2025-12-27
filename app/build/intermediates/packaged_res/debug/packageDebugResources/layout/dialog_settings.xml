@@ -2,13 +2,18 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:background="@color/station_card_background"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -16,14 +21,16 @@
             android:text="Impostazioni"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/text_primary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Raggio ricerca (km)"
             android:textStyle="bold"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:textColor="@color/text_primary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,11 +47,13 @@
 
             <TextView
                 android:id="@+id/tvRadiusValue"
-                android:layout_width="60dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:text="10 km"
                 android:textAlignment="textEnd"
-                android:layout_marginStart="8dp" />
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/text_primary" />
         </LinearLayout>
 
         <TextView
@@ -52,7 +61,8 @@
             android:layout_height="wrap_content"
             android:text="Numero massimo risultati"
             android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:textColor="@color/text_primary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,11 +79,13 @@
 
             <TextView
                 android:id="@+id/tvMaxResultsValue"
-                android:layout_width="60dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:text="20"
                 android:textAlignment="textEnd"
-                android:layout_marginStart="8dp" />
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/text_primary" />
         </LinearLayout>
 
         <TextView
@@ -81,39 +93,61 @@
             android:layout_height="wrap_content"
             android:text="Frequenza aggiornamento"
             android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:textColor="@color/text_primary" />
 
-        <RadioGroup
-            android:id="@+id/radioGroupFrequency"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
 
-            <RadioButton
-                android:id="@+id/radioFreq1"
+            <RadioGroup
+                android:id="@+id/radioGroupFrequency"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="1 min"
-                android:checked="true" />
+                android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radioFreq3"
-                android:layout_width="0dp"
+                <RadioButton
+                    android:id="@+id/radioFreq1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1"
+                    android:checked="true"
+                    android:paddingEnd="8dp"
+                    android:textColor="@color/text_primary" />
+
+                <RadioButton
+                    android:id="@+id/radioFreq3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="3"
+                    android:paddingEnd="8dp"
+                    android:textColor="@color/text_primary" />
+
+                <RadioButton
+                    android:id="@+id/radioFreq5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="5"
+                    android:paddingEnd="8dp"
+                    android:textColor="@color/text_primary" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="3 min" />
+                android:text="min"
+                android:textStyle="bold"
+                android:layout_marginStart="6dp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/radioFreq5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="5 min" />
-        </RadioGroup>
-
-        <!-- Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,15 +159,18 @@
                 android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Annulla"
+                android:text="ANNULLA"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginEnd="10dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnOk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Salva"
+                android:text="SALVA"
+                android:minWidth="140dp"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@color/primary"
                 style="@style/Widget.MaterialComponents.Button" />
 
         </LinearLayout>

@@ -1,0 +1,74 @@
+[
+    {
+        "merged": "com.fuelfinder.app-release-53:/color_chip_text_selector.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/color/chip_text_selector.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_circle_gradient.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/circle_gradient.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_ic_stop.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/ic_stop.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_handle.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/handle.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_ic_location.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/ic_location.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_ic_navigation.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/ic_navigation.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/layout_activity_main.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_ic_settings.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/ic_settings.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_live_badge.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/live_badge.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/color_chip_background_selector.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/color/chip_background_selector.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_circle_button.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/circle_button.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_ic_user_location.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/ic_user_location.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_ic_fuel.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/ic_fuel.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_bottom_sheet_background.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/bottom_sheet_background.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/layout_dialog_settings.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/layout/dialog_settings.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_stats_background.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/stats_background.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/layout_item_station.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/layout/item_station.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-release-53:/drawable_live_dot.xml.flat",
+        "source": "com.fuelfinder.app-main-54:/drawable/live_dot.xml"
+    }
+]

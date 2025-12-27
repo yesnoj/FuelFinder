@@ -12,16 +12,16 @@
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/drawable/stats_background.xml"
     },
     {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/color_chip_background_selector.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/color/chip_background_selector.xml"
+    },
+    {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/drawable_circle_button.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/drawable/circle_button.xml"
     },
     {
         "merged": "com.fuelfinder.app-debug-53:/layout_activity_main.xml.flat",
         "source": "com.fuelfinder.app-main-55:/layout/activity_main.xml"
-    },
-    {
-        "merged": "com.fuelfinder.app-debug-53:/layout_item_station.xml.flat",
-        "source": "com.fuelfinder.app-main-55:/layout/item_station.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/drawable_ic_settings.xml.flat",
@@ -66,6 +66,10 @@
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/drawable_live_dot.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/drawable/live_dot.xml"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/color_chip_text_selector.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/color/chip_text_selector.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/layout_dialog_settings.xml.flat",

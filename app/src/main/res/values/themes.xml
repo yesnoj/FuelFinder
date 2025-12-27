@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Tema App -->
     <style name="Theme.FuelFinder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Colori base -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/accent</item>
-        <item name="colorSecondaryVariant">@color/accent</item>
-        <item name="colorOnSecondary">@android:color/white</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+
+        <!-- Default Chip style (vale per tutti i Chip se non sovrascritto) -->
+        <item name="chipStyle">@style/Widget.FuelFinder.Chip.Choice</item>
     </style>
+
+    <!-- Chip Choice: grigio quando non selezionato, verde quando selezionato -->
+    <style name="Widget.FuelFinder.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+        <!-- Sfondo chip non selezionato -->
+        <item name="chipBackgroundColor">@color/station_card_background</item>
+
+        <!-- Testo non selezionato -->
+        <item name="android:textColor">@color/text_primary</item>
+
+        <!-- Bordo -->
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeColor">@color/green</item>
+
+        <!-- Checked: colore ripple/overlay e testo -->
+        <!-- (con MaterialComponents, quando checked il chip usa colorControlActivated / checkedIcon / tint:
+             forziamo il "pressed/checked" con attributi standard) -->
+        <item name="checkedIconVisible">false</item>
+        <item name="chipIconVisible">false</item>
+
+        <!-- Questi aiutano Material a rendere evidente lo stato checked -->
+        <item name="colorControlActivated">@color/green</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+    </style>
+
 </resources>

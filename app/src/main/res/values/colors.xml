@@ -5,9 +5,14 @@
     <color name="accent">#FF6F00</color>
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
+
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
     <color name="divider">#BDBDBD</color>
+
     <color name="background">#FAFAFA</color>
     <color name="card_background">#FFFFFF</color>
+
+    <!-- Grigio chiaro usato per card distributori + chip + impostazioni -->
+    <color name="station_card_background">#EEEEEE</color>
 </resources>

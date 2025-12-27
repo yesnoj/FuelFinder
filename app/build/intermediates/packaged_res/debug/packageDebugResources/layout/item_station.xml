@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/station_card_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,8 +18,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Station"
-            android:textSize="16sp"
             android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
             app:layout_constraintEnd_toStartOf="@id/btnNavigate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,6 +32,7 @@
             android:layout_marginTop="4dp"
             android:text="Address"
             android:textSize="13sp"
+            android:textColor="@color/text_secondary"
             app:layout_constraintEnd_toStartOf="@id/btnNavigate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvStationName" />
@@ -40,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="-- km"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/text_secondary"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvStationAddress" />
@@ -51,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Aggiornato: --"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvStationDistance" />
@@ -72,8 +75,9 @@
             android:id="@+id/btnNavigate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:text="VAI"
+            android:textColor="@android:color/white"
             app:backgroundTint="@color/green"
             app:icon="@drawable/ic_navigation"
             app:iconGravity="textStart"

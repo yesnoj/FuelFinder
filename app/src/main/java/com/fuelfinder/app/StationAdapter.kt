@@ -4,8 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class StationAdapter(
     private val onNavigate: (FuelStation) -> Unit
@@ -40,11 +44,13 @@ class StationAdapter(
         private val tvLastUpdate: TextView = itemView.findViewById(R.id.tvLastUpdate)
         private val btnNavigate: MaterialButton = itemView.findViewById(R.id.btnNavigate)
 
+        private val df = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY)
+
         fun bind(s: FuelStation) {
             tvName.text = s.name
             tvAddr.text = s.address
 
-            // Format price
+            // Price text
             val price = s.prices.values.firstOrNull()
             tvPrice.text = if (price != null) {
                 String.format("€ %.3f", price)
@@ -52,20 +58,78 @@ class StationAdapter(
                 "Prezzo n/d"
             }
 
-            // Format distance - prioritize air distance as it's always available and updated
-            val dist = when {
+            // Distance text
+            tvDistance.text = when {
                 s.airDistanceKm != null -> String.format("%.1f km", s.airDistanceKm)
                 else -> "Calcolo..."
             }
-            tvDistance.text = dist
 
-            // Last price update (from API, if available)
-            tvLastUpdate.text = s.lastUpdate?.let { "Aggiornato: $it" } ?: "Aggiornamento n/d"
+            // Last update label (relative time)
+            tvLastUpdate.text = formatLastUpdateRelative(s.lastUpdate)
 
-            // Navigation button
-            btnNavigate.setOnClickListener {
-                onNavigate(s)
+            // Price color based on update age
+            val ctx = itemView.context
+            val colorPrimary = ContextCompat.getColor(ctx, R.color.primary)
+            val colorWarn = ContextCompat.getColor(ctx, R.color.accent)
+            val colorOld = ContextCompat.getColor(ctx, R.color.red)
+
+            tvPrice.setTextColor(
+                when (val ageMin = computeAgeMinutes(s.lastUpdate)) {
+                    null -> colorPrimary // se non sappiamo la data, non allarmiamo
+                    in 0..(6 * 60) -> colorPrimary
+                    in (6 * 60 + 1)..(24 * 60) -> colorWarn
+                    else -> colorOld
+                }
+            )
+
+            btnNavigate.setOnClickListener { onNavigate(s) }
+        }
+
+        private fun computeAgeMinutes(lastUpdate: String?): Long? {
+            if (lastUpdate.isNullOrBlank()) return null
+            return try {
+                val t = df.parse(lastUpdate)?.time ?: return null
+                val diffMs = System.currentTimeMillis() - t
+                if (diffMs < 0) return null // clock/format inconsistente
+                TimeUnit.MILLISECONDS.toMinutes(diffMs)
+            } catch (_: Exception) {
+                null
             }
+        }
+
+        private fun formatLastUpdateRelative(lastUpdate: String?): String {
+            if (lastUpdate.isNullOrBlank()) return "Aggiornamento n/d"
+
+            val ageMin = computeAgeMinutes(lastUpdate)
+                ?: return "Aggiornato: $lastUpdate"
+
+            return "Aggiornato: ${humanizeAge(ageMin)}"
+        }
+
+        private fun humanizeAge(ageMin: Long): String {
+            // 0..59 min
+            if (ageMin < 1) return "pochi secondi fa"
+            if (ageMin < 2) return "1 minuto fa"
+            if (ageMin < 60) return "${ageMin} minuti fa"
+
+            val ageHours = ageMin / 60
+            if (ageHours < 2) return "1 ora fa"
+            if (ageHours < 24) return "${ageHours} ore fa"
+
+            val ageDays = ageHours / 24
+            if (ageDays < 2) return "1 gg fa"
+            if (ageDays < 7) return "${ageDays} gg fa"
+
+            val ageWeeks = ageDays / 7
+            if (ageWeeks < 2) return "1 sett fa"
+            if (ageWeeks < 5) return "${ageWeeks} sett fa"
+
+            val ageMonths = ageDays / 30
+            if (ageMonths < 2) return "1 mese fa"
+            if (ageMonths < 12) return "${ageMonths} mesi fa"
+
+            val ageYears = ageDays / 365
+            return if (ageYears < 2) "1 anno fa" else "${ageYears} anni fa"
         }
     }
 }

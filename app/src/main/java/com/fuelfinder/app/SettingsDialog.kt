@@ -3,10 +3,12 @@ package com.fuelfinder.app
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.view.View
-import android.widget.*
+import android.view.WindowManager
+import android.widget.RadioGroup
+import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.Slider
+import kotlin.math.roundToInt
 
 class SettingsDialog(
     context: Context,
@@ -33,7 +35,7 @@ class SettingsDialog(
         val btnCancel = findViewById<MaterialButton>(R.id.btnCancel)
         val btnOk = findViewById<MaterialButton>(R.id.btnOk)
 
-        // Setup radius slider
+        // Radius slider
         seekRadius.valueFrom = 5f
         seekRadius.valueTo = 50f
         seekRadius.stepSize = 5f
@@ -45,19 +47,22 @@ class SettingsDialog(
             tvRadiusValue.text = "${value.toInt()} km"
         }
 
-        // Setup max results slider
-        seekMaxResults.valueFrom = 1f
-        seekMaxResults.valueTo = 100f
-        seekMaxResults.stepSize = 1f
-        seekMaxResults.value = initialMaxResults.toFloat()
-        tvMaxResultsValue.text = "$initialMaxResults"
+        // Max results slider: 5..50 step 5
+        seekMaxResults.valueFrom = 5f
+        seekMaxResults.valueTo = 50f
+        seekMaxResults.stepSize = 5f
+
+        val normalizedInitialMax = (initialMaxResults / 5.0).roundToInt() * 5
+        selectedMaxResults = normalizedInitialMax.coerceIn(5, 50)
+        seekMaxResults.value = selectedMaxResults.toFloat()
+        tvMaxResultsValue.text = "$selectedMaxResults"
 
         seekMaxResults.addOnChangeListener { _, value, _ ->
             selectedMaxResults = value.toInt()
             tvMaxResultsValue.text = "${value.toInt()}"
         }
 
-        // Setup frequency radio buttons
+        // Frequency radio buttons
         when (initialFrequencyMin) {
             1 -> radioGroupFreq.check(R.id.radioFreq1)
             3 -> radioGroupFreq.check(R.id.radioFreq3)
@@ -74,17 +79,26 @@ class SettingsDialog(
             }
         }
 
-        // Setup buttons
-        btnCancel.setOnClickListener {
-            dismiss()
-        }
+        btnCancel.setOnClickListener { dismiss() }
 
         btnOk.setOnClickListener {
             onSettingsChanged(selectedRadiusKm, selectedMaxResults, selectedFrequencyMin)
             dismiss()
         }
 
-        // Prevent dismissing on outside touch
         setCanceledOnTouchOutside(false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // Dialog più largo (ottimo su Pixel 8a)
+        val dm = context.resources.displayMetrics
+        val width = (dm.widthPixels * 0.92f).toInt()
+
+        window?.setLayout(
+            width,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 }

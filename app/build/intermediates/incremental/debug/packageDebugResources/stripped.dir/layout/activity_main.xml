@@ -46,10 +46,10 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
+                android:layout_marginStart="12dp"
                 app:layout_constraintStart_toEndOf="@id/ivLoc"
                 app:layout_constraintTop_toTopOf="@id/ivLoc"
-                app:layout_constraintEnd_toStartOf="@id/btnSettings"
-                android:layout_marginStart="12dp" />
+                app:layout_constraintEnd_toStartOf="@id/btnSettings" />
 
             <TextView
                 android:id="@+id/tvSubtitle"
@@ -69,8 +69,8 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_settings"
-                app:tint="@color/text_primary"
                 android:padding="8dp"
+                app:tint="@color/text_primary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,6 +102,9 @@
                         android:layout_height="wrap_content"
                         android:text="Diesel"
                         android:checked="true"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                     <com.google.android.material.chip.Chip
@@ -109,6 +112,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Benzina"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                     <com.google.android.material.chip.Chip
@@ -116,6 +122,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="GPL"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                     <com.google.android.material.chip.Chip
@@ -123,6 +132,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Metano"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
                 </com.google.android.material.chip.ChipGroup>
 
@@ -184,6 +196,7 @@
                 android:textColor="@color/text_secondary"
                 android:layout_marginTop="4dp" />
 
+            <!-- Sort mode chips -->
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupSort"
                 android:layout_width="wrap_content"
@@ -197,6 +210,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Prezzo"
+                    android:textColor="@color/chip_text_selector"
+                    app:chipBackgroundColor="@color/chip_background_selector"
+                    app:checkedIconVisible="false"
                     style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                 <com.google.android.material.chip.Chip
@@ -204,6 +220,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Distanza"
+                    android:textColor="@color/chip_text_selector"
+                    app:chipBackgroundColor="@color/chip_background_selector"
+                    app:checkedIconVisible="false"
                     style="@style/Widget.MaterialComponents.Chip.Choice" />
             </com.google.android.material.chip.ChipGroup>
 
