@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/drawable_ic_navigation.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/drawable/ic_navigation.xml"
+    },
+    {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/drawable_ic_location.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/drawable/ic_location.xml"
     },
@@ -10,10 +14,6 @@
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/drawable_circle_button.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/drawable/circle_button.xml"
-    },
-    {
-        "merged": "com.fuelfinder.app-debug-53:/drawable_ic_navigation.xml.flat",
-        "source": "com.fuelfinder.app-main-55:/drawable/ic_navigation.xml"
     },
     {
         "merged": "com.fuelfinder.app-debug-53:/layout_activity_main.xml.flat",
@@ -66,10 +66,6 @@
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/drawable_live_dot.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/drawable/live_dot.xml"
-    },
-    {
-        "merged": "com.fuelfinder.app-debug-53:/layout_dialog_settings.xml.flat",
-        "source": "com.fuelfinder.app-main-55:/layout/dialog_settings.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-53:/layout_dialog_settings.xml.flat",

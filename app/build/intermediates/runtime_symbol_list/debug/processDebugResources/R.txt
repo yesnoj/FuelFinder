@@ -3514,7 +3514,6 @@ int id line3 0x7f080100
 int id linear 0x7f080101
 int id listMode 0x7f080102
 int id list_item 0x7f080103
-int id liveIndicator 0x7f080104
 int id locale 0x7f080105
 int id ltr 0x7f080106
 int id m3_side_sheet 0x7f080107
@@ -3652,6 +3651,7 @@ int id right 0x7f080186
 int id rightToLeft 0x7f080187
 int id right_icon 0x7f080188
 int id right_side 0x7f080189
+int id rootLayout 0x7f080236
 int id rounded 0x7f08018a
 int id row_index_key 0x7f08018b
 int id rtl 0x7f08018c
@@ -3770,6 +3770,7 @@ int id transition_position 0x7f0801fd
 int id transition_scene_layoutid_cache 0x7f0801fe
 int id transition_transform 0x7f0801ff
 int id triangle 0x7f080200
+int id tvLastUpdate 0x7f080237
 int id tvMaxResultsValue 0x7f080235
 int id tvRadiusValue 0x7f080203
 int id tvStationAddress 0x7f080205

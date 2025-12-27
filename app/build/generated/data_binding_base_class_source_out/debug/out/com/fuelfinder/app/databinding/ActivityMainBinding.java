@@ -71,13 +71,13 @@ public final class ActivityMainBinding implements ViewBinding {
   public final ImageView ivLoc;
 
   @NonNull
-  public final LinearLayout liveIndicator;
-
-  @NonNull
   public final MapView mapView;
 
   @NonNull
   public final RecyclerView recyclerViewStations;
+
+  @NonNull
+  public final CoordinatorLayout rootLayout;
 
   @NonNull
   public final TextView tvSubtitle;
@@ -94,10 +94,9 @@ public final class ActivityMainBinding implements ViewBinding {
       @NonNull Chip chipBenzina, @NonNull Chip chipGasolio, @NonNull Chip chipGpl,
       @NonNull ChipGroup chipGroupFuel, @NonNull ChipGroup chipGroupSort, @NonNull Chip chipMetano,
       @NonNull Chip chipSortDistance, @NonNull Chip chipSortPrice,
-      @NonNull LinearLayout fuelControlsLayout, @NonNull ImageView ivLoc,
-      @NonNull LinearLayout liveIndicator, @NonNull MapView mapView,
-      @NonNull RecyclerView recyclerViewStations, @NonNull TextView tvSubtitle,
-      @NonNull TextView tvTitle, @NonNull TextView tvUpdateStatus) {
+      @NonNull LinearLayout fuelControlsLayout, @NonNull ImageView ivLoc, @NonNull MapView mapView,
+      @NonNull RecyclerView recyclerViewStations, @NonNull CoordinatorLayout rootLayout,
+      @NonNull TextView tvSubtitle, @NonNull TextView tvTitle, @NonNull TextView tvUpdateStatus) {
     this.rootView = rootView;
     this.bottomSheet = bottomSheet;
     this.btnFindFuel = btnFindFuel;
@@ -113,9 +112,9 @@ public final class ActivityMainBinding implements ViewBinding {
     this.chipSortPrice = chipSortPrice;
     this.fuelControlsLayout = fuelControlsLayout;
     this.ivLoc = ivLoc;
-    this.liveIndicator = liveIndicator;
     this.mapView = mapView;
     this.recyclerViewStations = recyclerViewStations;
+    this.rootLayout = rootLayout;
     this.tvSubtitle = tvSubtitle;
     this.tvTitle = tvTitle;
     this.tvUpdateStatus = tvUpdateStatus;
@@ -232,12 +231,6 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.liveIndicator;
-      LinearLayout liveIndicator = ViewBindings.findChildViewById(rootView, id);
-      if (liveIndicator == null) {
-        break missingId;
-      }
-
       id = R.id.mapView;
       MapView mapView = ViewBindings.findChildViewById(rootView, id);
       if (mapView == null) {
@@ -249,6 +242,8 @@ public final class ActivityMainBinding implements ViewBinding {
       if (recyclerViewStations == null) {
         break missingId;
       }
+
+      CoordinatorLayout rootLayout = (CoordinatorLayout) rootView;
 
       id = R.id.tvSubtitle;
       TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
@@ -270,8 +265,8 @@ public final class ActivityMainBinding implements ViewBinding {
 
       return new ActivityMainBinding((CoordinatorLayout) rootView, bottomSheet, btnFindFuel,
           btnSettings, cardTopInfo, chipBenzina, chipGasolio, chipGpl, chipGroupFuel, chipGroupSort,
-          chipMetano, chipSortDistance, chipSortPrice, fuelControlsLayout, ivLoc, liveIndicator,
-          mapView, recyclerViewStations, tvSubtitle, tvTitle, tvUpdateStatus);
+          chipMetano, chipSortDistance, chipSortPrice, fuelControlsLayout, ivLoc, mapView,
+          recyclerViewStations, rootLayout, tvSubtitle, tvTitle, tvUpdateStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

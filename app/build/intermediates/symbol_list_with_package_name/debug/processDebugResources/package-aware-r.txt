@@ -3515,7 +3515,6 @@ id line3
 id linear
 id listMode
 id list_item
-id liveIndicator
 id locale
 id ltr
 id m3_side_sheet
@@ -3653,6 +3652,7 @@ id right
 id rightToLeft
 id right_icon
 id right_side
+id rootLayout
 id rounded
 id row_index_key
 id rtl
@@ -3771,6 +3771,7 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tvLastUpdate
 id tvMaxResultsValue
 id tvRadiusValue
 id tvStationAddress

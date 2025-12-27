@@ -40,9 +40,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
 import kotlin.math.sqrt
-import kotlin.math.min
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var bottomSheet: View
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var tvUpdateStatus: TextView
-    private lateinit var liveIndicator: View
 
     // Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -110,7 +109,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         stationRecyclerView = findViewById(R.id.recyclerViewStations)
         bottomSheet = findViewById(R.id.bottomSheet)
         tvUpdateStatus = findViewById(R.id.tvUpdateStatus)
-        liveIndicator = findViewById(R.id.liveIndicator)
 
         stationAdapter = StationAdapter { station ->
             navigateToStation(station)
@@ -253,9 +251,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Update distances if searching - this happens automatically when location changes
         if (isLiveSearchActive && currentStations.isNotEmpty()) {
             updateAirDistances()
-            // Update the displayed distances in the list
             applySortAndRefresh()
-            // Update marker snippets with new distances
             updateMarkerSnippets()
         }
     }
@@ -287,7 +283,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         locationRetryCount = 0
         isLiveSearchActive = true
-        liveIndicator.visibility = View.VISIBLE
 
         searchRadiusKm = originalSearchRadius
 
@@ -316,7 +311,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun stopLiveSearch() {
         isLiveSearchActive = false
-        liveIndicator.visibility = View.GONE
 
         btnFindFuel.apply {
             text = "Avvia ricerca"
@@ -393,7 +387,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         prices = mapOf(selectedFuelType.value to price),
                         airDistanceKm = null,
                         routeDistanceKm = null,
-                        routeDurationSec = null
+                        routeDurationSec = null,
+                        lastUpdate = dto.data
                     )
                 }
 
@@ -418,7 +413,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         currentStations.clear()
         currentStations.addAll(stations)
 
-        // Add new markers with distance info
         stations.forEachIndexed { index, st ->
             val distanceText = st.airDistanceKm?.let {
                 String.format("%.1f km", it)
@@ -447,10 +441,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             try {
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(b.build(), 100))
             } catch (e: Exception) {
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    LatLng(currentLocation?.latitude ?: 42.5, currentLocation?.longitude ?: 12.5),
-                    DEFAULT_ZOOM
-                ))
+                googleMap.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(currentLocation?.latitude ?: 42.5, currentLocation?.longitude ?: 12.5),
+                        DEFAULT_ZOOM
+                    )
+                )
             }
         }
     }
@@ -623,11 +619,12 @@ data class FuelStation(
     val prices: Map<String, Double>,
     var airDistanceKm: Double?,
     var routeDistanceKm: Double?,
-    var routeDurationSec: Int?
+    var routeDurationSec: Int?,
+    val lastUpdate: String?
 )
 
 enum class FuelType(val value: String) {
-    GASOLIO("gasolio"),  // Fixed: using "gasolio" instead of "diesel"
+    GASOLIO("gasolio"),
     BENZINA("benzina"),
     GPL("gpl"),
     METANO("metano")

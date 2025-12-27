@@ -24,6 +24,9 @@ public final class ItemStationBinding implements ViewBinding {
   public final MaterialButton btnNavigate;
 
   @NonNull
+  public final TextView tvLastUpdate;
+
+  @NonNull
   public final TextView tvStationAddress;
 
   @NonNull
@@ -36,10 +39,12 @@ public final class ItemStationBinding implements ViewBinding {
   public final TextView tvStationPrice;
 
   private ItemStationBinding(@NonNull CardView rootView, @NonNull MaterialButton btnNavigate,
-      @NonNull TextView tvStationAddress, @NonNull TextView tvStationDistance,
-      @NonNull TextView tvStationName, @NonNull TextView tvStationPrice) {
+      @NonNull TextView tvLastUpdate, @NonNull TextView tvStationAddress,
+      @NonNull TextView tvStationDistance, @NonNull TextView tvStationName,
+      @NonNull TextView tvStationPrice) {
     this.rootView = rootView;
     this.btnNavigate = btnNavigate;
+    this.tvLastUpdate = tvLastUpdate;
     this.tvStationAddress = tvStationAddress;
     this.tvStationDistance = tvStationDistance;
     this.tvStationName = tvStationName;
@@ -79,6 +84,12 @@ public final class ItemStationBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvLastUpdate;
+      TextView tvLastUpdate = ViewBindings.findChildViewById(rootView, id);
+      if (tvLastUpdate == null) {
+        break missingId;
+      }
+
       id = R.id.tvStationAddress;
       TextView tvStationAddress = ViewBindings.findChildViewById(rootView, id);
       if (tvStationAddress == null) {
@@ -103,8 +114,8 @@ public final class ItemStationBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemStationBinding((CardView) rootView, btnNavigate, tvStationAddress,
-          tvStationDistance, tvStationName, tvStationPrice);
+      return new ItemStationBinding((CardView) rootView, btnNavigate, tvLastUpdate,
+          tvStationAddress, tvStationDistance, tvStationName, tvStationPrice);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

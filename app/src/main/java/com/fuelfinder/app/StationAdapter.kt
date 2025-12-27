@@ -30,11 +30,14 @@ class StationAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class VH(itemView: View, private val onNavigate: (FuelStation) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    class VH(itemView: View, private val onNavigate: (FuelStation) -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
+
         private val tvName: TextView = itemView.findViewById(R.id.tvStationName)
         private val tvAddr: TextView = itemView.findViewById(R.id.tvStationAddress)
         private val tvPrice: TextView = itemView.findViewById(R.id.tvStationPrice)
         private val tvDistance: TextView = itemView.findViewById(R.id.tvStationDistance)
+        private val tvLastUpdate: TextView = itemView.findViewById(R.id.tvLastUpdate)
         private val btnNavigate: MaterialButton = itemView.findViewById(R.id.btnNavigate)
 
         fun bind(s: FuelStation) {
@@ -55,6 +58,9 @@ class StationAdapter(
                 else -> "Calcolo..."
             }
             tvDistance.text = dist
+
+            // Last price update (from API, if available)
+            tvLastUpdate.text = s.lastUpdate?.let { "Aggiornato: $it" } ?: "Aggiornamento n/d"
 
             // Navigation button
             btnNavigate.setOnClickListener {
