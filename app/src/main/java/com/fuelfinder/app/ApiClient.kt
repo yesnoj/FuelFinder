@@ -31,8 +31,7 @@ object ApiClient {
             val request = original.newBuilder()
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
-                .addHeader("X-API-Key", BuildConfig.PREZZI_BENZINA_API_KEY)
-                .method(original.method, original.body)
+                                .method(original.method, original.body)
                 .build()
             chain.proceed(request)
         }
@@ -52,29 +51,34 @@ object ApiClient {
 }
 
 /**
- * Service per le API dei benzinai
+ * Service per l'API prezzi-carburante (open data MIMIT)
+ * Repo: https://github.com/dstmrk/prezzi-carburante
+ * Endpoint live: https://prezzi-carburante.onrender.com
  */
 interface FuelService {
-    
-    @GET("stations/nearby")
+
+    @GET("api/distributori")
     fun getNearbyStations(
-        @Query("lat") latitude: Double,
-        @Query("lon") longitude: Double,
-        @Query("radius") radius: Int,
-        @Query("fuel_type") fuelType: String,
-        @Query("limit") limit: Int = 20
-    ): Call<StationResponse>
-    
-    @GET("stations/{id}")
-    fun getStationDetails(
-        @Path("id") stationId: String
-    ): Call<FuelStation>
-    
-    @POST("stations/search")
-    fun searchStations(
-        @Body request: SearchRequest
-    ): Call<StationResponse>
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double,
+        @Query("distance") distanceKm: Int,
+        @Query("fuel") fuel: String,
+        @Query("results") results: Int = 20
+    ): Call<List<DistributorDto>>
 }
+
+data class DistributorDto(
+    val ranking: Int? = null,
+    val gestore: String? = null,
+    val indirizzo: String? = null,
+    val prezzo: Double? = null,
+    val self: Boolean? = null,
+    val data: String? = null,
+    val distanza: String? = null,
+    val latitudine: Double? = null,
+    val longitudine: Double? = null
+)
+
 
 /**
  * Service per Google Directions API

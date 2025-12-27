@@ -1,8 +1,21 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
+
+import java.util.Properties
+
+def localProps = new Properties()
+def localPropsFile = rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { stream -> localProps.load(stream) }
+}
+
+// Accept both names to be resilient to different setups
+def MAPS_KEY = localProps.getProperty("GOOGLE_MAPS_API_KEY", localProps.getProperty("MAPS_API_KEY", ""))
+def BASE_URL_VAL = localProps.getProperty("BASE_URL", "https://prezzi-carburante.onrender.com/")
+
+
 
 android {
     namespace 'com.fuelfinder.app'
@@ -14,6 +27,12 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0.0"
+        // Keys from local.properties
+        manifestPlaceholders = [ MAPS_API_KEY: MAPS_KEY ]
+        buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${MAPS_KEY}\""
+        buildConfigField "String", "BASE_URL", "\"${BASE_URL_VAL}\""
+
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,13 +42,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {
-            buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${MAPS_API_KEY}\""
-            buildConfigField "String", "PREZZI_BENZINA_API_KEY", "\"YOUR_API_KEY_HERE\""
-            buildConfigField "String", "BASE_URL", "\"https://api.prezzibenzina.it/\""
-        }
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

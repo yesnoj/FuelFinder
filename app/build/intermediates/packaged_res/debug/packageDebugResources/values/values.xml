@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="divider">#E0E0E0</color>
+    <color name="green">#2E7D32</color>
+    <color name="primary">#1E88E5</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#616161</color>
+    <string name="app_name">FuelFinder</string>
+    <style name="Theme.FuelFinder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
+    </style>
+</resources>
