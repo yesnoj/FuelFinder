@@ -40,12 +40,14 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:extractNativeLibs="false"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:testOnly="true"
         android:theme="@style/Theme.FuelFinder" >
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCN2T44oha3QjmA91ZvJgoggFjisRz2II0" />
+            android:value="AIzaSyA7JJtoSkEJeOpF39QPCdEWwOqJWKaEVm0" />
 
         <activity
             android:name="com.fuelfinder.app.MainActivity"

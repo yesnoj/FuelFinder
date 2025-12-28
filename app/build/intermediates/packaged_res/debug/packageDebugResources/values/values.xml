@@ -5,6 +5,7 @@
     <color name="card_background">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="green">#4CAF50</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
     <color name="primary">#1E88E5</color>
     <color name="primary_dark">#1565C0</color>
     <color name="red">#F44336</color>

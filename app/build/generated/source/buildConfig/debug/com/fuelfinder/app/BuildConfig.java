@@ -12,5 +12,5 @@ public final class BuildConfig {
   // Field from default config.
   public static final String BASE_URL = "https://prezzi-carburante.onrender.com/";
   // Field from default config.
-  public static final String GOOGLE_MAPS_API_KEY = "AIzaSyCN2T44oha3QjmA91ZvJgoggFjisRz2II0";
+  public static final String GOOGLE_MAPS_API_KEY = "AIzaSyA7JJtoSkEJeOpF39QPCdEWwOqJWKaEVm0";
 }

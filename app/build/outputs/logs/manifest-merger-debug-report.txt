@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 meta-data#com.google.android.geo.API_KEY
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:13:9-15:47
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:16:9-18:47
 	android:value
 		INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:15:13-44
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:18:13-44
 	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:14:13-58
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:17:13-58
 manifest
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-28:12
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-31:12
 MERGED from [androidx.databinding:viewbinding:8.13.2] /Users/francescoprochilo/.gradle/caches/8.13/transforms/4bea3675c0bc10cf23e51faa2218c386/transformed/viewbinding-8.13.2/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.11.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/537d34060756dd349ce23550042443f8/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9b68402ce7f6d4d03fe33b867c06ea25/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
@@ -103,8 +103,8 @@ ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/mai
 	android:name
 		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:6:22-78
 application
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:8:5-26:19
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:8:5-26:19
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:8:5-29:19
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:8:5-29:19
 MERGED from [com.google.android.material:material:1.11.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/537d34060756dd349ce23550042443f8/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/537d34060756dd349ce23550042443f8/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9b68402ce7f6d4d03fe33b867c06ea25/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -145,26 +145,30 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/fran
 		ADDED from [androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 	android:label
 		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:10:9-41
+	android:roundIcon
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:13:9-54
+	android:icon
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:12:9-43
 	android:allowBackup
 		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:9:9-35
 	android:theme
 		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:11:9-48
 activity#com.fuelfinder.app.MainActivity
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:17:9-24:20
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:20:9-27:20
 	android:exported
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:19:13-36
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:22:13-36
 	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:18:13-41
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:21:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:20:13-23:29
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:23:13-26:29
 action#android.intent.action.MAIN
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:21:17-69
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:24:17-69
 	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:21:25-66
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:24:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:22:17-77
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:25:17-77
 	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:22:27-74
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:25:27-74
 uses-sdk
 INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml
