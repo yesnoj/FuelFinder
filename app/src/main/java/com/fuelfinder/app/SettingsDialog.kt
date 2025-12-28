@@ -12,13 +12,13 @@ import kotlin.math.roundToInt
 
 class SettingsDialog(
     context: Context,
-    private val initialRadiusKm: Int,
+    private val initialLookAheadKm: Int,
     private val initialMaxResults: Int,
     private val initialFrequencyMin: Int,
-    private val onSettingsChanged: (radiusKm: Int, maxResults: Int, frequencyMin: Int) -> Unit
+    private val onSettingsChanged: (lookAheadKm: Int, maxResults: Int, frequencyMin: Int) -> Unit
 ) : Dialog(context) {
 
-    private var selectedRadiusKm = initialRadiusKm
+    private var selectedLookAheadKm = initialLookAheadKm
     private var selectedMaxResults = initialMaxResults
     private var selectedFrequencyMin = initialFrequencyMin
 
@@ -27,24 +27,29 @@ class SettingsDialog(
         setContentView(R.layout.dialog_settings)
         setTitle("Impostazioni")
 
-        val seekRadius = findViewById<Slider>(R.id.seekRadius)
-        val tvRadiusValue = findViewById<TextView>(R.id.tvRadiusValue)
+        val seekLookAhead = findViewById<Slider>(R.id.seekRadius)
+        val tvLookAheadValue = findViewById<TextView>(R.id.tvRadiusValue)
+
         val seekMaxResults = findViewById<Slider>(R.id.seekMaxResults)
         val tvMaxResultsValue = findViewById<TextView>(R.id.tvMaxResultsValue)
+
         val radioGroupFreq = findViewById<RadioGroup>(R.id.radioGroupFrequency)
         val btnCancel = findViewById<MaterialButton>(R.id.btnCancel)
         val btnOk = findViewById<MaterialButton>(R.id.btnOk)
 
-        // Radius slider
-        seekRadius.valueFrom = 5f
-        seekRadius.valueTo = 50f
-        seekRadius.stepSize = 5f
-        seekRadius.value = initialRadiusKm.toFloat()
-        tvRadiusValue.text = "$initialRadiusKm km"
+        // Look-ahead slider: 10..100 step 10
+        seekLookAhead.valueFrom = 10f
+        seekLookAhead.valueTo = 100f
+        seekLookAhead.stepSize = 10f
 
-        seekRadius.addOnChangeListener { _, value, _ ->
-            selectedRadiusKm = value.toInt()
-            tvRadiusValue.text = "${value.toInt()} km"
+        val normalizedInitialLookAhead = (initialLookAheadKm / 10.0).roundToInt() * 10
+        selectedLookAheadKm = normalizedInitialLookAhead.coerceIn(10, 100)
+        seekLookAhead.value = selectedLookAheadKm.toFloat()
+        tvLookAheadValue.text = "$selectedLookAheadKm km"
+
+        seekLookAhead.addOnChangeListener { _, value, _ ->
+            selectedLookAheadKm = value.toInt()
+            tvLookAheadValue.text = "${value.toInt()} km"
         }
 
         // Max results slider: 5..50 step 5
@@ -62,7 +67,6 @@ class SettingsDialog(
             tvMaxResultsValue.text = "${value.toInt()}"
         }
 
-        // Frequency radio buttons
         when (initialFrequencyMin) {
             1 -> radioGroupFreq.check(R.id.radioFreq1)
             3 -> radioGroupFreq.check(R.id.radioFreq3)
@@ -80,9 +84,8 @@ class SettingsDialog(
         }
 
         btnCancel.setOnClickListener { dismiss() }
-
         btnOk.setOnClickListener {
-            onSettingsChanged(selectedRadiusKm, selectedMaxResults, selectedFrequencyMin)
+            onSettingsChanged(selectedLookAheadKm, selectedMaxResults, selectedFrequencyMin)
             dismiss()
         }
 
@@ -91,14 +94,8 @@ class SettingsDialog(
 
     override fun onStart() {
         super.onStart()
-
-        // Dialog più largo (ottimo su Pixel 8a)
         val dm = context.resources.displayMetrics
         val width = (dm.widthPixels * 0.92f).toInt()
-
-        window?.setLayout(
-            width,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
+        window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
     }
 }

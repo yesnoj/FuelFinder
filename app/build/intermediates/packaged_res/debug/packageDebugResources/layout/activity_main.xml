@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootLayout"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".MainActivity">
 
-    <!-- Map View -->
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Top Info Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardTopInfo"
         android:layout_width="match_parent"
@@ -38,6 +39,50 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- ✅ contenitore label + switch -->
+            <LinearLayout
+                android:id="@+id/modeContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@id/btnSettings"
+                app:layout_constraintTop_toTopOf="@id/btnSettings"
+                app:layout_constraintBottom_toBottomOf="@id/btnSettings">
+
+                <TextView
+                    android:id="@+id/tvModeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Percorso"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginEnd="6dp"/>
+
+                <!-- ✅ FIX: SwitchCompat senza testo (showText=false) + text=" " non nullo -->
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swSearchModeTop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:showText="false"
+                    android:text=" "
+                    android:contentDescription="Modalità ricerca: Percorso o 360 gradi" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnSettings"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/text_primary"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="0dp"
@@ -49,7 +94,7 @@
                 android:layout_marginStart="12dp"
                 app:layout_constraintStart_toEndOf="@id/ivLoc"
                 app:layout_constraintTop_toTopOf="@id/ivLoc"
-                app:layout_constraintEnd_toStartOf="@id/btnSettings" />
+                app:layout_constraintEnd_toStartOf="@id/modeContainer" />
 
             <TextView
                 android:id="@+id/tvSubtitle"
@@ -60,21 +105,8 @@
                 android:textColor="@color/text_secondary"
                 app:layout_constraintStart_toStartOf="@id/tvTitle"
                 app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                app:layout_constraintEnd_toStartOf="@id/btnSettings" />
+                app:layout_constraintEnd_toStartOf="@id/modeContainer" />
 
-            <!-- Settings button -->
-            <ImageButton
-                android:id="@+id/btnSettings"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_settings"
-                android:padding="8dp"
-                app:tint="@color/text_primary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Fuel type selection and search controls -->
             <LinearLayout
                 android:id="@+id/fuelControlsLayout"
                 android:layout_width="0dp"
@@ -87,7 +119,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivLoc">
 
-                <!-- Fuel type chips -->
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipGroupFuel"
                     android:layout_width="match_parent"
@@ -102,9 +133,6 @@
                         android:layout_height="wrap_content"
                         android:text="Diesel"
                         android:checked="true"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                     <com.google.android.material.chip.Chip
@@ -112,9 +140,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Benzina"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                     <com.google.android.material.chip.Chip
@@ -122,9 +147,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="GPL"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                     <com.google.android.material.chip.Chip
@@ -132,13 +154,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Metano"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        app:checkedIconVisible="false"
                         style="@style/Widget.MaterialComponents.Chip.Choice" />
                 </com.google.android.material.chip.ChipGroup>
 
-                <!-- Search button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnFindFuel"
                     android:layout_width="match_parent"
@@ -154,7 +172,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Bottom Sheet for Results -->
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
@@ -196,7 +213,6 @@
                 android:textColor="@color/text_secondary"
                 android:layout_marginTop="4dp" />
 
-            <!-- Sort mode chips -->
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupSort"
                 android:layout_width="wrap_content"
@@ -210,9 +226,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Prezzo"
-                    android:textColor="@color/chip_text_selector"
-                    app:chipBackgroundColor="@color/chip_background_selector"
-                    app:checkedIconVisible="false"
                     style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                 <com.google.android.material.chip.Chip
@@ -220,9 +233,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Distanza"
-                    android:textColor="@color/chip_text_selector"
-                    app:chipBackgroundColor="@color/chip_background_selector"
-                    app:checkedIconVisible="false"
                     style="@style/Widget.MaterialComponents.Chip.Choice" />
             </com.google.android.material.chip.ChipGroup>
 

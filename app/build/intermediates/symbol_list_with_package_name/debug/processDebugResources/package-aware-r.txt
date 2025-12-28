@@ -3552,6 +3552,7 @@ id matrix
 id message
 id middle
 id mini
+id modeContainer
 id month_grid
 id month_navigation_bar
 id month_navigation_fragment_toggle
@@ -3657,7 +3658,6 @@ id right
 id rightToLeft
 id right_icon
 id right_side
-id rootLayout
 id rounded
 id row_index_key
 id rtl
@@ -3728,6 +3728,7 @@ id stretch
 id submenuarrow
 id submit_area
 id supportScrollUp
+id swSearchModeTop
 id switchWidget
 id tabMode
 id tag_accessibility_actions
@@ -3781,6 +3782,7 @@ id tvInfoLine2
 id tvInfoTitle
 id tvLastUpdate
 id tvMaxResultsValue
+id tvModeLabel
 id tvRadiusValue
 id tvStationAddress
 id tvStationDistance

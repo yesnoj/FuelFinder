@@ -24,12 +24,13 @@
             android:layout_marginBottom="16dp"
             android:textColor="@color/text_primary" />
 
+        <!-- Look-ahead -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Raggio ricerca (km)"
+            android:text="Prossimi km di viaggio"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:textColor="@color/text_primary" />
 
         <LinearLayout
@@ -49,13 +50,14 @@
                 android:id="@+id/tvRadiusValue"
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="10 km"
+                android:text="70 km"
                 android:textAlignment="textEnd"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:textColor="@color/text_primary" />
         </LinearLayout>
 
+        <!-- Max results -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,13 +83,14 @@
                 android:id="@+id/tvMaxResultsValue"
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="20"
+                android:text="50"
                 android:textAlignment="textEnd"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:textColor="@color/text_primary" />
         </LinearLayout>
 
+        <!-- Frequency -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -148,6 +151,7 @@
                 android:textColor="@color/text_primary" />
         </LinearLayout>
 
+        <!-- Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -172,7 +176,6 @@
                 android:textColor="@android:color/white"
                 app:backgroundTint="@color/primary"
                 style="@style/Widget.MaterialComponents.Button" />
-
         </LinearLayout>
 
     </LinearLayout>

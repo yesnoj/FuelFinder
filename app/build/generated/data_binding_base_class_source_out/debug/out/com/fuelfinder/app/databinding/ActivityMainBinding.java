@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
@@ -74,10 +75,16 @@ public final class ActivityMainBinding implements ViewBinding {
   public final MapView mapView;
 
   @NonNull
+  public final LinearLayout modeContainer;
+
+  @NonNull
   public final RecyclerView recyclerViewStations;
 
   @NonNull
-  public final CoordinatorLayout rootLayout;
+  public final SwitchCompat swSearchModeTop;
+
+  @NonNull
+  public final TextView tvModeLabel;
 
   @NonNull
   public final TextView tvSubtitle;
@@ -95,7 +102,8 @@ public final class ActivityMainBinding implements ViewBinding {
       @NonNull ChipGroup chipGroupFuel, @NonNull ChipGroup chipGroupSort, @NonNull Chip chipMetano,
       @NonNull Chip chipSortDistance, @NonNull Chip chipSortPrice,
       @NonNull LinearLayout fuelControlsLayout, @NonNull ImageView ivLoc, @NonNull MapView mapView,
-      @NonNull RecyclerView recyclerViewStations, @NonNull CoordinatorLayout rootLayout,
+      @NonNull LinearLayout modeContainer, @NonNull RecyclerView recyclerViewStations,
+      @NonNull SwitchCompat swSearchModeTop, @NonNull TextView tvModeLabel,
       @NonNull TextView tvSubtitle, @NonNull TextView tvTitle, @NonNull TextView tvUpdateStatus) {
     this.rootView = rootView;
     this.bottomSheet = bottomSheet;
@@ -113,8 +121,10 @@ public final class ActivityMainBinding implements ViewBinding {
     this.fuelControlsLayout = fuelControlsLayout;
     this.ivLoc = ivLoc;
     this.mapView = mapView;
+    this.modeContainer = modeContainer;
     this.recyclerViewStations = recyclerViewStations;
-    this.rootLayout = rootLayout;
+    this.swSearchModeTop = swSearchModeTop;
+    this.tvModeLabel = tvModeLabel;
     this.tvSubtitle = tvSubtitle;
     this.tvTitle = tvTitle;
     this.tvUpdateStatus = tvUpdateStatus;
@@ -237,13 +247,29 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.modeContainer;
+      LinearLayout modeContainer = ViewBindings.findChildViewById(rootView, id);
+      if (modeContainer == null) {
+        break missingId;
+      }
+
       id = R.id.recyclerViewStations;
       RecyclerView recyclerViewStations = ViewBindings.findChildViewById(rootView, id);
       if (recyclerViewStations == null) {
         break missingId;
       }
 
-      CoordinatorLayout rootLayout = (CoordinatorLayout) rootView;
+      id = R.id.swSearchModeTop;
+      SwitchCompat swSearchModeTop = ViewBindings.findChildViewById(rootView, id);
+      if (swSearchModeTop == null) {
+        break missingId;
+      }
+
+      id = R.id.tvModeLabel;
+      TextView tvModeLabel = ViewBindings.findChildViewById(rootView, id);
+      if (tvModeLabel == null) {
+        break missingId;
+      }
 
       id = R.id.tvSubtitle;
       TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
@@ -266,7 +292,8 @@ public final class ActivityMainBinding implements ViewBinding {
       return new ActivityMainBinding((CoordinatorLayout) rootView, bottomSheet, btnFindFuel,
           btnSettings, cardTopInfo, chipBenzina, chipGasolio, chipGpl, chipGroupFuel, chipGroupSort,
           chipMetano, chipSortDistance, chipSortPrice, fuelControlsLayout, ivLoc, mapView,
-          recyclerViewStations, rootLayout, tvSubtitle, tvTitle, tvUpdateStatus);
+          modeContainer, recyclerViewStations, swSearchModeTop, tvModeLabel, tvSubtitle, tvTitle,
+          tvUpdateStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
