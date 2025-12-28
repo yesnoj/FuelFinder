@@ -1,14 +1,18 @@
 [
     {
-        "merged": "com.fuelfinder.app-mergeDebugResources-52:/layout/item_station.xml",
-        "source": "com.fuelfinder.app-main-55:/layout/item_station.xml"
+        "merged": "com.fuelfinder.app-mergeDebugResources-52:/layout/marker_info_window.xml",
+        "source": "com.fuelfinder.app-main-55:/layout/marker_info_window.xml"
     },
     {
-        "merged": "com.fuelfinder.app-mergeDebugResources-52:/layout/activity_main.xml",
-        "source": "com.fuelfinder.app-main-55:/layout/activity_main.xml"
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-mergeDebugResources-52:/layout/item_station.xml",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/layout/item_station.xml"
     },
     {
-        "merged": "com.fuelfinder.app-mergeDebugResources-52:/layout/dialog_settings.xml",
-        "source": "com.fuelfinder.app-main-55:/layout/dialog_settings.xml"
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-mergeDebugResources-52:/layout/dialog_settings.xml",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/layout/dialog_settings.xml"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-mergeDebugResources-52:/layout/activity_main.xml",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-55:/layout/activity_main.xml"
     }
 ]

@@ -3776,6 +3776,9 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tvInfoLine1
+id tvInfoLine2
+id tvInfoTitle
 id tvLastUpdate
 id tvMaxResultsValue
 id tvRadiusValue
@@ -3960,6 +3963,7 @@ layout m3_alert_dialog_actions
 layout m3_alert_dialog_title
 layout m3_auto_complete_simple_item
 layout m3_side_sheet_dialog
+layout marker_info_window
 layout material_chip_input_combo
 layout material_clock_display
 layout material_clock_display_divider

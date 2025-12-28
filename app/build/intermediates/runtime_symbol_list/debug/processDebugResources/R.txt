@@ -3775,6 +3775,9 @@ int id transition_position 0x7f080208
 int id transition_scene_layoutid_cache 0x7f080209
 int id transition_transform 0x7f08020a
 int id triangle 0x7f08020b
+int id tvInfoLine1 0x7f080230
+int id tvInfoLine2 0x7f080231
+int id tvInfoTitle 0x7f080232
 int id tvLastUpdate 0x7f08020c
 int id tvMaxResultsValue 0x7f08020d
 int id tvRadiusValue 0x7f08020e
@@ -3959,6 +3962,7 @@ int layout m3_alert_dialog_actions 0x7f0b0037
 int layout m3_alert_dialog_title 0x7f0b0038
 int layout m3_auto_complete_simple_item 0x7f0b0039
 int layout m3_side_sheet_dialog 0x7f0b003a
+int layout marker_info_window 0x7f0b0083
 int layout material_chip_input_combo 0x7f0b003b
 int layout material_clock_display 0x7f0b003c
 int layout material_clock_display_divider 0x7f0b003d

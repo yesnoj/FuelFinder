@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -38,6 +39,9 @@ import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.min
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var isLiveSearchActive = false
     private var selectedFuelType = FuelType.GASOLIO
     private var searchRadiusKm = 10
-    private var maxResults = 20
+    private var maxResults = 50              // ✅ come richiesto (max 50)
     private var updateFrequencyMin = 1
     private var sortMode = SortMode.PRICE
     private var originalSearchRadius = 10
@@ -82,6 +86,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val updateHandler = Handler(Looper.getMainLooper())
     private var updateRunnable: Runnable? = null
     private var locationRetryCount = 0
+
+    private val lastUpdateDf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY)
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST = 1001
@@ -143,7 +149,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         btnFindFuel.setOnClickListener { toggleLiveSearch() }
         btnSettings.setOnClickListener { openSettings() }
 
-        // Fuel type selection
         chipGroupFuel.setOnCheckedChangeListener { _, checkedId ->
             selectedFuelType = when (checkedId) {
                 R.id.chipGasolio -> FuelType.GASOLIO
@@ -152,14 +157,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 R.id.chipMetano -> FuelType.METANO
                 else -> FuelType.GASOLIO
             }
-
-            // If search is active, update immediately
-            if (isLiveSearchActive) {
-                searchAndUpdate()
-            }
+            if (isLiveSearchActive) searchAndUpdate()
         }
 
-        // Sort mode selection
         chipGroupSort.setOnCheckedChangeListener { _, checkedId ->
             sortMode = when (checkedId) {
                 R.id.chipSortDistance -> SortMode.DISTANCE
@@ -177,6 +177,31 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             isMyLocationButtonEnabled = false
             isCompassEnabled = true
         }
+
+        // ✅ InfoWindow custom: titolo + distanza + aggiornato relativo
+        googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
+            override fun getInfoWindow(marker: Marker): View? = null
+
+            override fun getInfoContents(marker: Marker): View {
+                val view = LayoutInflater.from(this@MainActivity)
+                    .inflate(R.layout.marker_info_window, null)
+
+                val tvTitle = view.findViewById<TextView>(R.id.tvInfoTitle)
+                val tvLine1 = view.findViewById<TextView>(R.id.tvInfoLine1)
+                val tvLine2 = view.findViewById<TextView>(R.id.tvInfoLine2)
+
+                tvTitle.text = marker.title ?: ""
+
+                val station = marker.tag as? FuelStation
+                val dist = station?.airDistanceKm?.let { String.format("%.1f km", it) } ?: ""
+                tvLine1.text = dist
+
+                val upd = station?.let { "Aggiornato: ${formatRelativeUpdate(it.lastUpdate)}" } ?: ""
+                tvLine2.text = upd
+
+                return view
+            }
+        })
 
         // Italy as default
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(42.5, 12.5), 6f))
@@ -238,7 +263,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun updateUserLocation(location: Location) {
         currentLocation = location
 
-        // Update marker
         val latLng = LatLng(location.latitude, location.longitude)
         userMarker?.remove()
         userMarker = googleMap.addMarker(
@@ -248,7 +272,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         )
 
-        // Update distances if searching - this happens automatically when location changes
         if (isLiveSearchActive && currentStations.isNotEmpty()) {
             updateAirDistances()
             applySortAndRefresh()
@@ -283,7 +306,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         locationRetryCount = 0
         isLiveSearchActive = true
-
         searchRadiusKm = originalSearchRadius
 
         btnFindFuel.apply {
@@ -331,10 +353,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun searchAndUpdate() {
         val loc = currentLocation ?: return
-
         tvUpdateStatus.text = "Ricerca in corso…"
-
-        println("DEBUG: Searching - lat: ${loc.latitude}, lon: ${loc.longitude}, radius: $searchRadiusKm km, fuel: ${selectedFuelType.value}, max: $maxResults")
 
         ApiClient.fuelService.getNearbyStations(
             latitude = loc.latitude,
@@ -343,6 +362,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             fuel = selectedFuelType.value,
             results = maxResults
         ).enqueue(object : Callback<List<DistributorDto>> {
+
             override fun onResponse(
                 call: Call<List<DistributorDto>>,
                 response: Response<List<DistributorDto>>
@@ -354,8 +374,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 val body = response.body()
-                println("DEBUG: API Response - ${body?.size ?: 0} stations found")
-
                 if (body.isNullOrEmpty()) {
                     tvUpdateStatus.text = "Nessun distributore trovato"
                     if (searchRadiusKm < 50) {
@@ -388,7 +406,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         airDistanceKm = null,
                         routeDistanceKm = null,
                         routeDurationSec = null,
-                        lastUpdate = dto.data
+                        lastUpdate = dto.data // ✅ data aggiornamento dal servizio
                     )
                 }
 
@@ -401,7 +419,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onFailure(call: Call<List<DistributorDto>>, t: Throwable) {
                 tvUpdateStatus.text = "Errore rete"
                 showToast("Errore di connessione: ${t.message}")
-                println("DEBUG: Network error - ${t.message}")
             }
         })
     }
@@ -414,15 +431,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         currentStations.addAll(stations)
 
         stations.forEachIndexed { index, st ->
-            val distanceText = st.airDistanceKm?.let {
-                String.format("%.1f km", it)
-            } ?: ""
-
             val marker = googleMap.addMarker(
                 MarkerOptions()
                     .position(LatLng(st.latitude, st.longitude))
                     .title("${st.name} - €${String.format("%.3f", st.prices.values.firstOrNull() ?: 0.0)}/L")
-                    .snippet(distanceText)
+                    .snippet("") // la UI usa la InfoWindow custom, snippet non serve
                     .icon(getMarkerIcon(index))
             )
             if (marker != null) {
@@ -440,7 +453,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
             try {
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(b.build(), 100))
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 googleMap.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         LatLng(currentLocation?.latitude ?: 42.5, currentLocation?.longitude ?: 12.5),
@@ -453,9 +466,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun updateMarkerSnippets() {
         stationMarkers.forEach { marker ->
-            val station = marker.tag as? FuelStation
-            station?.airDistanceKm?.let {
-                marker.snippet = String.format("%.1f km", it)
+            val station = marker.tag as? FuelStation ?: return@forEach
+
+            // Forza ridisegno se la finestra è aperta (Google Maps non aggiorna da solo)
+            if (marker.isInfoWindowShown) {
+                marker.hideInfoWindow()
+                marker.showInfoWindow()
             }
         }
     }
@@ -480,7 +496,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         currentStations.forEach { s ->
             s.airDistanceKm = haversineKm(lat1, lon1, s.latitude, s.longitude)
         }
+
         applySortAndRefresh()
+        updateMarkerSnippets()
     }
 
     private fun haversineKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
@@ -558,6 +576,52 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
+    // ---- Relativo "3 ore fa / 2 gg fa" ----
+
+    private fun formatRelativeUpdate(lastUpdate: String?): String {
+        if (lastUpdate.isNullOrBlank()) return "n/d"
+        val ageMin = computeAgeMinutes(lastUpdate) ?: return "n/d"
+        return humanizeAge(ageMin)
+    }
+
+    private fun computeAgeMinutes(lastUpdate: String): Long? {
+        return try {
+            val t = lastUpdateDf.parse(lastUpdate)?.time ?: return null
+            val diffMs = System.currentTimeMillis() - t
+            if (diffMs < 0) return null
+            TimeUnit.MILLISECONDS.toMinutes(diffMs)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun humanizeAge(ageMin: Long): String {
+        if (ageMin < 1) return "pochi secondi fa"
+        if (ageMin < 2) return "1 minuto fa"
+        if (ageMin < 60) return "${ageMin} minuti fa"
+
+        val ageHours = ageMin / 60
+        if (ageHours < 2) return "1 ora fa"
+        if (ageHours < 24) return "${ageHours} ore fa"
+
+        val ageDays = ageHours / 24
+        if (ageDays < 2) return "1 gg fa"
+        if (ageDays < 7) return "${ageDays} gg fa"
+
+        val ageWeeks = ageDays / 7
+        if (ageWeeks < 2) return "1 sett fa"
+        if (ageWeeks < 5) return "${ageWeeks} sett fa"
+
+        val ageMonths = ageDays / 30
+        if (ageMonths < 2) return "1 mese fa"
+        if (ageMonths < 12) return "${ageMonths} mesi fa"
+
+        val ageYears = ageDays / 365
+        return if (ageYears < 2) "1 anno fa" else "${ageYears} anni fa"
+    }
+
+    // ----------------------
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -620,7 +684,7 @@ data class FuelStation(
     var airDistanceKm: Double?,
     var routeDistanceKm: Double?,
     var routeDurationSec: Int?,
-    val lastUpdate: String?
+    val lastUpdate: String?            // ✅ aggiunto
 )
 
 enum class FuelType(val value: String) {

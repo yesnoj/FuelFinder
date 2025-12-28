@@ -54,6 +54,9 @@ id recyclerViewStations
 id rootLayout
 id seekMaxResults
 id seekRadius
+id tvInfoLine1
+id tvInfoLine2
+id tvInfoTitle
 id tvLastUpdate
 id tvMaxResultsValue
 id tvRadiusValue
@@ -67,6 +70,7 @@ id tvUpdateStatus
 layout activity_main
 layout dialog_settings
 layout item_station
+layout marker_info_window
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
