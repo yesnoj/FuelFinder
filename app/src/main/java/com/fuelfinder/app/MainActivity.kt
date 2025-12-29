@@ -37,6 +37,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.ChipGroup
 import androidx.appcompat.widget.SwitchCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var btnFindFuel: MaterialButton
     private lateinit var btnSettings: ImageButton
 
-    // ✅ Switch + label in alto
+    // Switch + label in alto
     private lateinit var swSearchModeTop: SwitchCompat
     private lateinit var tvModeLabel: TextView
 
@@ -79,14 +84,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var selectedFuelType = FuelType.GASOLIO
 
     // Settings
-    private var lookAheadKm = 70
-    private var maxResults = 50
+    private var lookAheadKm = 10  // Default 10 km invece di 70
+    private var maxResults = 5     // Default 5 risultati invece di 50
     private var updateFrequencyMin = 1
+    private var useRealDistance = false  // Default false per non usare distanze reali
 
-    // ✅ Modalità: true = percorso, false = 360°
+    // Modalità: true = percorso, false = 360°
     private var alongRouteMode = true
 
-    // ✅ Per quando sei in modalità percorso ma il GPS non dà bearing subito
+    // Per quando sei in modalità percorso ma il GPS non dà bearing subito
     private var lastGoodBearingDeg: Double? = null
 
     private var sortMode = SortMode.PRICE
@@ -101,6 +107,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val lastUpdateDf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY)
 
+    // Coroutine scope per operazioni async
+    private val mainScope = CoroutineScope(Dispatchers.Main + Job())
+    private val realDistanceCalculator = RealDistanceCalculator()
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST = 1001
         private const val DEFAULT_ZOOM = 13f
@@ -109,7 +119,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Autostrada: filtro laterale (km)
         private const val CORRIDOR_KM = 3.0
 
-        // “Davanti” rispetto al bearing
+        // "Davanti" rispetto al bearing
         private const val AHEAD_MAX_ANGLE_DEG = 70.0
 
         // Bearing considerato affidabile
@@ -173,7 +183,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         btnFindFuel.setOnClickListener { toggleLiveSearch() }
         btnSettings.setOnClickListener { openSettings() }
 
-        // ✅ switch: cambia modalità e rilancia la ricerca se attiva
+        // switch: cambia modalità e rilancia la ricerca se attiva
         swSearchModeTop.setOnCheckedChangeListener { _, isChecked ->
             alongRouteMode = isChecked
             tvModeLabel.text = if (alongRouteMode) "Percorso" else "360°"
@@ -209,7 +219,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.uiSettings.isMyLocationButtonEnabled = false
         googleMap.uiSettings.isCompassEnabled = true
 
-        // ✅ InfoWindow custom (titolo + distanza + aggiornato relativo)
+        // InfoWindow custom (titolo + distanza + aggiornato relativo)
         googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
             override fun getInfoWindow(marker: Marker): View? = null
 
@@ -221,7 +231,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 tvTitle.text = marker.title ?: ""
                 val st = marker.tag as? FuelStation
-                tvLine1.text = st?.airDistanceKm?.let { String.format("%.1f km", it) } ?: ""
+
+                // Mostra distanza reale se disponibile, altrimenti distanza aerea
+                val distanceText = when {
+                    st?.routeDistanceKm != null -> String.format("%.1f km (strada)", st.routeDistanceKm)
+                    st?.airDistanceKm != null -> String.format("%.1f km", st.airDistanceKm)
+                    else -> ""
+                }
+                tvLine1.text = distanceText
                 tvLine2.text = st?.let { "Aggiornato: ${formatRelativeUpdate(it.lastUpdate)}" } ?: ""
 
                 return v
@@ -286,7 +303,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun updateUserLocation(location: Location) {
         currentLocation = location
 
-        // Memorizza ultimo bearing “buono”
+        // Memorizza ultimo bearing "buono"
         if (location.hasBearing() && location.bearingAccuracyDegrees <= BEARING_ACC_MAX_DEG) {
             lastGoodBearingDeg = location.bearing.toDouble()
         }
@@ -300,9 +317,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         )
 
+        // Aggiorna SOLO le distanze in linea d'aria quando cambia la posizione
+        // Le distanze reali vengono aggiornate solo con la frequenza impostata
         if (isLiveSearchActive && currentStations.isNotEmpty()) {
-            updateAirDistances()
-            applySortAndRefresh()
+            updateAirDistancesOnly()
             refreshOpenInfoWindows()
         }
     }
@@ -373,15 +391,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val loc = currentLocation ?: return
         tvUpdateStatus.text = "Ricerca in corso…"
 
-        // fetch ragionevole: noi poi filtriamo localmente
-        val fetchRadiusKm = min(maxOf(lookAheadKm, 20), 50)
+        // Usa lookAheadKm come raggio di ricerca per l'API
+        val fetchRadiusKm = lookAheadKm
 
         ApiClient.fuelService.getNearbyStations(
             latitude = loc.latitude,
             longitude = loc.longitude,
-            distanceKm = fetchRadiusKm,
+            distanceKm = fetchRadiusKm,  // Usa direttamente lookAheadKm
             fuel = selectedFuelType.value,
-            results = maxResults
+            results = maxResults * 2  // Richiedi più risultati per poi filtrare
         ).enqueue(object : Callback<List<DistributorDto>> {
 
             override fun onResponse(call: Call<List<DistributorDto>>, response: Response<List<DistributorDto>>) {
@@ -403,6 +421,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     val lon = dto.longitudine ?: return@mapNotNull null
                     val price = dto.prezzo ?: return@mapNotNull null
 
+                    // Calcola subito la distanza aerea per filtrare
+                    val distanceKm = haversineKm(loc.latitude, loc.longitude, lat, lon)
+
+                    // Filtra per distanza massima (lookAheadKm)
+                    if (distanceKm > lookAheadKm) return@mapNotNull null
+
                     FuelStation(
                         id = "${dto.ranking ?: 0}_${lat}_${lon}",
                         name = dto.gestore ?: "Distributore",
@@ -411,7 +435,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         latitude = lat,
                         longitude = lon,
                         prices = mapOf(selectedFuelType.value to price),
-                        airDistanceKm = null,
+                        airDistanceKm = distanceKm,  // Imposta subito la distanza
                         routeDistanceKm = null,
                         routeDurationSec = null,
                         lastUpdate = dto.data
@@ -419,17 +443,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 val finalList = if (!alongRouteMode) {
-                    // ✅ 360°
-                    stationsRaw
+                    // 360° - già filtrati per distanza, prendi i primi maxResults
+                    stationsRaw.sortedBy { it.airDistanceKm }.take(maxResults)
                 } else {
-                    // ✅ percorso (con fallback automatico a 360° se manca bearing)
+                    // percorso (con fallback automatico a 360° se manca bearing)
                     filterStationsAlongDirectionWithFallback(stationsRaw)
                 }
 
                 updateStationDisplay(finalList)
-                tvUpdateStatus.text = "Trovati: ${finalList.size} • Aggiornato: ${getCurrentTime()}"
 
-                updateAirDistances()
+                // Mostra il conteggio corretto in base alla modalità
+                val modeText = if (alongRouteMode) "Percorso" else "360°"
+                tvUpdateStatus.text = "Trovati: ${finalList.size} ($modeText) • Max: ${lookAheadKm}km • Aggiornato: ${getCurrentTime()}"
+
+                // Aggiorna le distanze aeree (già calcolate sopra)
+                // updateAirDistances() - non serve più, già fatto sopra
+
+                // Calcola le distanze reali SOLO se abilitato
+                if (useRealDistance) {
+                    updateRealDistances()
+                }
             }
 
             override fun onFailure(call: Call<List<DistributorDto>>, t: Throwable) {
@@ -440,7 +473,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * ✅ Modalità percorso:
+     * Modalità percorso:
      * - se ho bearing: filtro davanti + corridoio
      * - se NON ho bearing: fallback 360° (non lasciare lista vuota)
      */
@@ -450,7 +483,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (bearingDeg == null) {
             // fallback 360°
-            tvUpdateStatus.text = "Direzione non disponibile: mostro risultati a 360°"
+            showToast("Direzione non disponibile: mostro risultati a 360°")
             return all
         }
 
@@ -461,7 +494,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         for (st in all) {
             val p = LatLng(st.latitude, st.longitude)
 
-            val proj = projectToDirectionKm(origin, p, dirUnit)   // km “davanti”
+            val proj = projectToDirectionKm(origin, p, dirUnit)   // km "davanti"
             val cross = crossTrackKm(origin, p, dirUnit)          // km laterali
 
             if (proj <= 0.5) continue
@@ -526,9 +559,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun applySortAndRefresh() {
         val sorted = when (sortMode) {
             SortMode.PRICE -> currentStations.sortedBy { it.prices.values.firstOrNull() ?: Double.MAX_VALUE }
-            SortMode.DISTANCE -> currentStations.sortedBy { it.airDistanceKm ?: Double.MAX_VALUE }
+            SortMode.DISTANCE -> currentStations.sortedBy {
+                // Usa distanza reale se disponibile, altrimenti distanza aerea
+                it.routeDistanceKm ?: it.airDistanceKm ?: Double.MAX_VALUE
+            }
         }
         stationAdapter.updateStations(sorted)
+    }
+
+    private fun updateAirDistancesOnly() {
+        val loc = currentLocation ?: return
+        val lat1 = loc.latitude
+        val lon1 = loc.longitude
+
+        currentStations.forEach { s ->
+            // Aggiorna SOLO la distanza aerea, mantiene quella stradale se c'era
+            s.airDistanceKm = haversineKm(lat1, lon1, s.latitude, s.longitude)
+        }
+
+        // Ordina in base al criterio selezionato
+        applySortAndRefresh()
     }
 
     private fun updateAirDistances() {
@@ -540,8 +590,54 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             s.airDistanceKm = haversineKm(lat1, lon1, s.latitude, s.longitude)
         }
 
-        applySortAndRefresh()
-        refreshOpenInfoWindows()
+        if (!useRealDistance) {
+            applySortAndRefresh()
+            refreshOpenInfoWindows()
+        }
+    }
+
+    private fun updateRealDistances() {
+        val loc = currentLocation ?: return
+
+        tvUpdateStatus.text = "${tvUpdateStatus.text} • Calcolo distanze stradali..."
+
+        // Calcola le distanze reali in batch (più efficiente)
+        mainScope.launch {
+            try {
+                val origin = Pair(loc.latitude, loc.longitude)
+                val destinations = currentStations.map { Pair(it.latitude, it.longitude) }
+
+                // Dividi in batch di 10 per rispettare i limiti API
+                val batchSize = 10
+                val results = mutableListOf<RealDistanceCalculator.RealDistanceResult?>()
+
+                for (i in destinations.indices step batchSize) {
+                    val batch = destinations.subList(i, minOf(i + batchSize, destinations.size))
+                    val batchResults = withContext(Dispatchers.IO) {
+                        realDistanceCalculator.getBatchDistances(origin, batch)
+                    }
+                    results.addAll(batchResults)
+                }
+
+                // Aggiorna le stazioni con le distanze reali
+                currentStations.forEachIndexed { index, station ->
+                    results.getOrNull(index)?.let { result ->
+                        station.routeDistanceKm = result.distanceKm
+                        station.routeDurationSec = result.durationMinutes * 60
+                    }
+                }
+
+                applySortAndRefresh()
+                refreshOpenInfoWindows()
+
+                val modeText = if (alongRouteMode) "Percorso" else "360°"
+                tvUpdateStatus.text = "Trovati: ${currentStations.size} ($modeText) • Distanze stradali calcolate"
+
+            } catch (e: Exception) {
+                showToast("Errore nel calcolo distanze stradali")
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun refreshOpenInfoWindows() {
@@ -558,11 +654,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             context = this,
             initialLookAheadKm = lookAheadKm,
             initialMaxResults = maxResults,
-            initialFrequencyMin = updateFrequencyMin
-        ) { newLookAheadKm, newMaxRes, newFreq ->
+            initialFrequencyMin = updateFrequencyMin,
+            initialUseRealDistance = useRealDistance  // Passa il nuovo parametro
+        ) { newLookAheadKm, newMaxRes, newFreq, newUseRealDistance ->
             lookAheadKm = newLookAheadKm
             maxResults = newMaxRes
             updateFrequencyMin = newFreq
+            useRealDistance = newUseRealDistance  // Salva la nuova impostazione
 
             showToast("Impostazioni salvate")
 
@@ -616,7 +714,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
-    // --- “Aggiornato: 3 ore fa” ---
+    // --- "Aggiornato: 3 ore fa" ---
     private fun formatRelativeUpdate(lastUpdate: String?): String {
         if (lastUpdate.isNullOrBlank()) return "n/d"
         val ageMin = computeAgeMinutes(lastUpdate) ?: return "n/d"

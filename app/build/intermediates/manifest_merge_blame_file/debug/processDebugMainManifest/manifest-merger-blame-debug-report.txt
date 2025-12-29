@@ -80,7 +80,7 @@
 48        <meta-data
 49            android:name="com.google.android.geo.API_KEY"
 49-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:17:13-58
-50            android:value="AIzaSyA7JJtoSkEJeOpF39QPCdEWwOqJWKaEVm0" />
+50            android:value="AIzaSyAfQV0xJTUFBU9KzBH973cEfveZYJImDu0" />
 50-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:18:13-44
 51
 52        <activity

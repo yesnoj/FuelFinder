@@ -47,7 +47,7 @@
         android:theme="@style/Theme.FuelFinder" >
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA7JJtoSkEJeOpF39QPCdEWwOqJWKaEVm0" />
+            android:value="AIzaSyAfQV0xJTUFBU9KzBH973cEfveZYJImDu0" />
 
         <activity
             android:name="com.fuelfinder.app.MainActivity"

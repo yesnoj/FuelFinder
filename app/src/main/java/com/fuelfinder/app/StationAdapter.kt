@@ -58,9 +58,19 @@ class StationAdapter(
                 "Prezzo n/d"
             }
 
-            // Distance text
+            // Distance text - mostra distanza reale se disponibile
             tvDistance.text = when {
-                s.airDistanceKm != null -> String.format("%.1f km", s.airDistanceKm)
+                s.routeDistanceKm != null -> {
+                    // Mostra anche il tempo di percorrenza se disponibile
+                    val duration = s.routeDurationSec
+                    if (duration != null) {
+                        val minutes = duration / 60
+                        String.format("🚗 %.1f km • %d min", s.routeDistanceKm, minutes)
+                    } else {
+                        String.format("🚗 %.1f km (strada)", s.routeDistanceKm)
+                    }
+                }
+                s.airDistanceKm != null -> String.format("📍 %.1f km (linea d'aria)", s.airDistanceKm)
                 else -> "Calcolo..."
             }
 
@@ -81,6 +91,13 @@ class StationAdapter(
                     else -> colorOld
                 }
             )
+
+            // Colora anche la distanza per evidenziare quando è stradale
+            if (s.routeDistanceKm != null) {
+                tvDistance.setTextColor(ContextCompat.getColor(ctx, R.color.green))
+            } else {
+                tvDistance.setTextColor(ContextCompat.getColor(ctx, R.color.text_secondary))
+            }
 
             btnNavigate.setOnClickListener { onNavigate(s) }
         }

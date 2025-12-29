@@ -39,7 +39,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- ✅ contenitore label + switch -->
+            <!-- contenitore label + switch -->
             <LinearLayout
                 android:id="@+id/modeContainer"
                 android:layout_width="wrap_content"
@@ -61,7 +61,6 @@
                     android:textColor="@color/text_primary"
                     android:layout_marginEnd="6dp"/>
 
-                <!-- ✅ FIX: SwitchCompat senza testo (showText=false) + text=" " non nullo -->
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swSearchModeTop"
                     android:layout_width="wrap_content"
@@ -133,28 +132,40 @@
                         android:layout_height="wrap_content"
                         android:text="Diesel"
                         android:checked="true"
-                        style="@style/Widget.MaterialComponents.Chip.Choice" />
+                        style="@style/Widget.FuelFinder.Chip.Choice"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipStrokeColor="@color/chip_stroke_selector" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipBenzina"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Benzina"
-                        style="@style/Widget.MaterialComponents.Chip.Choice" />
+                        style="@style/Widget.FuelFinder.Chip.Choice"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipStrokeColor="@color/chip_stroke_selector" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipGpl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="GPL"
-                        style="@style/Widget.MaterialComponents.Chip.Choice" />
+                        style="@style/Widget.FuelFinder.Chip.Choice"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipStrokeColor="@color/chip_stroke_selector" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipMetano"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Metano"
-                        style="@style/Widget.MaterialComponents.Chip.Choice" />
+                        style="@style/Widget.FuelFinder.Chip.Choice"
+                        app:chipBackgroundColor="@color/chip_background_selector"
+                        android:textColor="@color/chip_text_selector"
+                        app:chipStrokeColor="@color/chip_stroke_selector" />
                 </com.google.android.material.chip.ChipGroup>
 
                 <com.google.android.material.button.MaterialButton
@@ -226,14 +237,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Prezzo"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
+                    style="@style/Widget.FuelFinder.Chip.Choice"
+                    app:chipBackgroundColor="@color/chip_background_selector"
+                    android:textColor="@color/chip_text_selector"
+                    app:chipStrokeColor="@color/chip_stroke_selector" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSortDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Distanza"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
+                    style="@style/Widget.FuelFinder.Chip.Choice"
+                    app:chipBackgroundColor="@color/chip_background_selector"
+                    android:textColor="@color/chip_text_selector"
+                    app:chipStrokeColor="@color/chip_stroke_selector" />
             </com.google.android.material.chip.ChipGroup>
 
         </LinearLayout>

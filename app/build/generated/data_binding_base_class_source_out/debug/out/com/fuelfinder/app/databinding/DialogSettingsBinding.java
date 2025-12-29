@@ -10,6 +10,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.fuelfinder.app.R;
@@ -48,17 +49,24 @@ public final class DialogSettingsBinding implements ViewBinding {
   public final Slider seekRadius;
 
   @NonNull
+  public final SwitchCompat swRealDistance;
+
+  @NonNull
   public final TextView tvMaxResultsValue;
 
   @NonNull
   public final TextView tvRadiusValue;
 
+  @NonNull
+  public final TextView tvRealDistanceInfo;
+
   private DialogSettingsBinding(@NonNull ScrollView rootView, @NonNull MaterialButton btnCancel,
       @NonNull MaterialButton btnOk, @NonNull RadioButton radioFreq1,
       @NonNull RadioButton radioFreq3, @NonNull RadioButton radioFreq5,
       @NonNull RadioGroup radioGroupFrequency, @NonNull Slider seekMaxResults,
-      @NonNull Slider seekRadius, @NonNull TextView tvMaxResultsValue,
-      @NonNull TextView tvRadiusValue) {
+      @NonNull Slider seekRadius, @NonNull SwitchCompat swRealDistance,
+      @NonNull TextView tvMaxResultsValue, @NonNull TextView tvRadiusValue,
+      @NonNull TextView tvRealDistanceInfo) {
     this.rootView = rootView;
     this.btnCancel = btnCancel;
     this.btnOk = btnOk;
@@ -68,8 +76,10 @@ public final class DialogSettingsBinding implements ViewBinding {
     this.radioGroupFrequency = radioGroupFrequency;
     this.seekMaxResults = seekMaxResults;
     this.seekRadius = seekRadius;
+    this.swRealDistance = swRealDistance;
     this.tvMaxResultsValue = tvMaxResultsValue;
     this.tvRadiusValue = tvRadiusValue;
+    this.tvRealDistanceInfo = tvRealDistanceInfo;
   }
 
   @Override
@@ -147,6 +157,12 @@ public final class DialogSettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.swRealDistance;
+      SwitchCompat swRealDistance = ViewBindings.findChildViewById(rootView, id);
+      if (swRealDistance == null) {
+        break missingId;
+      }
+
       id = R.id.tvMaxResultsValue;
       TextView tvMaxResultsValue = ViewBindings.findChildViewById(rootView, id);
       if (tvMaxResultsValue == null) {
@@ -159,9 +175,15 @@ public final class DialogSettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvRealDistanceInfo;
+      TextView tvRealDistanceInfo = ViewBindings.findChildViewById(rootView, id);
+      if (tvRealDistanceInfo == null) {
+        break missingId;
+      }
+
       return new DialogSettingsBinding((ScrollView) rootView, btnCancel, btnOk, radioFreq1,
-          radioFreq3, radioFreq5, radioGroupFrequency, seekMaxResults, seekRadius,
-          tvMaxResultsValue, tvRadiusValue);
+          radioFreq3, radioFreq5, radioGroupFrequency, seekMaxResults, seekRadius, swRealDistance,
+          tvMaxResultsValue, tvRadiusValue, tvRealDistanceInfo);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -1478,6 +1478,7 @@ color cardview_light_background
 color cardview_shadow_end_color
 color cardview_shadow_start_color
 color chip_background_selector
+color chip_stroke_selector
 color chip_text_selector
 color common_google_signin_btn_text_dark
 color common_google_signin_btn_text_dark_default
@@ -3728,6 +3729,7 @@ id stretch
 id submenuarrow
 id submit_area
 id supportScrollUp
+id swRealDistance
 id swSearchModeTop
 id switchWidget
 id tabMode
@@ -3784,6 +3786,7 @@ id tvLastUpdate
 id tvMaxResultsValue
 id tvModeLabel
 id tvRadiusValue
+id tvRealDistanceInfo
 id tvStationAddress
 id tvStationDistance
 id tvStationName

@@ -4,6 +4,7 @@ color accent
 color background
 color card_background
 color chip_background_selector
+color chip_stroke_selector
 color chip_text_selector
 color divider
 color green
@@ -54,6 +55,7 @@ id radioGroupFrequency
 id recyclerViewStations
 id seekMaxResults
 id seekRadius
+id swRealDistance
 id swSearchModeTop
 id tvInfoLine1
 id tvInfoLine2
@@ -62,6 +64,7 @@ id tvLastUpdate
 id tvMaxResultsValue
 id tvModeLabel
 id tvRadiusValue
+id tvRealDistanceInfo
 id tvStationAddress
 id tvStationDistance
 id tvStationName
