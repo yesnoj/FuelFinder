@@ -62,7 +62,7 @@ L'app utilizza i dati ufficiali del **MISE (Ministero dello Sviluppo Economico)*
 
 1. **Clona il repository**
 ```bash
-git clone https://github.com/tuousername/FuelFinder.git
+git clone https://github.com/yesnoj/FuelFinder.git
 cd FuelFinder
 ```
 
