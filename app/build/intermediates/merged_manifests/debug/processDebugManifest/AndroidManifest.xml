@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- Include required permissions for Google Maps API to run. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,7 +27,6 @@
     </queries>
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <permission
@@ -58,6 +58,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- WIDGET INTEGRATION: Widget Provider -->
+        <receiver
+            android:name="com.fuelfinder.app.widget.FuelFinderWidgetProvider"
+            android:exported="true"
+            android:label="FuelFinder Widget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.fuelfinder.app.UPDATE_WIDGET" />
+                <action android:name="com.fuelfinder.app.NAVIGATE" />
+                <action android:name="com.fuelfinder.app.TOGGLE_SORT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_fuel_finder_info" />
+        </receiver>
+
+        <!-- WIDGET INTEGRATION: Widget Update Service -->
+        <service
+            android:name="com.fuelfinder.app.widget.WidgetUpdateService"
+            android:exported="false" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

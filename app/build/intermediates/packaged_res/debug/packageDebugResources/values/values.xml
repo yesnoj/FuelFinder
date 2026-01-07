@@ -13,6 +13,7 @@
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
     <string name="app_name">FuelFinder</string>
+    <string name="widget_description">Mostra i distributori di carburante più convenienti nelle vicinanze</string>
     <style name="Theme.FuelFinder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         
         <item name="colorPrimary">@color/primary</item>

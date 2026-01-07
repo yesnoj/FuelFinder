@@ -3169,9 +3169,12 @@ drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_navigate_widget
 drawable ic_navigation
+drawable ic_refresh
 drawable ic_search_black_24
 drawable ic_settings
+drawable ic_sort
 drawable ic_stop
 drawable ic_user_location
 drawable live_badge
@@ -3253,6 +3256,10 @@ drawable stats_background
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
+drawable widget_background
+drawable widget_background_modern
+drawable widget_button_background
+drawable widget_nav_button_background
 id ALT
 id BOTTOM_END
 id BOTTOM_START
@@ -3724,6 +3731,21 @@ id startToEnd
 id startVertical
 id staticLayout
 id staticPostLayout
+id station_1
+id station_1_distance
+id station_1_name
+id station_1_navigate
+id station_1_price
+id station_2
+id station_2_distance
+id station_2_name
+id station_2_navigate
+id station_2_price
+id station_3
+id station_3_distance
+id station_3_name
+id station_3_navigate
+id station_3_price
 id stop
 id stretch
 id submenuarrow
@@ -3811,6 +3833,13 @@ id visible_removing_fragment_view_tag
 id webview
 id west
 id wide
+id widget_empty_text
+id widget_header
+id widget_refresh_button
+id widget_setup_container
+id widget_sort_button
+id widget_sort_indicator
+id widget_update_time
 id window
 id withText
 id with_icon
@@ -4041,6 +4070,8 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
+layout widget_fuel_finder
+layout widget_fuel_finder_setup
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
@@ -4237,6 +4268,7 @@ string status_bar_notification_info_overflow
 string summary_collapsed_preference_list
 string v7_preference_off
 string v7_preference_on
+string widget_description
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog
@@ -5566,3 +5598,4 @@ styleable ViewPager2 android_orientation
 styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable ViewTransition android_id SharedValue SharedValueId clearsTag duration ifTagNotSet ifTagSet motionInterpolator motionTarget onStateTransition pathMotionArc setsTag transitionDisable upDuration viewTransitionMode
 styleable include constraintSet
+xml widget_fuel_finder_info

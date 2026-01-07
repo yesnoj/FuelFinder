@@ -37,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.ChipGroup
 import androidx.appcompat.widget.SwitchCompat
+import com.fuelfinder.app.widget.WidgetPreferencesHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var useRealDistance = false  // Default false per non usare distanze reali
 
     // Modalità: true = percorso, false = 360°
-    private var alongRouteMode = true
+    private var alongRouteMode = false  // DEFAULT: 360° invece di percorso
 
     // Per quando sei in modalità percorso ma il GPS non dà bearing subito
     private var lastGoodBearingDeg: Double? = null
@@ -131,6 +132,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_main)
 
         initViews()
+
+        // WIDGET INTEGRATION: Initialize widget preferences
+        WidgetPreferencesHelper.markAppAsInitialized(this)
+        syncSettingsFromWidget()
+
         initMap(savedInstanceState)
         initLocation()
         setupListeners()
@@ -183,16 +189,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         btnFindFuel.setOnClickListener { toggleLiveSearch() }
         btnSettings.setOnClickListener { openSettings() }
 
-        // switch: cambia modalità e rilancia la ricerca se attiva
+        // WIDGET INTEGRATION: Save settings when switch changes
         swSearchModeTop.setOnCheckedChangeListener { _, isChecked ->
             alongRouteMode = isChecked
             tvModeLabel.text = if (alongRouteMode) "Percorso" else "360°"
-
+            saveSettingsToWidget()  // Save to widget
             if (isLiveSearchActive) {
                 searchAndUpdate()
             }
         }
 
+        // WIDGET INTEGRATION: Save settings when fuel type changes
         chipGroupFuel.setOnCheckedChangeListener { _, checkedId ->
             selectedFuelType = when (checkedId) {
                 R.id.chipGasolio -> FuelType.GASOLIO
@@ -201,6 +208,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 R.id.chipMetano -> FuelType.METANO
                 else -> FuelType.GASOLIO
             }
+            saveSettingsToWidget()  // Save to widget
             if (isLiveSearchActive) searchAndUpdate()
         }
 
@@ -456,9 +464,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 val modeText = if (alongRouteMode) "Percorso" else "360°"
                 tvUpdateStatus.text = "Trovati: ${finalList.size} ($modeText) • Max: ${lookAheadKm}km • Aggiornato: ${getCurrentTime()}"
 
-                // Aggiorna le distanze aeree (già calcolate sopra)
-                // updateAirDistances() - non serve più, già fatto sopra
-
                 // Calcola le distanze reali SOLO se abilitato
                 if (useRealDistance) {
                     updateRealDistances()
@@ -655,12 +660,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             initialLookAheadKm = lookAheadKm,
             initialMaxResults = maxResults,
             initialFrequencyMin = updateFrequencyMin,
-            initialUseRealDistance = useRealDistance  // Passa il nuovo parametro
+            initialUseRealDistance = useRealDistance
         ) { newLookAheadKm, newMaxRes, newFreq, newUseRealDistance ->
             lookAheadKm = newLookAheadKm
             maxResults = newMaxRes
             updateFrequencyMin = newFreq
-            useRealDistance = newUseRealDistance  // Salva la nuova impostazione
+            useRealDistance = newUseRealDistance
+
+            // WIDGET INTEGRATION: Save settings to widget
+            saveSettingsToWidget()
 
             showToast("Impostazioni salvate")
 
@@ -694,6 +702,43 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 "https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}"
             )
             startActivity(Intent(Intent.ACTION_VIEW, browserUri))
+        }
+    }
+
+    // WIDGET INTEGRATION: Method to save settings to widget
+    private fun saveSettingsToWidget() {
+        WidgetPreferencesHelper.saveSettings(
+            context = this,
+            lookAheadKm = lookAheadKm,
+            maxResults = maxResults,
+            updateIntervalMin = updateFrequencyMin,
+            fuelType = selectedFuelType,
+            alongRouteMode = alongRouteMode,
+            useRealDistance = useRealDistance
+        )
+    }
+
+    // WIDGET INTEGRATION: Method to sync settings from widget
+    private fun syncSettingsFromWidget() {
+        val settings = WidgetPreferencesHelper.loadSettings(this)
+        if (settings.isInitialized) {
+            lookAheadKm = settings.lookAheadKm
+            maxResults = settings.maxResults
+            updateFrequencyMin = settings.updateIntervalMin
+            alongRouteMode = settings.alongRouteMode
+            useRealDistance = settings.useRealDistance
+
+            // Aggiorna UI
+            swSearchModeTop.isChecked = alongRouteMode
+            tvModeLabel.text = if (alongRouteMode) "Percorso" else "360°"
+
+            // Seleziona il chip del carburante corretto
+            when (settings.fuelType) {
+                FuelType.GASOLIO.value -> chipGroupFuel.check(R.id.chipGasolio)
+                FuelType.BENZINA.value -> chipGroupFuel.check(R.id.chipBenzina)
+                FuelType.GPL.value -> chipGroupFuel.check(R.id.chipGpl)
+                FuelType.METANO.value -> chipGroupFuel.check(R.id.chipMetano)
+            }
         }
     }
 

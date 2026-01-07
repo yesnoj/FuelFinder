@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FuelFinder</string>
+    <string name="widget_description">Mostra i distributori di carburante più convenienti nelle vicinanze</string>
 </resources>
