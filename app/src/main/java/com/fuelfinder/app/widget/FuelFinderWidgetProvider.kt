@@ -16,6 +16,7 @@ import com.fuelfinder.app.FuelStation
 import com.fuelfinder.app.FuelType
 import com.fuelfinder.app.MainActivity
 import com.fuelfinder.app.R
+import com.fuelfinder.app.RealDistanceCalculator
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
@@ -46,12 +47,9 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         private const val KEY_ALONG_ROUTE_MODE = "along_route_mode"
         private const val KEY_USE_REAL_DISTANCE = "use_real_distance"
         private const val KEY_APP_INITIALIZED = "app_initialized"
-
-        // Colori hardcoded per evitare problemi con i widget
-        private const val COLOR_GREEN = "#4CAF50"
-        private const val COLOR_ORANGE = "#FF6F00"
-        private const val COLOR_RED = "#F44336"
     }
+
+    private val mainScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         Log.d(TAG, "onUpdate called for ${appWidgetIds.size} widgets")
@@ -118,15 +116,16 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
             val fuelType = prefs.getString(KEY_FUEL_TYPE, FuelType.GASOLIO.value) ?: FuelType.GASOLIO.value
             val lookAheadKm = prefs.getInt(KEY_LOOK_AHEAD_KM, 10)
             val alongRouteMode = prefs.getBoolean(KEY_ALONG_ROUTE_MODE, false) // Default 360°
+            val useRealDistance = prefs.getBoolean(KEY_USE_REAL_DISTANCE, false)
             val sortMode = prefs.getString("${KEY_SORT_MODE}$appWidgetId", "PRICE") ?: "PRICE"
 
-            Log.d(TAG, "Settings: maxResults=$maxResults, fuel=$fuelType, lookAhead=$lookAheadKm, sortMode=$sortMode")
+            Log.d(TAG, "Settings: maxResults=$maxResults, fuel=$fuelType, lookAhead=$lookAheadKm, sortMode=$sortMode, useRealDistance=$useRealDistance")
 
             // Mostra widget di caricamento
             showLoadingWidget(context, appWidgetManager, appWidgetId)
 
             // Ottieni la posizione corrente e cerca i distributori
-            fetchStationsAndUpdate(context, appWidgetManager, appWidgetId, maxResults, fuelType, lookAheadKm, alongRouteMode, sortMode)
+            fetchStationsAndUpdate(context, appWidgetManager, appWidgetId, maxResults, fuelType, lookAheadKm, alongRouteMode, sortMode, useRealDistance)
 
         } catch (e: Exception) {
             Log.e(TAG, "Error updating widget", e)
@@ -167,7 +166,8 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         fuelType: String,
         lookAheadKm: Int,
         alongRouteMode: Boolean,
-        sortMode: String
+        sortMode: String,
+        useRealDistance: Boolean
     ) {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
@@ -176,7 +176,7 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
                 .addOnSuccessListener { location: Location? ->
                     if (location != null) {
                         Log.d(TAG, "Location obtained: ${location.latitude}, ${location.longitude}")
-                        searchStations(context, appWidgetManager, appWidgetId, location, maxResults, fuelType, lookAheadKm, alongRouteMode, sortMode)
+                        searchStations(context, appWidgetManager, appWidgetId, location, maxResults, fuelType, lookAheadKm, alongRouteMode, sortMode, useRealDistance)
                     } else {
                         Log.w(TAG, "Location is null")
                         showErrorWidget(context, appWidgetManager, appWidgetId, "Posizione non disponibile")
@@ -201,7 +201,8 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         fuelType: String,
         lookAheadKm: Int,
         alongRouteMode: Boolean,
-        sortMode: String
+        sortMode: String,
+        useRealDistance: Boolean
     ) {
         Log.d(TAG, "Searching stations at ${location.latitude}, ${location.longitude}")
 
@@ -215,9 +216,23 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
             override fun onResponse(call: Call<List<DistributorDto>>, response: Response<List<DistributorDto>>) {
                 Log.d(TAG, "API response: ${response.code()}")
                 if (response.isSuccessful) {
-                    val stations = processStations(response.body() ?: emptyList(), location, maxResults, alongRouteMode, sortMode)
-                    Log.d(TAG, "Found ${stations.size} stations, sorting by: $sortMode")
-                    displayStations(context, appWidgetManager, appWidgetId, stations, sortMode)
+                    val stations = processStations(response.body() ?: emptyList(), location, maxResults, alongRouteMode, lookAheadKm)
+
+                    // Se useRealDistance è attivo, calcola le distanze reali prima di ordinare
+                    if (useRealDistance && stations.isNotEmpty()) {
+                        mainScope.launch {
+                            calculateRealDistances(stations, location)
+                            // Dopo aver calcolato le distanze, ordina e mostra
+                            val sortedStations = sortStations(stations, sortMode)
+                            Log.d(TAG, "Found ${sortedStations.size} stations, sorting by: $sortMode")
+                            displayStations(context, appWidgetManager, appWidgetId, sortedStations, sortMode)
+                        }
+                    } else {
+                        // Ordina e mostra direttamente con distanze aeree
+                        val sortedStations = sortStations(stations, sortMode)
+                        Log.d(TAG, "Found ${sortedStations.size} stations, sorting by: $sortMode")
+                        displayStations(context, appWidgetManager, appWidgetId, sortedStations, sortMode)
+                    }
                 } else {
                     Log.e(TAG, "API error: ${response.code()}")
                     showErrorWidget(context, appWidgetManager, appWidgetId, "Errore API")
@@ -236,7 +251,7 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         location: Location,
         maxResults: Int,
         alongRouteMode: Boolean,
-        sortMode: String
+        lookAheadKm: Int
     ): List<FuelStation> {
         val stations = dtos.mapNotNull { dto ->
             val lat = dto.latitudine ?: return@mapNotNull null
@@ -244,6 +259,9 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
             val price = dto.prezzo ?: return@mapNotNull null
 
             val distanceKm = haversineKm(location.latitude, location.longitude, lat, lon)
+
+            // Filtra per distanza massima
+            if (distanceKm > lookAheadKm) return@mapNotNull null
 
             FuelStation(
                 id = "${dto.ranking ?: 0}_${lat}_${lon}",
@@ -266,12 +284,7 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
             stations.sortedBy { it.airDistanceKm }.take(maxResults)
         }
 
-        // IMPORTANTE: Ordina DOPO il filtraggio in base al sortMode
-        return when (sortMode) {
-            "PRICE" -> filtered.sortedBy { it.prices.values.firstOrNull() ?: Double.MAX_VALUE }
-            "DISTANCE" -> filtered.sortedBy { it.airDistanceKm ?: Double.MAX_VALUE }
-            else -> filtered
-        }
+        return filtered
     }
 
     private fun filterStationsAlongRoute(stations: List<FuelStation>, location: Location, maxResults: Int): List<FuelStation> {
@@ -284,6 +297,42 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         }.sortedBy { it.airDistanceKm }.take(maxResults)
     }
 
+    // Ordina sempre dal migliore al peggiore (prezzo crescente o distanza crescente)
+    private fun sortStations(stations: List<FuelStation>, sortMode: String): List<FuelStation> {
+        return when (sortMode) {
+            "PRICE" -> stations.sortedBy { it.prices.values.firstOrNull() ?: Double.MAX_VALUE }
+            "DISTANCE" -> stations.sortedBy {
+                // Usa distanza reale se disponibile, altrimenti distanza aerea
+                it.routeDistanceKm ?: it.airDistanceKm ?: Double.MAX_VALUE
+            }
+            else -> stations
+        }
+    }
+
+    private suspend fun calculateRealDistances(stations: List<FuelStation>, location: Location) {
+        try {
+            val realDistanceCalculator = RealDistanceCalculator()
+            val origin = Pair(location.latitude, location.longitude)
+            val destinations = stations.map { Pair(it.latitude, it.longitude) }
+
+            val results = withContext(Dispatchers.IO) {
+                // Calcola in batch per efficienza
+                realDistanceCalculator.getBatchDistances(origin, destinations)
+            }
+
+            // Aggiorna le stazioni con le distanze reali
+            stations.forEachIndexed { index, station ->
+                results.getOrNull(index)?.let { result ->
+                    station.routeDistanceKm = result.distanceKm
+                    station.routeDurationSec = result.durationMinutes * 60
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error calculating real distances", e)
+            // In caso di errore, mantieni le distanze aeree
+        }
+    }
+
     private fun displayStations(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -294,8 +343,8 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         try {
             val views = RemoteViews(context.packageName, R.layout.widget_fuel_finder)
 
-            // Imposta l'indicatore di ordinamento
-            val sortText = if (sortMode == "PRICE") "• Prezzo" else "• Distanza"
+            // Imposta l'indicatore di ordinamento per essere più chiaro
+            val sortText = if (sortMode == "PRICE") "💰 Prezzo" else "📍 Distanza"
             views.setTextViewText(R.id.widget_sort_indicator, sortText)
 
             // Setup click handlers
@@ -303,10 +352,10 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
 
             // Aggiorna ora ultimo aggiornamento
             val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            views.setTextViewText(R.id.widget_update_time, "Aggiornato: ${timeFormat.format(Date())}")
+            views.setTextViewText(R.id.widget_update_time, timeFormat.format(Date()))
 
-            // Mostra le stazioni con i colori corretti
-            displayStationList(context, views, stations, appWidgetId, sortMode)
+            // Mostra le stazioni
+            displayStationList(context, views, stations, appWidgetId)
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
 
@@ -354,7 +403,7 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.widget_header, openAppPendingIntent)
     }
 
-    private fun displayStationList(context: Context, views: RemoteViews, stations: List<FuelStation>, appWidgetId: Int, sortMode: String) {
+    private fun displayStationList(context: Context, views: RemoteViews, stations: List<FuelStation>, appWidgetId: Int) {
         // Hide all stations first
         views.setViewVisibility(R.id.station_1, android.view.View.GONE)
         views.setViewVisibility(R.id.station_2, android.view.View.GONE)
@@ -366,33 +415,8 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
         } else {
             views.setViewVisibility(R.id.widget_empty_text, android.view.View.GONE)
 
-            // IMPORTANTE: Determina i colori in base all'ordinamento
-            val colorMapping = when (sortMode) {
-                "PRICE" -> {
-                    // Se ordinato per prezzo: verde per il più economico, poi arancio
-                    mapOf(
-                        0 to COLOR_GREEN,
-                        1 to COLOR_ORANGE,
-                        2 to COLOR_RED
-                    )
-                }
-                "DISTANCE" -> {
-                    // Se ordinato per distanza: verde per il più vicino, poi arancio
-                    mapOf(
-                        0 to COLOR_GREEN,
-                        1 to COLOR_ORANGE,
-                        2 to COLOR_RED
-                    )
-                }
-                else -> {
-                    // Default
-                    mapOf(
-                        0 to COLOR_GREEN,
-                        1 to COLOR_ORANGE,
-                        2 to COLOR_RED
-                    )
-                }
-            }
+            // SimpleDateFormat per parsare la data
+            val df = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY)
 
             stations.take(3).forEachIndexed { index, station ->
                 val stationViewId = when (index) {
@@ -408,18 +432,39 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
                 val distanceId = context.resources.getIdentifier("station_${index + 1}_distance", "id", context.packageName)
                 val navigateId = context.resources.getIdentifier("station_${index + 1}_navigate", "id", context.packageName)
 
-                views.setTextViewText(nameId, station.name)
+                // Nome stazione (abbreviato se troppo lungo)
+                val name = station.name.let {
+                    if (it.length > 20) it.substring(0, 17) + "..." else it
+                }
+                views.setTextViewText(nameId, name)
 
-                // Formatta prezzo e distanza
+                // Formatta prezzo senza simboli aggiuntivi
                 val priceText = String.format("€%.3f", station.prices.values.firstOrNull() ?: 0.0)
-                val distanceText = String.format("%.1f km", station.airDistanceKm ?: 0.0)
-
                 views.setTextViewText(priceId, priceText)
-                views.setTextViewText(distanceId, distanceText)
 
-                // NOTA: Non possiamo cambiare i colori dinamicamente nei widget
-                // I colori sono definiti nel layout XML e rimangono fissi
-                // Il verde indica sempre il primo risultato (migliore secondo l'ordinamento corrente)
+                // NOTA: I colori dei prezzi nel widget sono fissi nel layout XML:
+                // - station_1_price usa sempre color verde (#4CAF50)
+                // - station_2_price usa sempre color arancio (#FF6F00)
+                // - station_3_price usa sempre color rosso (#F44336)
+                // Questi colori NON rappresentano l'età del prezzo ma la posizione nella classifica
+                // Non possiamo cambiarli dinamicamente per allinearli all'app principale
+
+                // Usa distanza reale se disponibile, altrimenti aerea
+                val distanceText = when {
+                    station.routeDistanceKm != null -> {
+                        // Mostra anche durata se disponibile
+                        val duration = station.routeDurationSec
+                        if (duration != null && duration > 0) {
+                            String.format("%.1f km • %d min", station.routeDistanceKm, duration / 60)
+                        } else {
+                            String.format("%.1f km", station.routeDistanceKm)
+                        }
+                    }
+                    station.airDistanceKm != null -> String.format("%.1f km", station.airDistanceKm)
+                    else -> "-- km"
+                }
+
+                views.setTextViewText(distanceId, distanceText)
 
                 // Navigation click
                 val navigateIntent = Intent(context, FuelFinderWidgetProvider::class.java).apply {
@@ -435,6 +480,18 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
                 )
                 views.setOnClickPendingIntent(navigateId, navigatePendingIntent)
             }
+        }
+    }
+
+    private fun computeAgeMinutes(lastUpdate: String?, df: SimpleDateFormat): Long? {
+        if (lastUpdate.isNullOrBlank()) return null
+        return try {
+            val updateTime = df.parse(lastUpdate)?.time ?: return null
+            val diffMs = System.currentTimeMillis() - updateTime
+            if (diffMs < 0) return null
+            diffMs / (1000 * 60)  // Converti in minuti
+        } catch (e: Exception) {
+            null
         }
     }
 

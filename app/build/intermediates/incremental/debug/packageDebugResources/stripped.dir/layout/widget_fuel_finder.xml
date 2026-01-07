@@ -6,62 +6,87 @@
     android:background="@drawable/widget_background_modern"
     android:padding="12dp">
 
-    <!-- Header semplificato -->
+    <!-- Header più grande e più tappabile -->
     <LinearLayout
         android:id="@+id/widget_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_fuel" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="FuelFinder"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#212121"
-            android:layout_marginStart="6dp" />
-
-        <TextView
-            android:id="@+id/widget_sort_indicator"
+            android:id="@+id/widget_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="• Prezzo"
-            android:textSize="11sp"
-            android:textColor="#757575"
-            android:layout_marginEnd="8dp" />
+            android:text="FuelFinder"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <LinearLayout
+            android:id="@+id/widget_sort_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/widget_sort_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📍 Distanza"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#212121" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_sort"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+        <!-- Spacer compatibile con RemoteViews -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/widget_update_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aggiornato: --:--"
-            android:textSize="11sp"
-            android:textColor="#757575" />
-
-        <ImageView
-            android:id="@+id/widget_sort_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_sort"
-            android:layout_marginStart="8dp"
-            android:padding="4dp" />
+            android:text="10:38"
+            android:textSize="13sp"
+            android:textColor="#555555"
+            android:layout_marginEnd="6dp" />
 
         <ImageView
             android:id="@+id/widget_refresh_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:src="@drawable/ic_refresh"
-            android:layout_marginStart="4dp"
-            android:padding="4dp" />
+            android:layout_marginStart="6dp"
+            android:padding="6dp" />
     </LinearLayout>
 
     <!-- Contenitore stazioni -->
@@ -167,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:text="€0,000"
                         android:textSize="13sp"
-                        android:textColor="#4CAF50"
+                        android:textColor="#FF6F00"
                         android:textStyle="bold" />
 
                     <TextView
@@ -225,7 +250,7 @@
                         android:layout_height="wrap_content"
                         android:text="€0,000"
                         android:textSize="13sp"
-                        android:textColor="#FF6F00"
+                        android:textColor="#F44336"
                         android:textStyle="bold" />
 
                     <TextView

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.fuelfinder.app-mergeDebugResources-51:/values-ur/values-ur.xml",
+            "outputFile": "com.fuelfinder.app-mergeDebugResources-54:/values-ur/values-ur.xml",
             "map": [
                 {
                     "source": "/Users/francescoprochilo/.gradle/caches/8.13/transforms/0305013ffbe646b36e5b75d4efc0bbba/transformed/preference-1.2.1/res/values-ur/values-ur.xml",

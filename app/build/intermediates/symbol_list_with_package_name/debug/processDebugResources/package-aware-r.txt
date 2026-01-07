@@ -77,6 +77,7 @@ animator mtrl_fab_hide_motion_spec
 animator mtrl_fab_show_motion_spec
 animator mtrl_fab_transformation_sheet_collapse_spec
 animator mtrl_fab_transformation_sheet_expand_spec
+array hosts_allowlist_sample
 attr SharedValue
 attr SharedValueId
 attr actionBarDivider
@@ -247,6 +248,11 @@ attr cameraTargetLat
 attr cameraTargetLng
 attr cameraTilt
 attr cameraZoom
+attr carColorPrimary
+attr carColorPrimaryDark
+attr carColorSecondary
+attr carColorSecondaryDark
+attr carPermissionActivityLayout
 attr cardBackgroundColor
 attr cardCornerRadius
 attr cardElevation
@@ -1472,6 +1478,10 @@ color button_material_dark
 color button_material_light
 color call_notification_answer_color
 color call_notification_decline_color
+color carColorBlue
+color carColorGreen
+color carColorRed
+color carColorYellow
 color card_background
 color cardview_dark_background
 color cardview_light_background
@@ -2195,6 +2205,7 @@ color mtrl_textinput_focused_box_stroke_color
 color mtrl_textinput_hovered_box_stroke_color
 color notification_action_color_filter
 color notification_icon_bg_color
+color notification_material_background_media_default_color
 color preference_fallback_accent_color
 color primary
 color primary_dark
@@ -3308,6 +3319,7 @@ id accessibility_custom_action_6
 id accessibility_custom_action_7
 id accessibility_custom_action_8
 id accessibility_custom_action_9
+id action0
 id actionDown
 id actionDownUp
 id actionUp
@@ -3371,6 +3383,7 @@ id btnSettings
 id buttonPanel
 id cache_measures
 id callMeasure
+id cancel_action
 id cancel_button
 id cardTopInfo
 id carryVelocity
@@ -3457,6 +3470,7 @@ id elastic
 id embed
 id end
 id endToStart
+id end_padder
 id enterAlways
 id enterAlwaysCollapsed
 id exitUntilCollapsed
@@ -3557,6 +3571,8 @@ id material_timepicker_ok_button
 id material_timepicker_view
 id material_value_index
 id matrix
+id media_actions
+id media_controller_compat_view_tag
 id message
 id middle
 id mini
@@ -3746,6 +3762,7 @@ id station_3_distance
 id station_3_name
 id station_3_navigate
 id station_3_price
+id status_bar_latest_event_content
 id stop
 id stretch
 id submenuarrow
@@ -3839,6 +3856,7 @@ id widget_refresh_button
 id widget_setup_container
 id widget_sort_button
 id widget_sort_indicator
+id widget_title
 id widget_update_time
 id window
 id withText
@@ -3855,6 +3873,11 @@ integer app_bar_elevation_anim_duration
 integer bottom_sheet_slide_duration
 integer cancel_button_image_alpha
 integer config_tooltipAnimTime
+integer content_limit_grid
+integer content_limit_list
+integer content_limit_pane
+integer content_limit_place_list
+integer content_limit_route_list
 integer design_snackbar_text_max_lines
 integer design_tab_indicator_anim_duration_ms
 integer google_play_services_version
@@ -4046,8 +4069,17 @@ layout mtrl_search_bar
 layout mtrl_search_view
 layout notification_action
 layout notification_action_tombstone
+layout notification_media_action
+layout notification_media_cancel_action
+layout notification_template_big_media
+layout notification_template_big_media_custom
+layout notification_template_big_media_narrow
+layout notification_template_big_media_narrow_custom
 layout notification_template_custom_big
 layout notification_template_icon_group
+layout notification_template_lines_media
+layout notification_template_media
+layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
 layout preference
@@ -4119,6 +4151,7 @@ string call_notification_hang_up_action
 string call_notification_incoming_text
 string call_notification_ongoing_text
 string call_notification_screening_text
+string car_app_library_version
 string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
@@ -4754,9 +4787,14 @@ style TextAppearance_AppCompat_Widget_Switch
 style TextAppearance_AppCompat_Widget_TextView_SpinnerItem
 style TextAppearance_Compat_Notification
 style TextAppearance_Compat_Notification_Info
+style TextAppearance_Compat_Notification_Info_Media
 style TextAppearance_Compat_Notification_Line2
+style TextAppearance_Compat_Notification_Line2_Media
+style TextAppearance_Compat_Notification_Media
 style TextAppearance_Compat_Notification_Time
+style TextAppearance_Compat_Notification_Time_Media
 style TextAppearance_Compat_Notification_Title
+style TextAppearance_Compat_Notification_Title_Media
 style TextAppearance_Design_CollapsingToolbar_Expanded
 style TextAppearance_Design_Counter
 style TextAppearance_Design_Counter_Overflow
@@ -5598,4 +5636,5 @@ styleable ViewPager2 android_orientation
 styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable ViewTransition android_id SharedValue SharedValueId clearsTag duration ifTagNotSet ifTagSet motionInterpolator motionTarget onStateTransition pathMotionArc setsTag transitionDisable upDuration viewTransitionMode
 styleable include constraintSet
+xml automotive_app_desc
 xml widget_fuel_finder_info

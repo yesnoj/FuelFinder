@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.fuelfinder.app-mergeDebugResources-51:/values-sq/values-sq.xml",
+            "outputFile": "com.fuelfinder.app-mergeDebugResources-54:/values-sq/values-sq.xml",
             "map": [
                 {
                     "source": "/Users/francescoprochilo/.gradle/caches/8.13/transforms/12caaa92e9b5a16dd38c8b9c38370f97/transformed/play-services-basement-18.1.0/res/values-sq/values.xml",

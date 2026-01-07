@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.fuelfinder.app-mergeDebugResources-51:/values-v23/values-v23.xml",
+            "outputFile": "com.fuelfinder.app-mergeDebugResources-54:/values-v23/values-v23.xml",
             "map": [
                 {
                     "source": "/Users/francescoprochilo/.gradle/caches/8.13/transforms/92cb8c52bb492612bc30897d2c202665/transformed/cardview-1.0.0/res/values-v23/values-v23.xml",

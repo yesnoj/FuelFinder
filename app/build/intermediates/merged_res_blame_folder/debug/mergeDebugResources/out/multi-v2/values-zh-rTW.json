@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.fuelfinder.app-mergeDebugResources-51:/values-zh-rTW/values-zh-rTW.xml",
+            "outputFile": "com.fuelfinder.app-mergeDebugResources-54:/values-zh-rTW/values-zh-rTW.xml",
             "map": [
                 {
                     "source": "/Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/res/values-zh-rTW/values-zh-rTW.xml",

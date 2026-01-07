@@ -100,6 +100,7 @@ id widget_refresh_button
 id widget_setup_container
 id widget_sort_button
 id widget_sort_indicator
+id widget_title
 id widget_update_time
 layout activity_main
 layout dialog_settings
@@ -114,4 +115,5 @@ string app_name
 string widget_description
 style Theme.FuelFinder
 style Widget.FuelFinder.Chip.Choice
+xml automotive_app_desc
 xml widget_fuel_finder_info

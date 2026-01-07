@@ -13,18 +13,29 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- Include required permissions for Google Maps API to run. -->
+    <!-- Android Auto permission -->
+    <uses-permission android:name="com.google.android.gms.permission.CAR_FUEL" />
+
+    <!-- Dichiara che l'app supporta Android Auto -->
+    <uses-feature
+        android:name="android.hardware.type.automotive"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.car.templates_host"
+        android:required="false" />
+
+    <queries>
+        <provider
+            android:name="androidx.car.app.connection.provider"
+            android:authorities="androidx.car.app.connection" />
+        <!-- Needs to be explicitly declared on Android R+ -->
+        <package android:name="com.google.android.apps.maps" />
+    </queries> <!-- Include required permissions for Google Maps API to run. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-
-    <queries>
-
-        <!-- Needs to be explicitly declared on Android R+ -->
-        <package android:name="com.google.android.apps.maps" />
-    </queries>
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -49,15 +60,45 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAfQV0xJTUFBU9KzBH973cEfveZYJImDu0" />
 
+        <!-- Android Auto metadata -->
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
         <activity
             android:name="com.fuelfinder.app.MainActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- Android Auto launcher intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="com.google.android.gms.car.category.CATEGORY_PROJECTION" />
+            </intent-filter>
+
+            <!-- Supporto per Android Auto con Car App Library -->
+            <meta-data
+                android:name="distractionOptimized"
+                android:value="true" />
         </activity>
+
+        <!-- Car Service per Android Auto -->
+        <service
+            android:name="com.fuelfinder.app.auto.FuelFinderCarAppService"
+            android:exported="true"
+            android:label="FuelFinder per Auto" >
+            <intent-filter>
+                <action android:name="androidx.car.app.CarAppService" />
+
+                <category android:name="androidx.car.app.category.POI" />
+            </intent-filter>
+        </service>
 
         <!-- WIDGET INTEGRATION: Widget Provider -->
         <receiver
@@ -79,6 +120,24 @@
         <!-- WIDGET INTEGRATION: Widget Update Service -->
         <service
             android:name="com.fuelfinder.app.widget.WidgetUpdateService"
+            android:exported="false" />
+        <service
+            android:name="androidx.car.app.CarAppMetadataHolderService"
+            android:enabled="false"
+            android:exported="false"
+            android:process="" >
+            <meta-data
+                android:name="androidx.car.app.CarAppMetadataHolderService.CAR_HARDWARE_MANAGER"
+                android:value="androidx.car.app.hardware.ProjectedCarHardwareManager" />
+        </service>
+
+        <activity
+            android:name="androidx.car.app.CarAppPermissionActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <receiver
+            android:name="androidx.car.app.notification.CarAppNotificationBroadcastReceiver"
             android:exported="false" />
 
         <provider

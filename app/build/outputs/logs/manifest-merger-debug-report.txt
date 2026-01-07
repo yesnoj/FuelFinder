@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 meta-data#com.google.android.geo.API_KEY
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:16:9-18:47
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:28:9-30:47
 	android:value
 		INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:18:13-44
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:30:13-44
 	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:17:13-58
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:29:13-58
 manifest
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-52:12
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-52:12
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-52:12
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-52:12
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-90:12
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-90:12
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-90:12
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:2:1-90:12
 MERGED from [androidx.databinding:viewbinding:8.13.2] /Users/francescoprochilo/.gradle/caches/8.13/transforms/4bea3675c0bc10cf23e51faa2218c386/transformed/viewbinding-8.13.2/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.11.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/537d34060756dd349ce23550042443f8/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9b68402ce7f6d4d03fe33b867c06ea25/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
@@ -18,6 +18,8 @@ MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /Users/francescoproch
 MERGED from [androidx.preference:preference-ktx:1.2.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/500875e9040630446a64472e022fd74c/transformed/preference-ktx-1.2.1/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.preference:preference:1.2.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0305013ffbe646b36e5b75d4efc0bbba/transformed/preference-1.2.1/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat:1.6.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9d07710f0fd9033a35fdc417ee3ddd99/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:17:1-41:12
 MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /Users/francescoprochilo/.gradle/caches/8.13/transforms/94b7634d8bbdb32d563cf81090934b7d/transformed/viewpager2-1.1.0-beta02/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.recyclerview:recyclerview:1.3.2] /Users/francescoprochilo/.gradle/caches/8.13/transforms/99b3b76966531145d2aeefa1edf3a824/transformed/recyclerview-1.3.2/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/79548fa8c28ca7884405a351889d3cb8/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
@@ -35,10 +37,10 @@ MERGED from [androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/
 MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/2daeb111342b3f6b1c4c11a737485240/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a6c9b08e3a90b87b4c314f2d93c3096f/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.loader:loader:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0bce12b36dac463d87d89dd71ab03c1e/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/aab8546c5b113d2a0f4dfd18d5f7263f/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0cb70efc0e4642a62073fc10d9d3929b/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8ccebbabfe3ecd9113289b689399ef63/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a4ae3fa5f29dddad1fb8769458a8a77a/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/aab8546c5b113d2a0f4dfd18d5f7263f/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8ccebbabfe3ecd9113289b689399ef63/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd2da037323f64bbe8f488485d08786f/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/2a631fbd2b1ef91e162212a35cf25299/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/e44b29d94ced669373c15443c797d2fa/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
@@ -57,6 +59,7 @@ MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /Users/francescoprochilo/
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/574c896f1d7c544e1a1746bbe2797ad6/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/34fc55408ed2d66100aa1b2038c59846/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/6a67d7e02bcf93e62ba6b1d63f1db3a6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.media:media:1.6.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/34c52d1e9a778f8a8b4c695dafec4291/transformed/media-1.6.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/895a90f30bf5a3ed916bc51bd79fa038/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.customview:customview:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/96e7f81938c5d8b53ef87fde3cfc4402/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.transition:transition:1.4.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/c751893f9dd8de94e7c7da8f7a861e5c/transformed/transition-1.4.1/AndroidManifest.xml:17:1-24:12
@@ -64,7 +67,7 @@ MERGED from [androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/
 MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/49e5215740ce622bc62ebecd0556a03e/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.core:core-ktx:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/bc910862b7f8746e13fc56f7d91e11c7/transformed/core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.room:room-runtime:2.5.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9f0c89b56b046d1a550fda99d3aed58c/transformed/room-runtime-2.5.0/AndroidManifest.xml:17:1-31:12
-MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9bb3fb4efbb1d2901a5346148d068679/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/6639981c20c68c609d511d55c34f5cef/transformed/annotation-experimental-1.3.1/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.sqlite:sqlite-framework:2.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/2cb4e43b86ff325c1a232480c9193bef/transformed/sqlite-framework-2.3.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cardview:cardview:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/92cb8c52bb492612bc30897d2c202665/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/73a757a13b226d1682e30badcb370e5c/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -108,13 +111,33 @@ MERGED from [androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/
 MERGED from [androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:25:5-81
 	android:name
 		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:7:22-78
+uses-permission#com.google.android.gms.permission.CAR_FUEL
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:10:5-82
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:10:22-79
+uses-feature#android.hardware.type.automotive
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:13:5-15:36
+	android:required
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:15:9-33
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:14:9-56
+uses-feature#android.software.car.templates_host
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:17:5-19:36
+	android:required
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:19:9-33
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:18:9-59
 application
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:9:5-50:19
-INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:9:5-50:19
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:21:5-88:19
+INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:21:5-88:19
 MERGED from [com.google.android.material:material:1.11.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/537d34060756dd349ce23550042443f8/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/537d34060756dd349ce23550042443f8/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9b68402ce7f6d4d03fe33b867c06ea25/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9b68402ce7f6d4d03fe33b867c06ea25/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:23:5-35:19
+MERGED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:23:5-35:19
+MERGED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:30:5-39:19
+MERGED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:30:5-39:19
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
 MERGED from [com.google.maps.android:android-maps-utils:3.8.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8871e612da0afac72477ebcdc447fd50/transformed/android-maps-utils-3.8.0/AndroidManifest.xml:7:5-11:19
@@ -150,69 +173,107 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/fran
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:11:9-41
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:23:9-41
 	android:roundIcon
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:14:9-54
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:26:9-54
 	android:icon
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:13:9-43
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:25:9-43
 	android:allowBackup
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:10:9-35
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:22:9-35
 	android:theme
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:12:9-48
-activity#com.fuelfinder.app.MainActivity
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:20:9-27:20
-	android:exported
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:22:13-36
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:21:13-41
-intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:23:13-26:29
-action#android.intent.action.MAIN
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:24:17-69
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:24:25-66
-category#android.intent.category.LAUNCHER
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:25:17-77
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:25:27-74
-receiver#com.fuelfinder.app.widget.FuelFinderWidgetProvider
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:30:9-43:20
-	android:label
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:33:13-46
-	android:exported
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:32:13-36
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:31:13-60
-intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE+action:name:com.fuelfinder.app.NAVIGATE+action:name:com.fuelfinder.app.TOGGLE_SORT+action:name:com.fuelfinder.app.UPDATE_WIDGET
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:34:13-39:29
-action#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:35:17-84
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:35:25-81
-action#com.fuelfinder.app.UPDATE_WIDGET
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:36:17-75
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:36:25-72
-action#com.fuelfinder.app.NAVIGATE
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:37:17-70
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:37:25-67
-action#com.fuelfinder.app.TOGGLE_SORT
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:38:17-73
-	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:38:25-70
-meta-data#android.appwidget.provider
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:40:13-42:67
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:24:9-48
+meta-data#com.google.android.gms.car.application
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:33:9-35:59
 	android:resource
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:42:17-64
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:35:13-56
 	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:41:17-58
-service#com.fuelfinder.app.widget.WidgetUpdateService
-ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:46:9-48:40
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:34:13-66
+activity#com.fuelfinder.app.MainActivity
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:37:9-54:20
+	android:launchMode
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:40:13-44
 	android:exported
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:48:13-37
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:39:13-36
 	android:name
-		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:47:13-55
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:38:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:41:13-44:29
+action#android.intent.action.MAIN
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:42:17-69
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:42:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:43:17-77
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:43:27-74
+intent-filter#action:name:android.intent.action.MAIN+category:name:com.google.android.gms.car.category.CATEGORY_PROJECTION
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:47:13-50:29
+category#com.google.android.gms.car.category.CATEGORY_PROJECTION
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:49:17-100
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:49:27-97
+meta-data#distractionOptimized
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:53:13-82
+	android:value
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:53:60-80
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:53:24-59
+service#com.fuelfinder.app.auto.FuelFinderCarAppService
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:57:9-65:19
+	android:label
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:60:13-48
+	android:exported
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:59:13-36
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:58:13-57
+intent-filter#action:name:androidx.car.app.CarAppService+category:name:androidx.car.app.category.POI
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:61:13-64:29
+action#androidx.car.app.CarAppService
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:62:17-73
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:62:25-70
+category#androidx.car.app.category.POI
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:63:17-74
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:63:27-71
+receiver#com.fuelfinder.app.widget.FuelFinderWidgetProvider
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:68:9-81:20
+	android:label
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:71:13-46
+	android:exported
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:70:13-36
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:69:13-60
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE+action:name:com.fuelfinder.app.NAVIGATE+action:name:com.fuelfinder.app.TOGGLE_SORT+action:name:com.fuelfinder.app.UPDATE_WIDGET
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:72:13-77:29
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:73:17-84
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:73:25-81
+action#com.fuelfinder.app.UPDATE_WIDGET
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:74:17-75
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:74:25-72
+action#com.fuelfinder.app.NAVIGATE
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:75:17-70
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:75:25-67
+action#com.fuelfinder.app.TOGGLE_SORT
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:76:17-73
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:76:25-70
+meta-data#android.appwidget.provider
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:78:13-80:67
+	android:resource
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:80:17-64
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:79:17-58
+service#com.fuelfinder.app.widget.WidgetUpdateService
+ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:84:9-86:40
+	android:exported
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:86:13-37
+	android:name
+		ADDED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:85:13-55
 uses-sdk
 INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml
@@ -231,6 +292,10 @@ MERGED from [androidx.preference:preference:1.2.1] /Users/francescoprochilo/.gra
 MERGED from [androidx.preference:preference:1.2.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0305013ffbe646b36e5b75d4efc0bbba/transformed/preference-1.2.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat:1.6.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9d07710f0fd9033a35fdc417ee3ddd99/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat:1.6.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9d07710f0fd9033a35fdc417ee3ddd99/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /Users/francescoprochilo/.gradle/caches/8.13/transforms/94b7634d8bbdb32d563cf81090934b7d/transformed/viewpager2-1.1.0-beta02/AndroidManifest.xml:5:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /Users/francescoprochilo/.gradle/caches/8.13/transforms/94b7634d8bbdb32d563cf81090934b7d/transformed/viewpager2-1.1.0-beta02/AndroidManifest.xml:5:5-44
 MERGED from [androidx.recyclerview:recyclerview:1.3.2] /Users/francescoprochilo/.gradle/caches/8.13/transforms/99b3b76966531145d2aeefa1edf3a824/transformed/recyclerview-1.3.2/AndroidManifest.xml:20:5-44
@@ -265,14 +330,14 @@ MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/francescopr
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a6c9b08e3a90b87b4c314f2d93c3096f/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0bce12b36dac463d87d89dd71ab03c1e/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0bce12b36dac463d87d89dd71ab03c1e/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/aab8546c5b113d2a0f4dfd18d5f7263f/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/aab8546c5b113d2a0f4dfd18d5f7263f/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0cb70efc0e4642a62073fc10d9d3929b/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0cb70efc0e4642a62073fc10d9d3929b/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8ccebbabfe3ecd9113289b689399ef63/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8ccebbabfe3ecd9113289b689399ef63/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a4ae3fa5f29dddad1fb8769458a8a77a/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a4ae3fa5f29dddad1fb8769458a8a77a/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/aab8546c5b113d2a0f4dfd18d5f7263f/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/aab8546c5b113d2a0f4dfd18d5f7263f/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8ccebbabfe3ecd9113289b689399ef63/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8ccebbabfe3ecd9113289b689399ef63/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd2da037323f64bbe8f488485d08786f/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd2da037323f64bbe8f488485d08786f/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/2a631fbd2b1ef91e162212a35cf25299/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
@@ -309,6 +374,8 @@ MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/franc
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/34fc55408ed2d66100aa1b2038c59846/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/6a67d7e02bcf93e62ba6b1d63f1db3a6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/6a67d7e02bcf93e62ba6b1d63f1db3a6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.6.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/34c52d1e9a778f8a8b4c695dafec4291/transformed/media-1.6.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.6.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/34c52d1e9a778f8a8b4c695dafec4291/transformed/media-1.6.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/895a90f30bf5a3ed916bc51bd79fa038/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/895a90f30bf5a3ed916bc51bd79fa038/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.customview:customview:1.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/96e7f81938c5d8b53ef87fde3cfc4402/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
@@ -323,8 +390,8 @@ MERGED from [androidx.core:core-ktx:1.12.0] /Users/francescoprochilo/.gradle/cac
 MERGED from [androidx.core:core-ktx:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/bc910862b7f8746e13fc56f7d91e11c7/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.room:room-runtime:2.5.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9f0c89b56b046d1a550fda99d3aed58c/transformed/room-runtime-2.5.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.room:room-runtime:2.5.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9f0c89b56b046d1a550fda99d3aed58c/transformed/room-runtime-2.5.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9bb3fb4efbb1d2901a5346148d068679/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9bb3fb4efbb1d2901a5346148d068679/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/6639981c20c68c609d511d55c34f5cef/transformed/annotation-experimental-1.3.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.1] /Users/francescoprochilo/.gradle/caches/8.13/transforms/6639981c20c68c609d511d55c34f5cef/transformed/annotation-experimental-1.3.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.sqlite:sqlite-framework:2.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/2cb4e43b86ff325c1a232480c9193bef/transformed/sqlite-framework-2.3.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.sqlite:sqlite-framework:2.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/2cb4e43b86ff325c1a232480c9193bef/transformed/sqlite-framework-2.3.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/92cb8c52bb492612bc30897d2c202665/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
@@ -359,6 +426,52 @@ MERGED from [androidx.sqlite:sqlite:2.3.0] /Users/francescoprochilo/.gradle/cach
 		INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from /Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml
+service#androidx.car.app.CarAppMetadataHolderService
+ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:24:9-34:19
+	tools:node
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:30:13-31
+	android:process
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:28:13-31
+	android:enabled
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:26:13-36
+	android:exported
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:27:13-37
+	tools:ignore
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:29:13-75
+	android:name
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:25:13-72
+meta-data#androidx.car.app.CarAppMetadataHolderService.CAR_HARDWARE_MANAGER
+ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:31:13-33:89
+	android:value
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:33:17-86
+	android:name
+		ADDED from [androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:32:17-97
+queries
+ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:23:5-28:15
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
+provider#androidx.car.app.connection.provider
+ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:24:9-27:43
+	android:authorities
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:26:13-62
+	tools:ignore
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:27:13-40
+	android:name
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:25:13-64
+activity#androidx.car.app.CarAppPermissionActivity
+ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:31:9-34:75
+	android:exported
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:33:13-37
+	android:theme
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:34:13-72
+	android:name
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:32:13-69
+receiver#androidx.car.app.notification.CarAppNotificationBroadcastReceiver
+ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:36:9-38:40
+	android:exported
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:38:13-37
+	android:name
+		ADDED from [androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:37:13-93
 provider#androidx.startup.InitializationProvider
 ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
 MERGED from [androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:29:9-37:20
@@ -403,8 +516,6 @@ ADDED from [com.google.android.gms:play-services-maps:18.2.0] /Users/francescopr
 		ADDED from [com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:27:9-41
 	android:required
 		ADDED from [com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:28:9-32
-queries
-ADDED from [com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
 package#com.google.android.apps.maps
 ADDED from [com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:33:9-64
 	android:name

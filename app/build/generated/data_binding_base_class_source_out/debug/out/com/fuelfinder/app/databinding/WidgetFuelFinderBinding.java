@@ -75,10 +75,13 @@ public final class WidgetFuelFinderBinding implements ViewBinding {
   public final ImageView widgetRefreshButton;
 
   @NonNull
-  public final ImageView widgetSortButton;
+  public final LinearLayout widgetSortButton;
 
   @NonNull
   public final TextView widgetSortIndicator;
+
+  @NonNull
+  public final TextView widgetTitle;
 
   @NonNull
   public final TextView widgetUpdateTime;
@@ -92,8 +95,9 @@ public final class WidgetFuelFinderBinding implements ViewBinding {
       @NonNull TextView station3Distance, @NonNull TextView station3Name,
       @NonNull ImageView station3Navigate, @NonNull TextView station3Price,
       @NonNull TextView widgetEmptyText, @NonNull LinearLayout widgetHeader,
-      @NonNull ImageView widgetRefreshButton, @NonNull ImageView widgetSortButton,
-      @NonNull TextView widgetSortIndicator, @NonNull TextView widgetUpdateTime) {
+      @NonNull ImageView widgetRefreshButton, @NonNull LinearLayout widgetSortButton,
+      @NonNull TextView widgetSortIndicator, @NonNull TextView widgetTitle,
+      @NonNull TextView widgetUpdateTime) {
     this.rootView = rootView;
     this.station1 = station1;
     this.station1Distance = station1Distance;
@@ -115,6 +119,7 @@ public final class WidgetFuelFinderBinding implements ViewBinding {
     this.widgetRefreshButton = widgetRefreshButton;
     this.widgetSortButton = widgetSortButton;
     this.widgetSortIndicator = widgetSortIndicator;
+    this.widgetTitle = widgetTitle;
     this.widgetUpdateTime = widgetUpdateTime;
   }
 
@@ -254,7 +259,7 @@ public final class WidgetFuelFinderBinding implements ViewBinding {
       }
 
       id = R.id.widget_sort_button;
-      ImageView widgetSortButton = ViewBindings.findChildViewById(rootView, id);
+      LinearLayout widgetSortButton = ViewBindings.findChildViewById(rootView, id);
       if (widgetSortButton == null) {
         break missingId;
       }
@@ -262,6 +267,12 @@ public final class WidgetFuelFinderBinding implements ViewBinding {
       id = R.id.widget_sort_indicator;
       TextView widgetSortIndicator = ViewBindings.findChildViewById(rootView, id);
       if (widgetSortIndicator == null) {
+        break missingId;
+      }
+
+      id = R.id.widget_title;
+      TextView widgetTitle = ViewBindings.findChildViewById(rootView, id);
+      if (widgetTitle == null) {
         break missingId;
       }
 
@@ -275,7 +286,7 @@ public final class WidgetFuelFinderBinding implements ViewBinding {
           station1Name, station1Navigate, station1Price, station2, station2Distance, station2Name,
           station2Navigate, station2Price, station3, station3Distance, station3Name,
           station3Navigate, station3Price, widgetEmptyText, widgetHeader, widgetRefreshButton,
-          widgetSortButton, widgetSortIndicator, widgetUpdateTime);
+          widgetSortButton, widgetSortIndicator, widgetTitle, widgetUpdateTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
