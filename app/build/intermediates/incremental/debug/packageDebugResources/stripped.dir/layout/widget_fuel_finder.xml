@@ -14,8 +14,8 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_marginBottom="8dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp">
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp">
 
         <ImageView
             android:layout_width="24dp"
