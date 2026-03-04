@@ -3,7 +3,7 @@ name: Build Debug APK
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch:  # Permette di lanciarlo manualmente dal sito GitHub
+  workflow_dispatch:
 
 jobs:
   build:
@@ -31,19 +31,36 @@ jobs:
       - name: Rimuovi java.home locale da gradle.properties
         run: sed -i '/org.gradle.java.home/d' gradle.properties
 
+      - name: Ripristina release keystore
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > fuelfinder.keystore
+
+      - name: Crea keystore.properties
+        run: |
+          echo "storePassword=${{ secrets.RELEASE_KEY_PASSWORD }}" > keystore.properties
+          echo "keyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}" >> keystore.properties
+          echo "keyAlias=${{ secrets.RELEASE_KEY_ALIAS }}" >> keystore.properties
+          echo "storeFile=../fuelfinder.keystore" >> keystore.properties
+
       - name: Rendi gradlew eseguibile
         run: chmod +x gradlew
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Mostra SHA-1 debug keystore
-        continue-on-error: true
-        run: keytool -list -v -keystore /home/runner/.config/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android | grep SHA1
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
 
-      - name: Upload APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: FuelFinder-debug
           path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 7  # L'APK rimane scaricabile per 7 giorni
+          retention-days: 7
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: FuelFinder-release
+          path: app/build/outputs/apk/release/app-release.apk
+          retention-days: 7
