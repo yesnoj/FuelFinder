@@ -15,25 +15,38 @@ def MAPS_KEY = localProps.getProperty("GOOGLE_MAPS_API_KEY", "")
 def BASE_URL_VAL = localProps.getProperty("BASE_URL", "https://prezzi-carburante.onrender.com/")
 
 android {
-    namespace 'com.fuelfinder.app'
+    namespace 'com.francescoprochilo.fuelfinder'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.fuelfinder.app"
+        applicationId "com.francescoprochilo.fuelfinder"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0.0"
-
         manifestPlaceholders = [ MAPS_API_KEY: MAPS_KEY ]
         buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${MAPS_KEY}\""
         buildConfigField "String", "BASE_URL", "\"${BASE_URL_VAL}\""
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            def keystorePropertiesFile = rootProject.file("keystore.properties")
+            if (keystorePropertiesFile.exists()) {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
+        }
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -79,7 +92,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
 
-    // Coroutines (già presenti nel progetto originale)
+    // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
 
