@@ -167,7 +167,7 @@ class FuelFinderCarScreen(carContext: CarContext) : Screen(carContext) {
             longitude = location.longitude,
             distanceKm = lookAheadKm,
             fuel = selectedFuelType.value,
-            results = maxResults * 2
+            results = 200  // Richiedi sempre il massimo, il filtraggio avviene in locale
         ).enqueue(object : Callback<List<DistributorDto>> {
             override fun onResponse(
                 call: Call<List<DistributorDto>>,

@@ -211,7 +211,7 @@ class FuelFinderWidgetProvider : AppWidgetProvider() {
             longitude = location.longitude,
             distanceKm = lookAheadKm,
             fuel = fuelType,
-            results = maxResults * 2
+            results = 200  // Richiedi sempre il massimo, il filtraggio avviene in locale
         ).enqueue(object : Callback<List<DistributorDto>> {
             override fun onResponse(call: Call<List<DistributorDto>>, response: Response<List<DistributorDto>>) {
                 Log.d(TAG, "API response: ${response.code()}")

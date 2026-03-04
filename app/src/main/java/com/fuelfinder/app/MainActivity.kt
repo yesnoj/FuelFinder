@@ -407,7 +407,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             longitude = loc.longitude,
             distanceKm = fetchRadiusKm,  // Usa direttamente lookAheadKm
             fuel = selectedFuelType.value,
-            results = maxResults * 2  // Richiedi più risultati per poi filtrare
+            results = 200  // Richiedi sempre il massimo, il filtraggio avviene in locale
         ).enqueue(object : Callback<List<DistributorDto>> {
 
             override fun onResponse(call: Call<List<DistributorDto>>, response: Response<List<DistributorDto>>) {
