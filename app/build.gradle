@@ -15,7 +15,7 @@ def MAPS_KEY = localProps.getProperty("GOOGLE_MAPS_API_KEY", "")
 def BASE_URL_VAL = localProps.getProperty("BASE_URL", "https://prezzi-carburante.onrender.com/")
 
 android {
-    namespace 'com.francescoprochilo.fuelfinder'
+    namespace 'com.fuelfinder.app'
     compileSdk 34
 
     defaultConfig {

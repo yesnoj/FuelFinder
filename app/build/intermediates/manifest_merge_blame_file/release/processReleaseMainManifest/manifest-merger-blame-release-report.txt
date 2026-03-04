@@ -1,0 +1,529 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.francescoprochilo.fuelfinder"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:4:5-67
+11-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:4:22-64
+12    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+12-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:5:5-79
+12-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:5:22-76
+13    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+13-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:6:5-81
+13-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:6:22-78
+14    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+14-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:7:5-81
+14-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:7:22-78
+15
+16    <!-- Android Auto permission -->
+17    <uses-permission android:name="com.google.android.gms.permission.CAR_FUEL" />
+17-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:10:5-82
+17-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:10:22-79
+18
+19    <!-- RIMOSSO android.hardware.type.automotive: non compatibile con gms.car.application -->
+20    <uses-feature
+20-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:13:5-15:36
+21        android:name="android.software.car.templates_host"
+21-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:14:9-59
+22        android:required="false" />
+22-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:15:9-33
+23
+24    <queries>
+24-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:23:5-28:15
+25        <provider
+25-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:24:9-27:43
+26            android:name="androidx.car.app.connection.provider"
+26-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:25:13-64
+27            android:authorities="androidx.car.app.connection" />
+27-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:26:13-62
+28        <!-- Needs to be explicitly declared on Android R+ -->
+29        <package android:name="com.google.android.apps.maps" />
+29-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:33:9-64
+29-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:33:18-61
+30    </queries> <!-- Include required permissions for Google Maps API to run. -->
+31    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+31-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:23:5-79
+31-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:23:22-76
+32
+33    <uses-feature
+33-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:26:5-28:35
+34        android:glEsVersion="0x00020000"
+34-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:27:9-41
+35        android:required="true" />
+35-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:28:9-32
+36
+37    <uses-permission android:name="android.permission.WAKE_LOCK" />
+37-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:23:5-68
+37-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:23:22-65
+38    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+38-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:26:5-77
+38-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:26:22-74
+39
+40    <permission
+40-->[androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+41        android:name="com.francescoprochilo.fuelfinder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+41-->[androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+42        android:protectionLevel="signature" />
+42-->[androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+43
+44    <uses-permission android:name="com.francescoprochilo.fuelfinder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+44-->[androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+44-->[androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+45
+46    <application
+46-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:17:5-77:19
+47        android:allowBackup="true"
+47-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:18:9-35
+48        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+48-->[androidx.core:core:1.12.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/914a173bada60ee0bae34ebad27f7b33/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+49        android:extractNativeLibs="false"
+50        android:icon="@mipmap/ic_launcher"
+50-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:21:9-43
+51        android:label="@string/app_name"
+51-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:19:9-41
+52        android:roundIcon="@mipmap/ic_launcher_round"
+52-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:22:9-54
+53        android:theme="@style/Theme.FuelFinder" >
+53-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:20:9-48
+54        <meta-data
+55            android:name="com.google.android.geo.API_KEY"
+55-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:25:13-58
+56            android:value="AIzCIAONE" />
+56-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:26:13-44
+57
+58        <!-- Android Auto metadata -->
+59        <meta-data
+59-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:29:9-31:59
+60            android:name="com.google.android.gms.car.application"
+60-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:30:13-66
+61            android:resource="@xml/automotive_app_desc" />
+61-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:31:13-56
+62
+63        <activity
+63-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:33:9-42:20
+64            android:name="com.fuelfinder.app.MainActivity"
+64-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:34:13-41
+65            android:exported="true"
+65-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:35:13-36
+66            android:launchMode="singleTask" >
+66-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:36:13-44
+67            <intent-filter>
+67-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:37:13-40:29
+68                <action android:name="android.intent.action.MAIN" />
+68-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:38:17-69
+68-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:38:25-66
+69
+70                <category android:name="android.intent.category.LAUNCHER" />
+70-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:39:17-77
+70-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:39:27-74
+71            </intent-filter>
+72
+73            <meta-data
+73-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:41:13-82
+74                android:name="distractionOptimized"
+74-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:41:24-59
+75                android:value="true" />
+75-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:41:60-80
+76        </activity>
+77
+78        <!-- Car Service per Android Auto -->
+79        <service
+79-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:45:9-54:19
+80            android:name="com.fuelfinder.app.auto.FuelFinderCarAppService"
+80-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:46:13-57
+81            android:exported="true"
+81-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:47:13-36
+82            android:label="FuelFinder per Auto"
+82-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:49:13-48
+83            android:permission="com.google.android.gms.permission.BIND_CAR_APP" >
+83-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:48:13-80
+84            <intent-filter>
+84-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:50:13-53:29
+85                <action android:name="androidx.car.app.CarAppService" />
+85-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:51:17-73
+85-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:51:25-70
+86
+87                <category android:name="androidx.car.app.category.POI" />
+87-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:52:17-74
+87-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:52:27-71
+88            </intent-filter>
+89        </service>
+90
+91        <!-- Widget Provider -->
+92        <receiver
+92-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:57:9-70:20
+93            android:name="com.fuelfinder.app.widget.FuelFinderWidgetProvider"
+93-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:58:13-60
+94            android:exported="true"
+94-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:59:13-36
+95            android:label="FuelFinder Widget" >
+95-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:60:13-46
+96            <intent-filter>
+96-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:61:13-66:29
+97                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+97-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:62:17-84
+97-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:62:25-81
+98                <action android:name="com.francescoprochilo.fuelfinder.UPDATE_WIDGET" />
+98-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:63:17-89
+98-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:63:25-86
+99                <action android:name="com.francescoprochilo.fuelfinder.NAVIGATE" />
+99-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:64:17-84
+99-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:64:25-81
+100                <action android:name="com.francescoprochilo.fuelfinder.TOGGLE_SORT" />
+100-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:65:17-87
+100-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:65:25-84
+101            </intent-filter>
+102
+103            <meta-data
+103-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:67:13-69:67
+104                android:name="android.appwidget.provider"
+104-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:68:17-58
+105                android:resource="@xml/widget_fuel_finder_info" />
+105-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:69:17-64
+106        </receiver>
+107
+108        <!-- Widget Update Service -->
+109        <service
+109-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:73:9-75:40
+110            android:name="com.fuelfinder.app.widget.WidgetUpdateService"
+110-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:74:13-55
+111            android:exported="false" />
+111-->/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/src/main/AndroidManifest.xml:75:13-37
+112        <service
+112-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:24:9-34:19
+113            android:name="androidx.car.app.CarAppMetadataHolderService"
+113-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:25:13-72
+114            android:enabled="false"
+114-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:26:13-36
+115            android:exported="false"
+115-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:27:13-37
+116            android:process="" >
+116-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:28:13-31
+117            <meta-data
+117-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:31:13-33:89
+118                android:name="androidx.car.app.CarAppMetadataHolderService.CAR_HARDWARE_MANAGER"
+118-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:32:17-97
+119                android:value="androidx.car.app.hardware.ProjectedCarHardwareManager" />
+119-->[androidx.car.app:app-projected:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/cd7aa02d3cdb899ba54f2cd11abe1764/transformed/app-projected-1.4.0/AndroidManifest.xml:33:17-86
+120        </service>
+121
+122        <activity
+122-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:31:9-34:75
+123            android:name="androidx.car.app.CarAppPermissionActivity"
+123-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:32:13-69
+124            android:exported="false"
+124-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:33:13-37
+125            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+125-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:34:13-72
+126
+127        <receiver
+127-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:36:9-38:40
+128            android:name="androidx.car.app.notification.CarAppNotificationBroadcastReceiver"
+128-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:37:13-93
+129            android:exported="false" />
+129-->[androidx.car.app:app:1.4.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/63faf6f14b12a9334b8df3cbdb4086c7/transformed/app-1.4.0/AndroidManifest.xml:38:13-37
+130
+131        <provider
+131-->[androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+132            android:name="androidx.startup.InitializationProvider"
+132-->[androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+133            android:authorities="com.francescoprochilo.fuelfinder.androidx-startup"
+133-->[androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+134            android:exported="false" >
+134-->[androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+135            <meta-data
+135-->[androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+136                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+136-->[androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+137                android:value="androidx.startup" />
+137-->[androidx.emoji2:emoji2:1.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/a7b1723d01590439bd49219178e178f3/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+138            <meta-data
+138-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:34:13-36:52
+139                android:name="androidx.work.WorkManagerInitializer"
+139-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:35:17-68
+140                android:value="androidx.startup" />
+140-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:36:17-49
+141            <meta-data
+141-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/e44b29d94ced669373c15443c797d2fa/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+142                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+142-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/e44b29d94ced669373c15443c797d2fa/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+143                android:value="androidx.startup" />
+143-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/e44b29d94ced669373c15443c797d2fa/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+144            <meta-data
+144-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+145                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+145-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+146                android:value="androidx.startup" />
+146-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+147        </provider>
+148
+149        <meta-data
+149-->[com.google.maps.android:android-maps-utils:3.8.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8871e612da0afac72477ebcdc447fd50/transformed/android-maps-utils-3.8.0/AndroidManifest.xml:8:9-10:69
+150            android:name="com.google.android.gms.version"
+150-->[com.google.maps.android:android-maps-utils:3.8.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8871e612da0afac72477ebcdc447fd50/transformed/android-maps-utils-3.8.0/AndroidManifest.xml:9:13-58
+151            android:value="@integer/google_play_services_version" /> <!-- Needs to be explicitly declared on P+ -->
+151-->[com.google.maps.android:android-maps-utils:3.8.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/8871e612da0afac72477ebcdc447fd50/transformed/android-maps-utils-3.8.0/AndroidManifest.xml:10:13-66
+152        <uses-library
+152-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:39:9-41:40
+153            android:name="org.apache.http.legacy"
+153-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:40:13-50
+154            android:required="false" />
+154-->[com.google.android.gms:play-services-maps:18.2.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/ddae2e2d645a32f71054edcb677ec196/transformed/play-services-maps-18.2.0/AndroidManifest.xml:41:13-37
+155
+156        <activity
+156-->[com.google.android.gms:play-services-base:18.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0ce022a38b89629286d9c984490bea3f/transformed/play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+157            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+157-->[com.google.android.gms:play-services-base:18.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0ce022a38b89629286d9c984490bea3f/transformed/play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+158            android:exported="false"
+158-->[com.google.android.gms:play-services-base:18.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0ce022a38b89629286d9c984490bea3f/transformed/play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+159            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+159-->[com.google.android.gms:play-services-base:18.1.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0ce022a38b89629286d9c984490bea3f/transformed/play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+160
+161        <service
+161-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:39:9-45:35
+162            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+162-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:40:13-88
+163            android:directBootAware="false"
+163-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:41:13-44
+164            android:enabled="@bool/enable_system_alarm_service_default"
+164-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:42:13-72
+165            android:exported="false" />
+165-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:43:13-37
+166        <service
+166-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:46:9-52:35
+167            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+167-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:47:13-84
+168            android:directBootAware="false"
+168-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:48:13-44
+169            android:enabled="@bool/enable_system_job_service_default"
+169-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:49:13-70
+170            android:exported="true"
+170-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:50:13-36
+171            android:permission="android.permission.BIND_JOB_SERVICE" />
+171-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:51:13-69
+172        <service
+172-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:53:9-59:35
+173            android:name="androidx.work.impl.foreground.SystemForegroundService"
+173-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:54:13-81
+174            android:directBootAware="false"
+174-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:55:13-44
+175            android:enabled="@bool/enable_system_foreground_service_default"
+175-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:56:13-77
+176            android:exported="false" />
+176-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:57:13-37
+177
+178        <receiver
+178-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:61:9-66:35
+179            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+179-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:62:13-88
+180            android:directBootAware="false"
+180-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:63:13-44
+181            android:enabled="true"
+181-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:64:13-35
+182            android:exported="false" />
+182-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:65:13-37
+183        <receiver
+183-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:67:9-77:20
+184            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+184-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:68:13-106
+185            android:directBootAware="false"
+185-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:69:13-44
+186            android:enabled="false"
+186-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:70:13-36
+187            android:exported="false" >
+187-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:71:13-37
+188            <intent-filter>
+188-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:73:13-76:29
+189                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+189-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:74:17-87
+189-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:74:25-84
+190                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+190-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:75:17-90
+190-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:75:25-87
+191            </intent-filter>
+192        </receiver>
+193        <receiver
+193-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:78:9-88:20
+194            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+194-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:79:13-104
+195            android:directBootAware="false"
+195-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:80:13-44
+196            android:enabled="false"
+196-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:81:13-36
+197            android:exported="false" >
+197-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:82:13-37
+198            <intent-filter>
+198-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:84:13-87:29
+199                <action android:name="android.intent.action.BATTERY_OKAY" />
+199-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:85:17-77
+199-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:85:25-74
+200                <action android:name="android.intent.action.BATTERY_LOW" />
+200-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:86:17-76
+200-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:86:25-73
+201            </intent-filter>
+202        </receiver>
+203        <receiver
+203-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:89:9-99:20
+204            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+204-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:90:13-104
+205            android:directBootAware="false"
+205-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:91:13-44
+206            android:enabled="false"
+206-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:92:13-36
+207            android:exported="false" >
+207-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:93:13-37
+208            <intent-filter>
+208-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:95:13-98:29
+209                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+209-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:96:17-83
+209-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:96:25-80
+210                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+210-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:97:17-82
+210-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:97:25-79
+211            </intent-filter>
+212        </receiver>
+213        <receiver
+213-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:100:9-109:20
+214            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+214-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:101:13-103
+215            android:directBootAware="false"
+215-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:102:13-44
+216            android:enabled="false"
+216-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:103:13-36
+217            android:exported="false" >
+217-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:104:13-37
+218            <intent-filter>
+218-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:106:13-108:29
+219                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+219-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:107:17-79
+219-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:107:25-76
+220            </intent-filter>
+221        </receiver>
+222        <receiver
+222-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:110:9-121:20
+223            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+223-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:111:13-88
+224            android:directBootAware="false"
+224-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:112:13-44
+225            android:enabled="false"
+225-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:113:13-36
+226            android:exported="false" >
+226-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:114:13-37
+227            <intent-filter>
+227-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:116:13-120:29
+228                <action android:name="android.intent.action.BOOT_COMPLETED" />
+228-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:117:17-79
+228-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:117:25-76
+229                <action android:name="android.intent.action.TIME_SET" />
+229-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:118:17-73
+229-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:118:25-70
+230                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+230-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:119:17-81
+230-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:119:25-78
+231            </intent-filter>
+232        </receiver>
+233        <receiver
+233-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:122:9-131:20
+234            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+234-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:123:13-99
+235            android:directBootAware="false"
+235-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:124:13-44
+236            android:enabled="@bool/enable_system_alarm_service_default"
+236-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:125:13-72
+237            android:exported="false" >
+237-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:126:13-37
+238            <intent-filter>
+238-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:128:13-130:29
+239                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies" />
+239-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:129:17-98
+239-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:129:25-95
+240            </intent-filter>
+241        </receiver>
+242        <receiver
+242-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:132:9-142:20
+243            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+243-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:133:13-78
+244            android:directBootAware="false"
+244-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:134:13-44
+245            android:enabled="true"
+245-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:135:13-35
+246            android:exported="true"
+246-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:136:13-36
+247            android:permission="android.permission.DUMP" >
+247-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:137:13-57
+248            <intent-filter>
+248-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:139:13-141:29
+249                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
+249-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:140:17-88
+249-->[androidx.work:work-runtime:2.9.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/646525f693d6678e376051a30ba8f4cd/transformed/work-runtime-2.9.0/AndroidManifest.xml:140:25-85
+250            </intent-filter>
+251        </receiver>
+252
+253        <uses-library
+253-->[androidx.window:window:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0c2fd5a797c021073bc021307fb926ed/transformed/window-1.0.0/AndroidManifest.xml:25:9-27:40
+254            android:name="androidx.window.extensions"
+254-->[androidx.window:window:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0c2fd5a797c021073bc021307fb926ed/transformed/window-1.0.0/AndroidManifest.xml:26:13-54
+255            android:required="false" />
+255-->[androidx.window:window:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0c2fd5a797c021073bc021307fb926ed/transformed/window-1.0.0/AndroidManifest.xml:27:13-37
+256        <uses-library
+256-->[androidx.window:window:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0c2fd5a797c021073bc021307fb926ed/transformed/window-1.0.0/AndroidManifest.xml:28:9-30:40
+257            android:name="androidx.window.sidecar"
+257-->[androidx.window:window:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0c2fd5a797c021073bc021307fb926ed/transformed/window-1.0.0/AndroidManifest.xml:29:13-51
+258            android:required="false" />
+258-->[androidx.window:window:1.0.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/0c2fd5a797c021073bc021307fb926ed/transformed/window-1.0.0/AndroidManifest.xml:30:13-37
+259
+260        <service
+260-->[androidx.room:room-runtime:2.5.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9f0c89b56b046d1a550fda99d3aed58c/transformed/room-runtime-2.5.0/AndroidManifest.xml:24:9-28:63
+261            android:name="androidx.room.MultiInstanceInvalidationService"
+261-->[androidx.room:room-runtime:2.5.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9f0c89b56b046d1a550fda99d3aed58c/transformed/room-runtime-2.5.0/AndroidManifest.xml:25:13-74
+262            android:directBootAware="true"
+262-->[androidx.room:room-runtime:2.5.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9f0c89b56b046d1a550fda99d3aed58c/transformed/room-runtime-2.5.0/AndroidManifest.xml:26:13-43
+263            android:exported="false" />
+263-->[androidx.room:room-runtime:2.5.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/9f0c89b56b046d1a550fda99d3aed58c/transformed/room-runtime-2.5.0/AndroidManifest.xml:27:13-37
+264
+265        <receiver
+265-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+266            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+266-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+267            android:directBootAware="false"
+267-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+268            android:enabled="true"
+268-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+269            android:exported="true"
+269-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+270            android:permission="android.permission.DUMP" >
+270-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+271            <intent-filter>
+271-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+272                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+272-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+272-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+273            </intent-filter>
+274            <intent-filter>
+274-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+275                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+275-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+275-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+276            </intent-filter>
+277            <intent-filter>
+277-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+278                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+278-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+278-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+279            </intent-filter>
+280            <intent-filter>
+280-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+281                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+281-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+281-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/francescoprochilo/.gradle/caches/8.13/transforms/71a16e2ff261035292f67c8fe3390d6d/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+282            </intent-filter>
+283        </receiver>
+284    </application>
+285
+286</manifest>
