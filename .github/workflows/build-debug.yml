@@ -28,6 +28,9 @@ jobs:
           echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> local.properties
           echo "BASE_URL=https://prezzi-carburante.onrender.com/" >> local.properties
 
+      - name: Rimuovi java.home locale da gradle.properties
+        run: sed -i '/org.gradle.java.home/d' gradle.properties
+
       - name: Rendi gradlew eseguibile
         run: chmod +x gradlew
 
