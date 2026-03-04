@@ -34,11 +34,11 @@ jobs:
       - name: Rendi gradlew eseguibile
         run: chmod +x gradlew
 
-      - name: Mostra SHA-1 debug keystore
-        run: keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android | grep SHA1
-
       - name: Build Debug APK
         run: ./gradlew assembleDebug
+
+      - name: Mostra SHA-1 debug keystore
+        run: keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android | grep SHA1
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
