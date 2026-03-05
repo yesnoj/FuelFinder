@@ -7,24 +7,18 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
         <item name="colorSecondary">@color/accent</item>
+        <!-- Disabilita edge-to-edge forzato su Android 15+ -->
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- Chip Choice: grigio quando non selezionato, verde quando selezionato -->
     <style name="Widget.FuelFinder.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
-        <!-- Usa i selector per gestire gli stati -->
         <item name="chipBackgroundColor">@color/chip_background_selector</item>
         <item name="android:textColor">@color/chip_text_selector</item>
-
-        <!-- Bordo solo quando non selezionato -->
         <item name="chipStrokeWidth">1dp</item>
         <item name="chipStrokeColor">@color/chip_stroke_selector</item>
-
-        <!-- Nascondi icone -->
         <item name="checkedIconVisible">false</item>
         <item name="chipIconVisible">false</item>
-
-        <!-- Ripple effect verde -->
         <item name="rippleColor">@color/green</item>
     </style>
 
