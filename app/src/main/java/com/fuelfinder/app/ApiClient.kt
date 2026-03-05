@@ -11,8 +11,10 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
 
-    // Try the correct endpoint format
     private const val BASE_URL = "https://prezzi-carburante.onrender.com/"
+
+    // Chiave separata per Distance Matrix API (web service, non Android)
+    const val DISTANCE_MATRIX_API_KEY = "AIzaSyCmmBYZH3NKGpXbf-5ytWgLn1MlP-aoAh0"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = if (BuildConfig.DEBUG) {
@@ -49,23 +51,17 @@ object ApiClient {
     val directionsService: DirectionsService = retrofit.create(DirectionsService::class.java)
 }
 
-/**
- * Service per l'API prezzi-carburante
- * Trying different endpoint formats based on the API documentation
- */
 interface FuelService {
 
-    // Try different endpoint variations
     @GET("api/distributori")
     fun getNearbyStations(
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double,
         @Query("distance") distanceKm: Int,
         @Query("fuel") fuel: String,
-        @Query("results") results: Int = 50 // Increased default
+        @Query("results") results: Int = 50
     ): Call<List<DistributorDto>>
 
-    // Alternative endpoint format
     @GET("distributori")
     fun getNearbyStationsAlt(
         @Query("lat") latitude: Double,
@@ -104,7 +100,7 @@ interface DirectionsService {
         @Query("origins") origins: String,
         @Query("destinations") destinations: String,
         @Query("mode") mode: String = "driving",
-        @Query("key") apiKey: String = BuildConfig.GOOGLE_MAPS_API_KEY,
+        @Query("key") apiKey: String = ApiClient.DISTANCE_MATRIX_API_KEY,
         @Query("language") language: String = "it"
     ): Call<DistanceMatrixResponse>
 }
