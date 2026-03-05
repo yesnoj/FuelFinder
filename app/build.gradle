@@ -16,7 +16,7 @@ def BASE_URL_VAL = localProps.getProperty("BASE_URL", "https://prezzi-carburante
 
 android {
     namespace 'com.fuelfinder.app'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.francescoprochilo.fuelfinder"
