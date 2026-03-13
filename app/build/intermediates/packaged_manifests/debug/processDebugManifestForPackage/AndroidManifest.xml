@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fuelfinder.app"
-    android:versionCode="1"
-    android:versionName="1.0.0" >
+    package="com.francescoprochilo.fuelfinder"
+    android:versionCode="53"
+    android:versionName="1.0.53" >
 
     <uses-sdk
         android:minSdkVersion="24"
-        android:targetSdkVersion="34" />
+        android:targetSdkVersion="35" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- Android Auto permission -->
+    <!-- Android Auto permissions -->
     <uses-permission android:name="com.google.android.gms.permission.CAR_FUEL" />
+    <uses-permission android:name="androidx.car.app.MAP_TEMPLATES" />
 
-    <!-- Dichiara che l'app supporta Android Auto -->
-    <uses-feature
-        android:name="android.hardware.type.automotive"
-        android:required="false" />
     <uses-feature
         android:name="android.software.car.templates_host"
         android:required="false" />
@@ -41,10 +38,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <permission
-        android:name="com.fuelfinder.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.francescoprochilo.fuelfinder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.fuelfinder.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+    <uses-permission android:name="com.francescoprochilo.fuelfinder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
         android:allowBackup="true"
@@ -58,12 +55,15 @@
         android:theme="@style/Theme.FuelFinder" >
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAfQV0xJTUFBU9KzBH973cEfveZYJImDu0" />
+            android:value="AIzaSyA7JJtoSkEJeOpF39QPCdEWwOqJWKaEVm0" />
 
         <!-- Android Auto metadata -->
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
+        <meta-data
+            android:name="androidx.car.app.minCarApiLevel"
+            android:value="2" />
 
         <activity
             android:name="com.fuelfinder.app.MainActivity"
@@ -75,14 +75,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Android Auto launcher intent -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="com.google.android.gms.car.category.CATEGORY_PROJECTION" />
-            </intent-filter>
-
-            <!-- Supporto per Android Auto con Car App Library -->
             <meta-data
                 android:name="distractionOptimized"
                 android:value="true" />
@@ -98,18 +90,22 @@
 
                 <category android:name="androidx.car.app.category.POI" />
             </intent-filter>
+
+            <meta-data
+                android:name="androidx.car.app.minCarApiLevel"
+                android:value="2" />
         </service>
 
-        <!-- WIDGET INTEGRATION: Widget Provider -->
+        <!-- Widget Provider -->
         <receiver
             android:name="com.fuelfinder.app.widget.FuelFinderWidgetProvider"
             android:exported="true"
             android:label="FuelFinder Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.fuelfinder.app.UPDATE_WIDGET" />
-                <action android:name="com.fuelfinder.app.NAVIGATE" />
-                <action android:name="com.fuelfinder.app.TOGGLE_SORT" />
+                <action android:name="com.francescoprochilo.fuelfinder.UPDATE_WIDGET" />
+                <action android:name="com.francescoprochilo.fuelfinder.NAVIGATE" />
+                <action android:name="com.francescoprochilo.fuelfinder.TOGGLE_SORT" />
             </intent-filter>
 
             <meta-data
@@ -117,19 +113,10 @@
                 android:resource="@xml/widget_fuel_finder_info" />
         </receiver>
 
-        <!-- WIDGET INTEGRATION: Widget Update Service -->
+        <!-- Widget Update Service -->
         <service
             android:name="com.fuelfinder.app.widget.WidgetUpdateService"
             android:exported="false" />
-        <service
-            android:name="androidx.car.app.CarAppMetadataHolderService"
-            android:enabled="false"
-            android:exported="false"
-            android:process="" >
-            <meta-data
-                android:name="androidx.car.app.CarAppMetadataHolderService.CAR_HARDWARE_MANAGER"
-                android:value="androidx.car.app.hardware.ProjectedCarHardwareManager" />
-        </service>
 
         <activity
             android:name="androidx.car.app.CarAppPermissionActivity"
@@ -142,7 +129,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.fuelfinder.app.androidx-startup"
+            android:authorities="com.francescoprochilo.fuelfinder.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"
@@ -273,6 +260,15 @@
             android:name="androidx.room.MultiInstanceInvalidationService"
             android:directBootAware="true"
             android:exported="false" />
+        <service
+            android:name="androidx.car.app.CarAppMetadataHolderService"
+            android:enabled="false"
+            android:exported="false"
+            android:process="" >
+            <meta-data
+                android:name="androidx.car.app.CarAppMetadataHolderService.CAR_HARDWARE_MANAGER"
+                android:value="androidx.car.app.hardware.ProjectedCarHardwareManager" />
+        </service>
 
         <receiver
             android:name="androidx.profileinstaller.ProfileInstallReceiver"

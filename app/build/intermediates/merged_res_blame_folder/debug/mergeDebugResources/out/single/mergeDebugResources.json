@@ -4,20 +4,20 @@
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/mipmap-xxxhdpi/ic_launcher_round.webp"
     },
     {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_close.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_close.xml"
+    },
+    {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_handle.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/handle.xml"
     },
     {
-        "merged": "com.fuelfinder.app-debug-56:/layout_widget_fuel_finder.xml.flat",
-        "source": "com.fuelfinder.app-main-58:/layout/widget_fuel_finder.xml"
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/mipmap-xhdpi/ic_launcher.webp"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_widget_nav_button_background.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/widget_nav_button_background.xml"
-    },
-    {
-        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/mipmap-xhdpi/ic_launcher.webp"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
@@ -56,12 +56,12 @@
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_location.xml"
     },
     {
-        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_launcher_background.xml.flat",
-        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_launcher_background.xml"
-    },
-    {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/mipmap-mdpi_ic_launcher_round.webp.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_launcher_background.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_launcher_background.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/xml_automotive_app_desc.xml.flat",
@@ -72,12 +72,32 @@
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_sort.xml"
     },
     {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_location_pin.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_location_pin.xml"
+    },
+    {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_widget_background_modern.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/widget_background_modern.xml"
     },
     {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_search.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_search.xml"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/layout_dialog_station_detail.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/layout/dialog_station_detail.xml"
+    },
+    {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_circle_button.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/circle_button.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-debug-56:/drawable_bottom_sheet_bg.xml.flat",
+        "source": "com.fuelfinder.app-main-58:/drawable/bottom_sheet_bg.xml"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_custom_pin.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_custom_pin.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_navigation.xml.flat",
@@ -90,6 +110,14 @@
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/color_chip_text_selector.xml.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/color/chip_text_selector.xml"
+    },
+    {
+        "merged": "com.fuelfinder.app-debug-56:/layout_activity_main.xml.flat",
+        "source": "com.fuelfinder.app-main-58:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_dialog_rounded_bg.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/dialog_rounded_bg.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_user_location.xml.flat",
@@ -126,6 +154,10 @@
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/mipmap-xhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_list.xml.flat",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/drawable/ic_list.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-debug-56:/drawable_ic_refresh.xml.flat",

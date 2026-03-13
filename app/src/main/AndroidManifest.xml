@@ -6,10 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- Android Auto permission -->
+    <!-- Android Auto permissions -->
     <uses-permission android:name="com.google.android.gms.permission.CAR_FUEL" />
+    <uses-permission android:name="androidx.car.app.MAP_TEMPLATES" />
 
-    <!-- RIMOSSO android.hardware.type.automotive: non compatibile con gms.car.application -->
     <uses-feature
         android:name="android.software.car.templates_host"
         android:required="false" />
@@ -29,6 +29,9 @@
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
+        <meta-data
+            android:name="androidx.car.app.minCarApiLevel"
+            android:value="2" />
 
         <activity
             android:name=".MainActivity"
@@ -45,12 +48,14 @@
         <service
             android:name=".auto.FuelFinderCarAppService"
             android:exported="true"
-            android:permission="com.google.android.gms.permission.BIND_CAR_APP"
             android:label="FuelFinder per Auto">
             <intent-filter>
                 <action android:name="androidx.car.app.CarAppService" />
                 <category android:name="androidx.car.app.category.POI" />
             </intent-filter>
+            <meta-data
+                android:name="androidx.car.app.minCarApiLevel"
+                android:value="2" />
         </service>
 
         <!-- Widget Provider -->

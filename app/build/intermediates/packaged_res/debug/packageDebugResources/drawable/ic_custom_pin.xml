@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="64dp"
+    android:viewportWidth="48"
+    android:viewportHeight="64">
+
+    <!-- Corpo del pin (drop shape) -->
+    <path
+        android:fillColor="#E65100"
+        android:pathData="M24,2 C13.5,2 5,10.5 5,21 C5,34 24,62 24,62 C24,62 43,34 43,21 C43,10.5 34.5,2 24,2 Z" />
+
+    <!-- Bordo scuro -->
+    <path
+        android:fillColor="#BF360C"
+        android:pathData="M24,2 C13.5,2 5,10.5 5,21 C5,34 24,62 24,62 C24,62 43,34 43,21 C43,10.5 34.5,2 24,2 Z"
+        android:strokeColor="#BF360C"
+        android:strokeWidth="1.5" />
+
+    <!-- Cerchio bianco interno -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,13 C19.03,13 15,17.03 15,22 C15,26.97 19.03,31 24,31 C28.97,31 33,26.97 33,22 C33,17.03 28.97,13 24,13 Z" />
+
+</vector>

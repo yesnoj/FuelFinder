@@ -12,8 +12,12 @@
         "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/layout/marker_info_window.xml"
     },
     {
-        "merged": "com.fuelfinder.app-mergeDebugResources-55:/layout/widget_fuel_finder.xml",
-        "source": "com.fuelfinder.app-main-58:/layout/widget_fuel_finder.xml"
+        "merged": "com.fuelfinder.app-mergeDebugResources-55:/layout/activity_main.xml",
+        "source": "com.fuelfinder.app-main-58:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-mergeDebugResources-55:/layout/dialog_station_detail.xml",
+        "source": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-main-58:/layout/dialog_station_detail.xml"
     },
     {
         "merged": "/Users/francescoprochilo/.gradle/daemon/8.13/com.fuelfinder.app-mergeDebugResources-55:/layout/widget_fuel_finder.xml",

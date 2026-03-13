@@ -4,13 +4,14 @@ package com.fuelfinder.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
@@ -21,6 +22,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -33,31 +35,25 @@ public final class ActivityMainBinding implements ViewBinding {
   public final LinearLayout bottomSheet;
 
   @NonNull
+  public final FloatingActionButton btnExitCustomMode;
+
+  @NonNull
   public final MaterialButton btnFindFuel;
+
+  @NonNull
+  public final FloatingActionButton btnSearchHere;
 
   @NonNull
   public final ImageButton btnSettings;
 
   @NonNull
+  public final FloatingActionButton btnToggleList;
+
+  @NonNull
   public final MaterialCardView cardTopInfo;
 
   @NonNull
-  public final Chip chipBenzina;
-
-  @NonNull
-  public final Chip chipGasolio;
-
-  @NonNull
-  public final Chip chipGpl;
-
-  @NonNull
-  public final ChipGroup chipGroupFuel;
-
-  @NonNull
   public final ChipGroup chipGroupSort;
-
-  @NonNull
-  public final Chip chipMetano;
 
   @NonNull
   public final Chip chipSortDistance;
@@ -66,67 +62,71 @@ public final class ActivityMainBinding implements ViewBinding {
   public final Chip chipSortPrice;
 
   @NonNull
-  public final LinearLayout fuelControlsLayout;
+  public final LinearLayout customModeButtons;
+
+  @NonNull
+  public final LinearLayout fabColumn;
+
+  @NonNull
+  public final ImageView ivCustomPin;
 
   @NonNull
   public final ImageView ivLoc;
 
   @NonNull
-  public final MapView mapView;
+  public final LinearLayout ivLocContainer;
 
   @NonNull
-  public final LinearLayout modeContainer;
+  public final FrameLayout mapContainer;
+
+  @NonNull
+  public final MapView mapView;
 
   @NonNull
   public final RecyclerView recyclerViewStations;
 
   @NonNull
-  public final SwitchCompat swSearchModeTop;
+  public final ConstraintLayout topBar;
 
   @NonNull
   public final TextView tvModeLabel;
 
   @NonNull
-  public final TextView tvSubtitle;
-
-  @NonNull
-  public final TextView tvTitle;
-
-  @NonNull
   public final TextView tvUpdateStatus;
 
   private ActivityMainBinding(@NonNull CoordinatorLayout rootView,
-      @NonNull LinearLayout bottomSheet, @NonNull MaterialButton btnFindFuel,
-      @NonNull ImageButton btnSettings, @NonNull MaterialCardView cardTopInfo,
-      @NonNull Chip chipBenzina, @NonNull Chip chipGasolio, @NonNull Chip chipGpl,
-      @NonNull ChipGroup chipGroupFuel, @NonNull ChipGroup chipGroupSort, @NonNull Chip chipMetano,
+      @NonNull LinearLayout bottomSheet, @NonNull FloatingActionButton btnExitCustomMode,
+      @NonNull MaterialButton btnFindFuel, @NonNull FloatingActionButton btnSearchHere,
+      @NonNull ImageButton btnSettings, @NonNull FloatingActionButton btnToggleList,
+      @NonNull MaterialCardView cardTopInfo, @NonNull ChipGroup chipGroupSort,
       @NonNull Chip chipSortDistance, @NonNull Chip chipSortPrice,
-      @NonNull LinearLayout fuelControlsLayout, @NonNull ImageView ivLoc, @NonNull MapView mapView,
-      @NonNull LinearLayout modeContainer, @NonNull RecyclerView recyclerViewStations,
-      @NonNull SwitchCompat swSearchModeTop, @NonNull TextView tvModeLabel,
-      @NonNull TextView tvSubtitle, @NonNull TextView tvTitle, @NonNull TextView tvUpdateStatus) {
+      @NonNull LinearLayout customModeButtons, @NonNull LinearLayout fabColumn,
+      @NonNull ImageView ivCustomPin, @NonNull ImageView ivLoc,
+      @NonNull LinearLayout ivLocContainer, @NonNull FrameLayout mapContainer,
+      @NonNull MapView mapView, @NonNull RecyclerView recyclerViewStations,
+      @NonNull ConstraintLayout topBar, @NonNull TextView tvModeLabel,
+      @NonNull TextView tvUpdateStatus) {
     this.rootView = rootView;
     this.bottomSheet = bottomSheet;
+    this.btnExitCustomMode = btnExitCustomMode;
     this.btnFindFuel = btnFindFuel;
+    this.btnSearchHere = btnSearchHere;
     this.btnSettings = btnSettings;
+    this.btnToggleList = btnToggleList;
     this.cardTopInfo = cardTopInfo;
-    this.chipBenzina = chipBenzina;
-    this.chipGasolio = chipGasolio;
-    this.chipGpl = chipGpl;
-    this.chipGroupFuel = chipGroupFuel;
     this.chipGroupSort = chipGroupSort;
-    this.chipMetano = chipMetano;
     this.chipSortDistance = chipSortDistance;
     this.chipSortPrice = chipSortPrice;
-    this.fuelControlsLayout = fuelControlsLayout;
+    this.customModeButtons = customModeButtons;
+    this.fabColumn = fabColumn;
+    this.ivCustomPin = ivCustomPin;
     this.ivLoc = ivLoc;
+    this.ivLocContainer = ivLocContainer;
+    this.mapContainer = mapContainer;
     this.mapView = mapView;
-    this.modeContainer = modeContainer;
     this.recyclerViewStations = recyclerViewStations;
-    this.swSearchModeTop = swSearchModeTop;
+    this.topBar = topBar;
     this.tvModeLabel = tvModeLabel;
-    this.tvSubtitle = tvSubtitle;
-    this.tvTitle = tvTitle;
     this.tvUpdateStatus = tvUpdateStatus;
   }
 
@@ -163,9 +163,21 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnExitCustomMode;
+      FloatingActionButton btnExitCustomMode = ViewBindings.findChildViewById(rootView, id);
+      if (btnExitCustomMode == null) {
+        break missingId;
+      }
+
       id = R.id.btnFindFuel;
       MaterialButton btnFindFuel = ViewBindings.findChildViewById(rootView, id);
       if (btnFindFuel == null) {
+        break missingId;
+      }
+
+      id = R.id.btnSearchHere;
+      FloatingActionButton btnSearchHere = ViewBindings.findChildViewById(rootView, id);
+      if (btnSearchHere == null) {
         break missingId;
       }
 
@@ -175,45 +187,21 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnToggleList;
+      FloatingActionButton btnToggleList = ViewBindings.findChildViewById(rootView, id);
+      if (btnToggleList == null) {
+        break missingId;
+      }
+
       id = R.id.cardTopInfo;
       MaterialCardView cardTopInfo = ViewBindings.findChildViewById(rootView, id);
       if (cardTopInfo == null) {
         break missingId;
       }
 
-      id = R.id.chipBenzina;
-      Chip chipBenzina = ViewBindings.findChildViewById(rootView, id);
-      if (chipBenzina == null) {
-        break missingId;
-      }
-
-      id = R.id.chipGasolio;
-      Chip chipGasolio = ViewBindings.findChildViewById(rootView, id);
-      if (chipGasolio == null) {
-        break missingId;
-      }
-
-      id = R.id.chipGpl;
-      Chip chipGpl = ViewBindings.findChildViewById(rootView, id);
-      if (chipGpl == null) {
-        break missingId;
-      }
-
-      id = R.id.chipGroupFuel;
-      ChipGroup chipGroupFuel = ViewBindings.findChildViewById(rootView, id);
-      if (chipGroupFuel == null) {
-        break missingId;
-      }
-
       id = R.id.chipGroupSort;
       ChipGroup chipGroupSort = ViewBindings.findChildViewById(rootView, id);
       if (chipGroupSort == null) {
-        break missingId;
-      }
-
-      id = R.id.chipMetano;
-      Chip chipMetano = ViewBindings.findChildViewById(rootView, id);
-      if (chipMetano == null) {
         break missingId;
       }
 
@@ -229,9 +217,21 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.fuelControlsLayout;
-      LinearLayout fuelControlsLayout = ViewBindings.findChildViewById(rootView, id);
-      if (fuelControlsLayout == null) {
+      id = R.id.customModeButtons;
+      LinearLayout customModeButtons = ViewBindings.findChildViewById(rootView, id);
+      if (customModeButtons == null) {
+        break missingId;
+      }
+
+      id = R.id.fabColumn;
+      LinearLayout fabColumn = ViewBindings.findChildViewById(rootView, id);
+      if (fabColumn == null) {
+        break missingId;
+      }
+
+      id = R.id.ivCustomPin;
+      ImageView ivCustomPin = ViewBindings.findChildViewById(rootView, id);
+      if (ivCustomPin == null) {
         break missingId;
       }
 
@@ -241,15 +241,21 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.mapView;
-      MapView mapView = ViewBindings.findChildViewById(rootView, id);
-      if (mapView == null) {
+      id = R.id.ivLocContainer;
+      LinearLayout ivLocContainer = ViewBindings.findChildViewById(rootView, id);
+      if (ivLocContainer == null) {
         break missingId;
       }
 
-      id = R.id.modeContainer;
-      LinearLayout modeContainer = ViewBindings.findChildViewById(rootView, id);
-      if (modeContainer == null) {
+      id = R.id.mapContainer;
+      FrameLayout mapContainer = ViewBindings.findChildViewById(rootView, id);
+      if (mapContainer == null) {
+        break missingId;
+      }
+
+      id = R.id.mapView;
+      MapView mapView = ViewBindings.findChildViewById(rootView, id);
+      if (mapView == null) {
         break missingId;
       }
 
@@ -259,9 +265,9 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.swSearchModeTop;
-      SwitchCompat swSearchModeTop = ViewBindings.findChildViewById(rootView, id);
-      if (swSearchModeTop == null) {
+      id = R.id.topBar;
+      ConstraintLayout topBar = ViewBindings.findChildViewById(rootView, id);
+      if (topBar == null) {
         break missingId;
       }
 
@@ -271,28 +277,16 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvSubtitle;
-      TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
-      if (tvSubtitle == null) {
-        break missingId;
-      }
-
-      id = R.id.tvTitle;
-      TextView tvTitle = ViewBindings.findChildViewById(rootView, id);
-      if (tvTitle == null) {
-        break missingId;
-      }
-
       id = R.id.tvUpdateStatus;
       TextView tvUpdateStatus = ViewBindings.findChildViewById(rootView, id);
       if (tvUpdateStatus == null) {
         break missingId;
       }
 
-      return new ActivityMainBinding((CoordinatorLayout) rootView, bottomSheet, btnFindFuel,
-          btnSettings, cardTopInfo, chipBenzina, chipGasolio, chipGpl, chipGroupFuel, chipGroupSort,
-          chipMetano, chipSortDistance, chipSortPrice, fuelControlsLayout, ivLoc, mapView,
-          modeContainer, recyclerViewStations, swSearchModeTop, tvModeLabel, tvSubtitle, tvTitle,
+      return new ActivityMainBinding((CoordinatorLayout) rootView, bottomSheet, btnExitCustomMode,
+          btnFindFuel, btnSearchHere, btnSettings, btnToggleList, cardTopInfo, chipGroupSort,
+          chipSortDistance, chipSortPrice, customModeButtons, fabColumn, ivCustomPin, ivLoc,
+          ivLocContainer, mapContainer, mapView, recyclerViewStations, topBar, tvModeLabel,
           tvUpdateStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);

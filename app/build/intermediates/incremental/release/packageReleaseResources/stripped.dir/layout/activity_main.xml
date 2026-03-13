@@ -8,11 +8,30 @@
     android:background="@color/background"
     tools:context=".MainActivity">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <!-- Mappa wrappata in FrameLayout per permettere overlay pin centrale -->
+    <FrameLayout
+        android:id="@+id/mapContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Pin fisso al centro, visibile solo in modalità punto personalizzato -->
+        <ImageView
+            android:id="@+id/ivCustomPin"
+            android:layout_width="48dp"
+            android:layout_height="96dp"
+            android:src="@drawable/ic_custom_pin"
+            android:layout_gravity="center"
+            android:layout_marginBottom="48dp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <!-- Card superiore (funge da topBar per cambio colore) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardTopInfo"
         android:layout_width="match_parent"
@@ -24,244 +43,202 @@
         app:cardBackgroundColor="@color/card_background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/ivLoc"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_location"
-                android:padding="8dp"
-                android:background="@drawable/circle_gradient"
-                app:tint="@android:color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- contenitore label + switch -->
+            <!-- Cerchio GPS + label modalità — click togola GPS/Punto -->
             <LinearLayout
-                android:id="@+id/modeContainer"
+                android:id="@+id/ivLocContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toStartOf="@id/btnSettings"
-                app:layout_constraintTop_toTopOf="@id/btnSettings"
-                app:layout_constraintBottom_toBottomOf="@id/btnSettings">
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivLoc"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_location"
+                    android:padding="8dp"
+                    android:background="@drawable/circle_gradient"
+                    app:tint="@android:color/white" />
 
                 <TextView
                     android:id="@+id/tvModeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Percorso"
-                    android:textSize="12sp"
+                    android:layout_marginStart="6dp"
+                    android:text="GPS"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginEnd="6dp"/>
+                    android:textColor="@color/text_primary" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swSearchModeTop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:showText="false"
-                    android:text=" "
-                    android:contentDescription="Modalità ricerca: Percorso o 360 gradi" />
             </LinearLayout>
 
+
+            <!-- Pulsante impostazioni -->
             <ImageButton
                 android:id="@+id/btnSettings"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_settings"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="6dp"
+                android:contentDescription="Impostazioni"
                 app:tint="@color/text_primary"
-                android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/ivLocContainer" />
 
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Posizione attuale"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginStart="12dp"
-                app:layout_constraintStart_toEndOf="@id/ivLoc"
-                app:layout_constraintTop_toTopOf="@id/ivLoc"
-                app:layout_constraintEnd_toStartOf="@id/modeContainer" />
-
-            <TextView
-                android:id="@+id/tvSubtitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Monitoraggio GPS attivo"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                app:layout_constraintStart_toStartOf="@id/tvTitle"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                app:layout_constraintEnd_toStartOf="@id/modeContainer" />
-
-            <LinearLayout
-                android:id="@+id/fuelControlsLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/stats_background"
-                android:padding="12dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivLoc">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroupFuel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:singleSelection="true"
-                    app:selectionRequired="true"
-                    app:chipSpacingHorizontal="8dp">
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipGasolio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Diesel"
-                        android:checked="true"
-                        style="@style/Widget.FuelFinder.Chip.Choice"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipStrokeColor="@color/chip_stroke_selector" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipBenzina"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Benzina"
-                        style="@style/Widget.FuelFinder.Chip.Choice"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipStrokeColor="@color/chip_stroke_selector" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipGpl"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="GPL"
-                        style="@style/Widget.FuelFinder.Chip.Choice"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipStrokeColor="@color/chip_stroke_selector" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipMetano"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Metano"
-                        style="@style/Widget.FuelFinder.Chip.Choice"
-                        app:chipBackgroundColor="@color/chip_background_selector"
-                        android:textColor="@color/chip_text_selector"
-                        app:chipStrokeColor="@color/chip_stroke_selector" />
-                </com.google.android.material.chip.ChipGroup>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnFindFuel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Avvia ricerca"
-                    app:icon="@drawable/ic_fuel"
-                    app:iconGravity="textStart"
-                    app:backgroundTint="@color/primary" />
-
-            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Colonna FAB a destra: ricerca + esci (solo modalità manuale) + lista (sempre visibile) -->
+    <LinearLayout
+        android:id="@+id/fabColumn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="16dp">
+
+        <!-- FAB ricerca: sempre visibile. GPS=avvia/ferma, Manuale=cerca qui -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnSearchHere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Avvia/ferma ricerca"
+            app:backgroundTint="@color/primary"
+            app:srcCompat="@drawable/ic_search"
+            app:tint="@android:color/white"
+            app:fabSize="normal" />
+
+        <!-- Visibile solo in modalità Posizione Manuale -->
+        <LinearLayout
+            android:id="@+id/customModeButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnExitCustomMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="Esci dalla modalità"
+                app:backgroundTint="#FFFFFF"
+                app:srcCompat="@drawable/ic_close"
+                app:tint="#333333"
+                app:fabSize="normal" />
+
+        </LinearLayout>
+
+        <!-- Sempre visibile: apre/chiude la lista risultati -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnToggleList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Mostra/nascondi lista"
+            app:backgroundTint="@color/primary"
+            app:srcCompat="@drawable/ic_list"
+            app:tint="@android:color/white"
+            app:fabSize="normal" />
+
+    </LinearLayout>
+
+    <!-- Bottom sheet — card flottante con margini e angoli arrotondati -->
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        android:background="@drawable/bottom_sheet_background"
-        android:elevation="16dp"
-        app:behavior_peekHeight="80dp"
-        app:behavior_hideable="false"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        android:background="@drawable/bottom_sheet_bg"
+        android:elevation="8dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp">
 
+        <!-- Handle visuale + margine superiore per non finire sotto la card -->
         <View
             android:layout_width="40dp"
             android:layout_height="4dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/handle" />
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="#BDBDBD" />
 
+        <!-- Riga ordinamento + stato -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Benzinai nelle vicinanze"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary" />
-
-            <TextView
-                android:id="@+id/tvUpdateStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="In attesa ricerca…"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="4dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="8dp">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupSort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:singleSelection="true"
-                app:checkedChip="@id/chipSortPrice">
+                app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSortPrice"
+                    style="@style/Widget.FuelFinder.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Prezzo"
-                    style="@style/Widget.FuelFinder.Chip.Choice"
-                    app:chipBackgroundColor="@color/chip_background_selector"
-                    android:textColor="@color/chip_text_selector"
-                    app:chipStrokeColor="@color/chip_stroke_selector" />
+                    android:checked="true" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSortDistance"
+                    style="@style/Widget.FuelFinder.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Distanza"
-                    style="@style/Widget.FuelFinder.Chip.Choice"
-                    app:chipBackgroundColor="@color/chip_background_selector"
-                    android:textColor="@color/chip_text_selector"
-                    app:chipStrokeColor="@color/chip_stroke_selector" />
+                    android:text="Distanza" />
+
             </com.google.android.material.chip.ChipGroup>
+
+            <TextView
+                android:id="@+id/tvUpdateStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="In attesa ricerca…"
+                android:textSize="11sp"
+                android:textColor="@color/text_secondary"
+                android:gravity="end" />
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewStations"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:clipToPadding="false" />
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="32dp"
+            android:nestedScrollingEnabled="true"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_station" />
 
     </LinearLayout>
 

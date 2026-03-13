@@ -22,8 +22,8 @@ android {
         applicationId "com.francescoprochilo.fuelfinder"
         minSdk 24
         targetSdk 35
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 54
+        versionName "1.0.54"
         manifestPlaceholders = [ MAPS_API_KEY: MAPS_KEY ]
         buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${MAPS_KEY}\""
         buildConfigField "String", "BASE_URL", "\"${BASE_URL_VAL}\""
@@ -81,7 +81,9 @@ dependencies {
 
     // Android Auto - Car App Library
     implementation 'androidx.car.app:app:1.4.0'
-    implementation 'androidx.car.app:app-projected:1.4.0'
+    implementation('androidx.car.app:app-projected:1.4.0') {
+        exclude group: 'androidx.car.app', module: 'app'
+    }
 
     // Directions API
     implementation 'com.google.maps:google-maps-services:2.2.0'

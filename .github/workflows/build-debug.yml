@@ -25,7 +25,7 @@ jobs:
       - name: Crea local.properties
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" >> local.properties
-          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> local.properties
+          echo "MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> local.properties
           echo "BASE_URL=https://prezzi-carburante.onrender.com/" >> local.properties
 
       - name: Rimuovi java.home locale da gradle.properties

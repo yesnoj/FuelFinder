@@ -15,6 +15,8 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.fuelfinder.app.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -29,6 +31,21 @@ public final class DialogSettingsBinding implements ViewBinding {
 
   @NonNull
   public final MaterialButton btnOk;
+
+  @NonNull
+  public final Chip chipBenzina;
+
+  @NonNull
+  public final Chip chipGasolio;
+
+  @NonNull
+  public final Chip chipGpl;
+
+  @NonNull
+  public final ChipGroup chipGroupFuel;
+
+  @NonNull
+  public final Chip chipMetano;
 
   @NonNull
   public final RadioButton radioFreq1;
@@ -49,10 +66,22 @@ public final class DialogSettingsBinding implements ViewBinding {
   public final Slider seekRadius;
 
   @NonNull
+  public final SwitchCompat swAlongRoute;
+
+  @NonNull
   public final SwitchCompat swRealDistance;
 
   @NonNull
+  public final TextView tvAlongRouteInfo;
+
+  @NonNull
+  public final TextView tvAlongRouteLabel;
+
+  @NonNull
   public final TextView tvMaxResultsValue;
+
+  @NonNull
+  public final TextView tvRadiusLabel;
 
   @NonNull
   public final TextView tvRadiusValue;
@@ -61,23 +90,35 @@ public final class DialogSettingsBinding implements ViewBinding {
   public final TextView tvRealDistanceInfo;
 
   private DialogSettingsBinding(@NonNull ScrollView rootView, @NonNull MaterialButton btnCancel,
-      @NonNull MaterialButton btnOk, @NonNull RadioButton radioFreq1,
-      @NonNull RadioButton radioFreq3, @NonNull RadioButton radioFreq5,
-      @NonNull RadioGroup radioGroupFrequency, @NonNull Slider seekMaxResults,
-      @NonNull Slider seekRadius, @NonNull SwitchCompat swRealDistance,
-      @NonNull TextView tvMaxResultsValue, @NonNull TextView tvRadiusValue,
-      @NonNull TextView tvRealDistanceInfo) {
+      @NonNull MaterialButton btnOk, @NonNull Chip chipBenzina, @NonNull Chip chipGasolio,
+      @NonNull Chip chipGpl, @NonNull ChipGroup chipGroupFuel, @NonNull Chip chipMetano,
+      @NonNull RadioButton radioFreq1, @NonNull RadioButton radioFreq3,
+      @NonNull RadioButton radioFreq5, @NonNull RadioGroup radioGroupFrequency,
+      @NonNull Slider seekMaxResults, @NonNull Slider seekRadius,
+      @NonNull SwitchCompat swAlongRoute, @NonNull SwitchCompat swRealDistance,
+      @NonNull TextView tvAlongRouteInfo, @NonNull TextView tvAlongRouteLabel,
+      @NonNull TextView tvMaxResultsValue, @NonNull TextView tvRadiusLabel,
+      @NonNull TextView tvRadiusValue, @NonNull TextView tvRealDistanceInfo) {
     this.rootView = rootView;
     this.btnCancel = btnCancel;
     this.btnOk = btnOk;
+    this.chipBenzina = chipBenzina;
+    this.chipGasolio = chipGasolio;
+    this.chipGpl = chipGpl;
+    this.chipGroupFuel = chipGroupFuel;
+    this.chipMetano = chipMetano;
     this.radioFreq1 = radioFreq1;
     this.radioFreq3 = radioFreq3;
     this.radioFreq5 = radioFreq5;
     this.radioGroupFrequency = radioGroupFrequency;
     this.seekMaxResults = seekMaxResults;
     this.seekRadius = seekRadius;
+    this.swAlongRoute = swAlongRoute;
     this.swRealDistance = swRealDistance;
+    this.tvAlongRouteInfo = tvAlongRouteInfo;
+    this.tvAlongRouteLabel = tvAlongRouteLabel;
     this.tvMaxResultsValue = tvMaxResultsValue;
+    this.tvRadiusLabel = tvRadiusLabel;
     this.tvRadiusValue = tvRadiusValue;
     this.tvRealDistanceInfo = tvRealDistanceInfo;
   }
@@ -121,6 +162,36 @@ public final class DialogSettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.chipBenzina;
+      Chip chipBenzina = ViewBindings.findChildViewById(rootView, id);
+      if (chipBenzina == null) {
+        break missingId;
+      }
+
+      id = R.id.chipGasolio;
+      Chip chipGasolio = ViewBindings.findChildViewById(rootView, id);
+      if (chipGasolio == null) {
+        break missingId;
+      }
+
+      id = R.id.chipGpl;
+      Chip chipGpl = ViewBindings.findChildViewById(rootView, id);
+      if (chipGpl == null) {
+        break missingId;
+      }
+
+      id = R.id.chipGroupFuel;
+      ChipGroup chipGroupFuel = ViewBindings.findChildViewById(rootView, id);
+      if (chipGroupFuel == null) {
+        break missingId;
+      }
+
+      id = R.id.chipMetano;
+      Chip chipMetano = ViewBindings.findChildViewById(rootView, id);
+      if (chipMetano == null) {
+        break missingId;
+      }
+
       id = R.id.radioFreq1;
       RadioButton radioFreq1 = ViewBindings.findChildViewById(rootView, id);
       if (radioFreq1 == null) {
@@ -157,15 +228,39 @@ public final class DialogSettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.swAlongRoute;
+      SwitchCompat swAlongRoute = ViewBindings.findChildViewById(rootView, id);
+      if (swAlongRoute == null) {
+        break missingId;
+      }
+
       id = R.id.swRealDistance;
       SwitchCompat swRealDistance = ViewBindings.findChildViewById(rootView, id);
       if (swRealDistance == null) {
         break missingId;
       }
 
+      id = R.id.tvAlongRouteInfo;
+      TextView tvAlongRouteInfo = ViewBindings.findChildViewById(rootView, id);
+      if (tvAlongRouteInfo == null) {
+        break missingId;
+      }
+
+      id = R.id.tvAlongRouteLabel;
+      TextView tvAlongRouteLabel = ViewBindings.findChildViewById(rootView, id);
+      if (tvAlongRouteLabel == null) {
+        break missingId;
+      }
+
       id = R.id.tvMaxResultsValue;
       TextView tvMaxResultsValue = ViewBindings.findChildViewById(rootView, id);
       if (tvMaxResultsValue == null) {
+        break missingId;
+      }
+
+      id = R.id.tvRadiusLabel;
+      TextView tvRadiusLabel = ViewBindings.findChildViewById(rootView, id);
+      if (tvRadiusLabel == null) {
         break missingId;
       }
 
@@ -181,9 +276,11 @@ public final class DialogSettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new DialogSettingsBinding((ScrollView) rootView, btnCancel, btnOk, radioFreq1,
-          radioFreq3, radioFreq5, radioGroupFrequency, seekMaxResults, seekRadius, swRealDistance,
-          tvMaxResultsValue, tvRadiusValue, tvRealDistanceInfo);
+      return new DialogSettingsBinding((ScrollView) rootView, btnCancel, btnOk, chipBenzina,
+          chipGasolio, chipGpl, chipGroupFuel, chipMetano, radioFreq1, radioFreq3, radioFreq5,
+          radioGroupFrequency, seekMaxResults, seekRadius, swAlongRoute, swRealDistance,
+          tvAlongRouteInfo, tvAlongRouteLabel, tvMaxResultsValue, tvRadiusLabel, tvRadiusValue,
+          tvRealDistanceInfo);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

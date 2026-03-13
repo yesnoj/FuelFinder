@@ -81,7 +81,8 @@ data class DistributorDto(
     val data: String? = null,
     val distanza: String? = null,
     val latitudine: Double? = null,
-    val longitudine: Double? = null
+    val longitudine: Double? = null,
+    val bandieraId: Int? = null   // ← id logo brand dal MISE (null se l'API non lo restituisce)
 )
 
 interface DirectionsService {
@@ -226,7 +227,9 @@ class RealDistanceCalculator {
             ).execute()
 
             if (response.isSuccessful && response.body()?.rows?.isNotEmpty() == true) {
-                response.body()!!.rows[0].elements.map { element ->
+                val body = response.body()!!
+                android.util.Log.d("FuelFinder", "DistMatrix status: ${body.status}, elements: ${body.rows.getOrNull(0)?.elements?.map { it.status }}")
+                body.rows[0].elements.map { element ->
                     if (element.status == "OK" && element.distance != null && element.duration != null) {
                         RealDistanceResult(
                             distanceKm = element.distance.value / 1000.0,

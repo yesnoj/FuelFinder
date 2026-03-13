@@ -12,6 +12,7 @@
 
     <color name="background">#FAFAFA</color>
     <color name="card_background">#FFFFFF</color>
+    <color name="green_dark">#2E7D32</color>
 
     <!-- Grigio chiaro usato per card distributori + chip + impostazioni -->
     <color name="station_card_background">#EEEEEE</color>

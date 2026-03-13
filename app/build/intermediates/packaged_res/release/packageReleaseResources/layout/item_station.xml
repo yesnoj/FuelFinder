@@ -13,16 +13,27 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
+        <!-- Logo brand: quadrato, a sinistra, allineato in alto con il nome -->
+        <ImageView
+            android:id="@+id/ivBrandLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tvStationName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:text="Station"
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@color/text_primary"
+            app:layout_constraintStart_toEndOf="@id/ivBrandLogo"
             app:layout_constraintEnd_toStartOf="@id/btnNavigate"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -30,11 +41,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
             android:text="Address"
             android:textSize="13sp"
             android:textColor="@color/text_secondary"
+            app:layout_constraintStart_toEndOf="@id/ivBrandLogo"
             app:layout_constraintEnd_toStartOf="@id/btnNavigate"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvStationName" />
 
         <TextView
@@ -80,6 +92,7 @@
             android:textColor="@android:color/white"
             app:backgroundTint="@color/green"
             app:icon="@drawable/ic_navigation"
+            app:iconTint="@android:color/white"
             app:iconGravity="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

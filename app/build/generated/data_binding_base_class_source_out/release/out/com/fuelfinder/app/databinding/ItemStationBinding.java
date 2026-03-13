@@ -4,6 +4,7 @@ package com.fuelfinder.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,9 @@ public final class ItemStationBinding implements ViewBinding {
   public final MaterialButton btnNavigate;
 
   @NonNull
+  public final ImageView ivBrandLogo;
+
+  @NonNull
   public final TextView tvLastUpdate;
 
   @NonNull
@@ -39,11 +43,12 @@ public final class ItemStationBinding implements ViewBinding {
   public final TextView tvStationPrice;
 
   private ItemStationBinding(@NonNull CardView rootView, @NonNull MaterialButton btnNavigate,
-      @NonNull TextView tvLastUpdate, @NonNull TextView tvStationAddress,
-      @NonNull TextView tvStationDistance, @NonNull TextView tvStationName,
-      @NonNull TextView tvStationPrice) {
+      @NonNull ImageView ivBrandLogo, @NonNull TextView tvLastUpdate,
+      @NonNull TextView tvStationAddress, @NonNull TextView tvStationDistance,
+      @NonNull TextView tvStationName, @NonNull TextView tvStationPrice) {
     this.rootView = rootView;
     this.btnNavigate = btnNavigate;
+    this.ivBrandLogo = ivBrandLogo;
     this.tvLastUpdate = tvLastUpdate;
     this.tvStationAddress = tvStationAddress;
     this.tvStationDistance = tvStationDistance;
@@ -84,6 +89,12 @@ public final class ItemStationBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.ivBrandLogo;
+      ImageView ivBrandLogo = ViewBindings.findChildViewById(rootView, id);
+      if (ivBrandLogo == null) {
+        break missingId;
+      }
+
       id = R.id.tvLastUpdate;
       TextView tvLastUpdate = ViewBindings.findChildViewById(rootView, id);
       if (tvLastUpdate == null) {
@@ -114,7 +125,7 @@ public final class ItemStationBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemStationBinding((CardView) rootView, btnNavigate, tvLastUpdate,
+      return new ItemStationBinding((CardView) rootView, btnNavigate, ivBrandLogo, tvLastUpdate,
           tvStationAddress, tvStationDistance, tvStationName, tvStationPrice);
     }
     String missingId = rootView.getResources().getResourceName(id);
