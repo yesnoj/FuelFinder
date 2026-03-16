@@ -107,7 +107,7 @@ class FuelFinderCarScreen(carContext: CarContext) : Screen(carContext) {
         screenManager.push(
             FuelFinderStationListScreen(
                 carContext = carContext,
-                location = location,
+                initialLocation = location,
                 selectedFuelType = selectedFuelType,
                 sortMode = sortMode,
                 lookAheadKm = activeRadius,
@@ -186,7 +186,7 @@ class FuelFinderCarScreen(carContext: CarContext) : Screen(carContext) {
 // ─────────────────────────────────────────────────────────────
 class FuelFinderStationListScreen(
     carContext: CarContext,
-    private val location: Location,
+    initialLocation: Location,
     private val selectedFuelType: FuelType,
     private var sortMode: String,
     private val lookAheadKm: Int,
@@ -195,6 +195,9 @@ class FuelFinderStationListScreen(
     private val updateIntervalMin: Int,
     private val alongRouteMode: Boolean
 ) : Screen(carContext) {
+
+    private var location: Location = initialLocation
+    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(carContext)
 
     private val stations = mutableListOf<FuelStation>()
     private var isLoading = false
@@ -228,7 +231,7 @@ class FuelFinderStationListScreen(
     override fun onGetTemplate(): Template {
         val modeLabel = if (alongRouteMode) "Percorso" else "360°"
         val title = if (sortMode == "DISTANCE") "I più vicini · ${getFuelLabel()} · $modeLabel"
-        else "I più economici · ${getFuelLabel()} · $modeLabel"
+                    else "I più economici · ${getFuelLabel()} · $modeLabel"
 
         if (isLoading) {
             return PlaceListMapTemplate.Builder()
@@ -333,10 +336,26 @@ class FuelFinderStationListScreen(
         refreshJob?.cancel()
         refreshJob = mainScope.launch {
             while (true) {
-                searchStations()
+                refreshLocationAndSearch()
                 delay(updateIntervalMin * 60 * 1000L)
             }
         }
+    }
+
+    private suspend fun refreshLocationAndSearch() {
+        if (ActivityCompat.checkSelfPermission(
+                carContext, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            try {
+                val newLocation = com.google.android.gms.tasks.Tasks.await(
+                    fusedLocationClient.lastLocation,
+                    5, java.util.concurrent.TimeUnit.SECONDS
+                )
+                if (newLocation != null) location = newLocation
+            } catch (e: Exception) { /* usa posizione precedente */ }
+        }
+        searchStations()
     }
 
     private fun searchStations() {
@@ -468,7 +487,7 @@ class FuelFinderStationListScreen(
         val sorted = when (sortMode) {
             "PRICE" -> stations.sortedBy { it.prices.values.firstOrNull() ?: Double.MAX_VALUE }
             else    -> stations.sortedBy { if (useRealDistance) it.routeDistanceKm ?: it.airDistanceKm ?: Double.MAX_VALUE
-            else it.airDistanceKm ?: Double.MAX_VALUE }
+                                           else it.airDistanceKm ?: Double.MAX_VALUE }
         }
         stations.clear()
         stations.addAll(sorted)
