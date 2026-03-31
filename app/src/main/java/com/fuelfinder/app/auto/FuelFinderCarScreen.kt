@@ -100,7 +100,9 @@ class FuelFinderCarScreen(carContext: CarContext) : Screen(carContext) {
 
     private fun openList(sortMode: String) {
         val location = currentLocation ?: return
-        loadSettings()
+        val userFuelType = selectedFuelType   // preserva il carburante scelto dall'utente in Auto
+        loadSettings()                        // ricarica le altre impostazioni dall'app
+        selectedFuelType = userFuelType       // ripristina il carburante scelto in Auto
         val activeRadius = if (alongRouteMode) lookAheadKm else lookAheadKm360
         val activeMax = if (alongRouteMode) maxResults else maxResults360
         val activeRealDistance = useRealDistance && alongRouteMode
