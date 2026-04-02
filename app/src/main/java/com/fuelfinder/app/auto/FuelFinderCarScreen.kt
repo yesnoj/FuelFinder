@@ -299,9 +299,9 @@ class FuelFinderStationListScreen(
                     .addText(line1)       // riga 1: prezzo • data
                     .addText(distSpannable) // riga 2: distanza
                     .setMetadata(Metadata.Builder().setPlace(place).build())
-                    .setOnClickListener(ParkedOnlyOnClickListener.create {
+                    .setOnClickListener {
                         navigateToStation(station)
-                    })
+                    }
 
                 itemListBuilder.addItem(rowBuilder.build())
             }
