@@ -18,7 +18,6 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.fuelfinder.app.R;
 import com.google.android.gms.maps.MapView;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -36,9 +35,6 @@ public final class ActivityMainBinding implements ViewBinding {
 
   @NonNull
   public final FloatingActionButton btnExitCustomMode;
-
-  @NonNull
-  public final MaterialButton btnFindFuel;
 
   @NonNull
   public final FloatingActionButton btnSearchHere;
@@ -96,10 +92,9 @@ public final class ActivityMainBinding implements ViewBinding {
 
   private ActivityMainBinding(@NonNull CoordinatorLayout rootView,
       @NonNull LinearLayout bottomSheet, @NonNull FloatingActionButton btnExitCustomMode,
-      @NonNull MaterialButton btnFindFuel, @NonNull FloatingActionButton btnSearchHere,
-      @NonNull ImageButton btnSettings, @NonNull FloatingActionButton btnToggleList,
-      @NonNull MaterialCardView cardTopInfo, @NonNull ChipGroup chipGroupSort,
-      @NonNull Chip chipSortDistance, @NonNull Chip chipSortPrice,
+      @NonNull FloatingActionButton btnSearchHere, @NonNull ImageButton btnSettings,
+      @NonNull FloatingActionButton btnToggleList, @NonNull MaterialCardView cardTopInfo,
+      @NonNull ChipGroup chipGroupSort, @NonNull Chip chipSortDistance, @NonNull Chip chipSortPrice,
       @NonNull LinearLayout customModeButtons, @NonNull LinearLayout fabColumn,
       @NonNull ImageView ivCustomPin, @NonNull ImageView ivLoc,
       @NonNull LinearLayout ivLocContainer, @NonNull FrameLayout mapContainer,
@@ -109,7 +104,6 @@ public final class ActivityMainBinding implements ViewBinding {
     this.rootView = rootView;
     this.bottomSheet = bottomSheet;
     this.btnExitCustomMode = btnExitCustomMode;
-    this.btnFindFuel = btnFindFuel;
     this.btnSearchHere = btnSearchHere;
     this.btnSettings = btnSettings;
     this.btnToggleList = btnToggleList;
@@ -166,12 +160,6 @@ public final class ActivityMainBinding implements ViewBinding {
       id = R.id.btnExitCustomMode;
       FloatingActionButton btnExitCustomMode = ViewBindings.findChildViewById(rootView, id);
       if (btnExitCustomMode == null) {
-        break missingId;
-      }
-
-      id = R.id.btnFindFuel;
-      MaterialButton btnFindFuel = ViewBindings.findChildViewById(rootView, id);
-      if (btnFindFuel == null) {
         break missingId;
       }
 
@@ -284,10 +272,9 @@ public final class ActivityMainBinding implements ViewBinding {
       }
 
       return new ActivityMainBinding((CoordinatorLayout) rootView, bottomSheet, btnExitCustomMode,
-          btnFindFuel, btnSearchHere, btnSettings, btnToggleList, cardTopInfo, chipGroupSort,
-          chipSortDistance, chipSortPrice, customModeButtons, fabColumn, ivCustomPin, ivLoc,
-          ivLocContainer, mapContainer, mapView, recyclerViewStations, topBar, tvModeLabel,
-          tvUpdateStatus);
+          btnSearchHere, btnSettings, btnToggleList, cardTopInfo, chipGroupSort, chipSortDistance,
+          chipSortPrice, customModeButtons, fabColumn, ivCustomPin, ivLoc, ivLocContainer,
+          mapContainer, mapView, recyclerViewStations, topBar, tvModeLabel, tvUpdateStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -1,4 +1,4 @@
-#Fri Mar 13 17:15:13 CET 2026
+#Mon Mar 16 18:28:32 CET 2026
 base.0=/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
 base.1=/Users/francescoprochilo/AndroidStudioProjects/FuelFinder/app/build/intermediates/dex/release/mergeDexRelease/classes2.dex
 path.0=classes.dex

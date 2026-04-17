@@ -8,6 +8,7 @@ color chip_stroke_selector
 color chip_text_selector
 color divider
 color green
+color green_dark
 color ic_launcher_background
 color primary
 color primary_dark
@@ -47,7 +48,6 @@ id bottomSheet
 id btnCancel
 id btnDialogNavigate
 id btnExitCustomMode
-id btnFindFuel
 id btnNavigate
 id btnOk
 id btnSearchHere

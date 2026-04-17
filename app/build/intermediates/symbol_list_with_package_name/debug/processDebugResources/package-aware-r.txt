@@ -1549,6 +1549,7 @@ color error_color_material_light
 color foreground_material_dark
 color foreground_material_light
 color green
+color green_dark
 color highlighted_text_material_dark
 color highlighted_text_material_light
 color ic_launcher_background
@@ -3385,7 +3386,6 @@ id bounceStart
 id btnCancel
 id btnDialogNavigate
 id btnExitCustomMode
-id btnFindFuel
 id btnNavigate
 id btnOk
 id btnSearchHere

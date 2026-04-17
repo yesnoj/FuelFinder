@@ -7,8 +7,8 @@ public final class BuildConfig {
   public static final boolean DEBUG = Boolean.parseBoolean("true");
   public static final String APPLICATION_ID = "com.francescoprochilo.fuelfinder";
   public static final String BUILD_TYPE = "debug";
-  public static final int VERSION_CODE = 53;
-  public static final String VERSION_NAME = "1.0.53";
+  public static final int VERSION_CODE = 56;
+  public static final String VERSION_NAME = "1.0.56";
   // Field from default config.
   public static final String BASE_URL = "https://prezzi-carburante.onrender.com/";
   // Field from default config.

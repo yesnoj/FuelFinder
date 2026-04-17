@@ -146,6 +146,7 @@
   <androidx.viewpager2/>
   <androidx.wear/>
   <androidx.wear.compose/>
+  <androidx.wear.compose.remote/>
   <androidx.wear.protolayout/>
   <androidx.wear.tiles/>
   <androidx.wear.watchface/>
