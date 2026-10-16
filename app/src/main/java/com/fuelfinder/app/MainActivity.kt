@@ -331,8 +331,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             MarkerOptions()
                 .position(point)
                 .title("Punto di ricerca")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                .icon(customPinDescriptor() ?: BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                .anchor(0.5f, 0.97f)
+                .zIndex(10f)
         )
+        // Il pin di mira è fisso al centro dello schermo: dopo la ricerca la mappa si sposta
+        // per mostrare i risultati, quindi lo nascondo e resta il marker (uguale) sul punto.
+        ivCustomPin.visibility = View.GONE
 
         ApiClient.fuelService.getNearbyStations(
             latitude  = point.latitude,
@@ -433,9 +438,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun goToPlace(place: PlaceDto) {
         val lat = place.lat ?: return
         val lon = place.lon ?: return
+        ivCustomPin.visibility = View.VISIBLE
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lon), 14f))
         showToast("${place.name ?: "Località"}: premi la lente per cercare qui")
+    }
+
+    /** Marker identico al pin di mira (ic_custom_pin), disegnato da vettoriale. */
+    private var customPinIcon: BitmapDescriptor? = null
+    private fun customPinDescriptor(): BitmapDescriptor? {
+        customPinIcon?.let { return it }
+        val d = ContextCompat.getDrawable(this, R.drawable.ic_custom_pin) ?: return null
+        val w = 48.dpToPx(); val h = 64.dpToPx()
+        val bmp = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(bmp)
+        d.setBounds(0, 0, w, h)
+        d.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bmp).also { customPinIcon = it }
     }
 
     private fun hideKeyboard() {
@@ -503,6 +522,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(42.5, 12.5), 6f))
+
+        // Trascinando la mappa in modalità manuale torna il pin di mira
+        googleMap.setOnCameraMoveStartedListener { reason ->
+            if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE && isCustomLocationMode) {
+                ivCustomPin.visibility = View.VISIBLE
+            }
+        }
 
         clusterManager = ClusterManager<FuelStationClusterItem>(this, googleMap).apply {
             renderer = FuelStationClusterRenderer(this@MainActivity, googleMap, this)

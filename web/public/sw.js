@@ -3,7 +3,7 @@
 // - loghi: cache al primo uso
 // - API prezzi e tile della mappa: sempre dalla rete (i prezzi devono essere freschi)
 
-const VERSION = "ff-v3";
+const VERSION = "ff-v4";
 const SHELL = [
   "/",
   "/app.css",

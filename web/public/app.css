@@ -177,7 +177,7 @@ svg { fill: currentColor; }
 .ff-user { width: 20px; height: 20px; border-radius: 50%; background: var(--primary); border: 3px solid #fff;
   box-shadow: 0 0 0 6px rgba(30,136,229,.25), 0 1px 3px rgba(0,0,0,.4); }
 /* Punto di ricerca personalizzato */
-.ff-point { width: 32px; height: 43px; }
+.ff-point { width: 48px; height: 64px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
 
 /* ── Schermi larghi (tablet/computer): card e lista come pannello a sinistra ── */
 @media (min-width: 900px) {

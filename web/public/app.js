@@ -85,8 +85,9 @@
   const userIcon = L.divIcon({ className: "ff-user", iconSize: [20, 20] });
   const pointIcon = L.divIcon({
     className: "",
-    html: `<svg class="ff-point" viewBox="0 0 48 64"><path fill="#FB8C00" stroke="#E65100" stroke-width="2" d="M24,2 C13.5,2 5,10.5 5,21 C5,34 24,62 24,62 C24,62 43,34 43,21 C43,10.5 34.5,2 24,2 Z"/><circle cx="24" cy="22" r="8" fill="#fff"/></svg>`,
-    iconSize: [32, 43], iconAnchor: [16, 43],
+    // Identico al pin fisso di mira, così dopo la ricerca il pin "resta" sul punto cercato
+    html: `<svg class="ff-point" viewBox="0 0 48 64"><path fill="#E65100" stroke="#BF360C" stroke-width="1.5" d="M24,2 C13.5,2 5,10.5 5,21 C5,34 24,62 24,62 C24,62 43,34 43,21 C43,10.5 34.5,2 24,2 Z"/><circle cx="24" cy="22" r="9" fill="#fff"/></svg>`,
+    iconSize: [48, 64], iconAnchor: [24, 63],
   });
 
   // ── Loghi brand (BrandLogoManager) ─────────────────────────────────────────
@@ -358,6 +359,9 @@
     openSheet();
     if (customPointMarker) map.removeLayer(customPointMarker);
     customPointMarker = L.marker([point.lat, point.lon], { icon: pointIcon, title: "Punto di ricerca", zIndexOffset: 900 }).addTo(map);
+    // Il pin di mira è fisso al centro dello schermo: dopo la ricerca la mappa si
+    // sposta per mostrare i risultati, quindi lo nascondo e resta il marker sul punto.
+    el.customPin.classList.add("hidden");
 
     const seq = ++requestSeq;
     const radius = settings.lookAheadKm360;
@@ -729,6 +733,11 @@
     }
   });
 
+  // Trascinando la mappa in modalità manuale torna il pin di mira
+  map.on("dragstart", () => {
+    if (isCustomLocationMode) el.customPin.classList.remove("hidden");
+  });
+
   // ── Ricerca località (Nominatim tramite /api/luoghi) ──────────────────────
   let placeResults = [];
   function hidePlaceResults() {
@@ -742,6 +751,7 @@
   }
   function goToPlace(p) {
     hidePlaceResults();
+    el.customPin.classList.remove("hidden");
     el.placeInput.blur();
     hideSheet();
     map.flyTo([p.lat, p.lon], 14, { duration: 0.8 });
