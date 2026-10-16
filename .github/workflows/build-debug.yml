@@ -3,6 +3,8 @@ name: Build Debug APK
 on:
   push:
     branches: [ main, master ]
+    paths-ignore:
+      - 'web/**'
   workflow_dispatch:
 
 jobs:
@@ -21,6 +23,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # Le cmdline-tools recenti non hanno più il pacchetto 'tools' (default dell'action)
+          packages: 'platform-tools'
 
       - name: Crea local.properties
         run: |
