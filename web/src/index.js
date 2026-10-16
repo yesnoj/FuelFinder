@@ -32,7 +32,11 @@ export default {
     }
 
     if (url.pathname === "/api/health") {
-      return json({ ok: true, time: new Date().toISOString() });
+      return json({
+        ok: true,
+        time: new Date().toISOString(),
+        distanzeStradali: Boolean(env && env.GOOGLE_MAPS_KEY),
+      });
     }
 
     if (url.pathname === "/api/distributori") {
@@ -42,9 +46,123 @@ export default {
       return handleDistributori(url, ctx);
     }
 
+    if (url.pathname === "/api/distanze") {
+      if (request.method !== "GET") {
+        return json({ error: "Metodo non consentito" }, 405);
+      }
+      return handleDistanze(url, request, env, ctx);
+    }
+
     return json({ error: "Not found" }, 404);
   },
 };
+
+// ── Distanze stradali (Google Distance Matrix) ────────────────────────────────
+//
+//   GET /api/distanze?origin=lat,lon&dest=lat,lon|lat,lon|...
+//   → [{ distanceKm, durationMin } | null, ...] nello stesso ordine di dest
+//
+// La chiave Google sta solo nel segreto GOOGLE_MAPS_KEY del Worker (dashboard
+// Cloudflare → fuelfinder → Settings → Variables and secrets), mai nel codice.
+// Ogni chiamata costa crediti Google, quindi:
+//   - solo richieste dal sito FuelFinder (controllo Origin/Referer/Sec-Fetch-Site)
+//   - massimo MAX_DESTINATIONS destinazioni per richiesta (come l'app Android)
+//   - risultati in cache per qualche minuto, per origine arrotondata a ~100 m
+
+const DM_URL = "https://maps.googleapis.com/maps/api/distancematrix/json";
+const MAX_DESTINATIONS = 10;
+const DM_CACHE_TTL_SEC = 300;
+const SITE_ORIGINS = new Set(["https://fuelfinder.frankprochilo.com"]);
+
+function isFromOwnSite(request, url) {
+  const allowed = new Set([...SITE_ORIGINS, url.origin]);
+  const origin = request.headers.get("Origin");
+  if (origin) return allowed.has(origin);
+  const referer = request.headers.get("Referer");
+  if (referer) {
+    try { return allowed.has(new URL(referer).origin); } catch { return false; }
+  }
+  return request.headers.get("Sec-Fetch-Site") === "same-origin";
+}
+
+function parsePoint(s) {
+  const parts = String(s ?? "").split(",");
+  if (parts.length !== 2) return null;
+  const lat = parseFloat(parts[0]), lon = parseFloat(parts[1]);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  if (lat < LAT_MIN || lat > LAT_MAX || lon < LON_MIN || lon > LON_MAX) return null;
+  return { lat, lon };
+}
+
+async function handleDistanze(url, request, env, ctx) {
+  const key = env && env.GOOGLE_MAPS_KEY;
+  if (!key) {
+    return json({ error: "Distanze stradali non configurate", configured: false }, 503);
+  }
+  if (!isFromOwnSite(request, url)) {
+    return json({ error: "Richiesta non consentita" }, 403);
+  }
+
+  const origin = parsePoint(url.searchParams.get("origin"));
+  const dests = (url.searchParams.get("dest") ?? "").split("|").filter(Boolean).map(parsePoint);
+  if (!origin) return json({ error: "origin non valido" }, 400);
+  if (!dests.length || dests.some((d) => !d)) return json({ error: "dest non valido" }, 400);
+  if (dests.length > MAX_DESTINATIONS) {
+    return json({ error: `Massimo ${MAX_DESTINATIONS} destinazioni per richiesta` }, 400);
+  }
+
+  // Origine arrotondata a 3 decimali (~100 m): poco errore, molta più cache condivisa
+  const o = `${origin.lat.toFixed(3)},${origin.lon.toFixed(3)}`;
+  const d = dests.map((p) => `${p.lat.toFixed(5)},${p.lon.toFixed(5)}`).join("|");
+
+  const cacheKey = new Request(
+    `https://fuelfinder.frankprochilo.com/__cache/distanze/${encodeURIComponent(o)}/${encodeURIComponent(d)}`
+  );
+  const cache = caches.default;
+  const cached = await cache.match(cacheKey);
+  if (cached) return withCors(cached, "HIT");
+
+  const dmUrl = new URL(DM_URL);
+  dmUrl.searchParams.set("origins", o);
+  dmUrl.searchParams.set("destinations", d);
+  dmUrl.searchParams.set("mode", "driving");
+  dmUrl.searchParams.set("language", "it");
+  dmUrl.searchParams.set("key", key);
+
+  let data;
+  try {
+    const r = await fetch(dmUrl.toString(), { signal: AbortSignal.timeout(15000) });
+    if (!r.ok) return json({ error: "Errore dal servizio distanze", upstreamStatus: r.status }, 502);
+    data = await r.json();
+  } catch {
+    return json({ error: "Servizio distanze non raggiungibile" }, 502);
+  }
+
+  if (data.status !== "OK") {
+    // Non inoltro error_message: potrebbe contenere dettagli sulla chiave
+    return json({ error: "Distanze non disponibili", googleStatus: data.status }, 502);
+  }
+
+  const elements = (data.rows && data.rows[0] && data.rows[0].elements) || [];
+  const out = dests.map((_, i) => {
+    const e = elements[i];
+    if (!e || e.status !== "OK" || !e.distance || !e.duration) return null;
+    return {
+      distanceKm: Math.round(e.distance.value / 100) / 10,
+      durationMin: Math.round(e.duration.value / 60),
+    };
+  });
+
+  const response = new Response(JSON.stringify(out), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": `public, max-age=${DM_CACHE_TTL_SEC}`,
+    },
+  });
+  ctx.waitUntil(cache.put(cacheKey, response.clone()));
+  return withCors(response, "MISS");
+}
 
 async function handleDistributori(url, ctx) {
   const p = url.searchParams;

@@ -17,6 +17,7 @@
     lookAheadKm: 10, maxResults: 5,          // Percorso
     lookAheadKm360: 5, maxResults360: 20,    // 360°
     updateFrequencyMin: 1,
+    useRealDistance: false,
     alongRouteMode: false,
     fuelType: "gasolio",
   };
@@ -37,6 +38,7 @@
   let firstFix = true;
   let wakeLock = null;
   let requestSeq = 0;
+  let realDistanceAvailable = false;   // il Worker ha la chiave Google?
 
   // ── DOM ────────────────────────────────────────────────────────────────────
   const $ = (id) => document.getElementById(id);
@@ -334,6 +336,8 @@
         address: dto.indirizzo || "Indirizzo non disponibile",
         lat, lon, price,
         airDistanceKm: dist,
+        routeDistanceKm: null,
+        routeDurationMin: null,
         lastUpdate: dto.data || null,
         bandieraId: dto.bandieraId ?? null,
       });
@@ -422,6 +426,7 @@
         : raw.sort((a, b) => a.airDistanceKm - b.airDistanceKm).slice(0, activeMax);
       updateStationDisplay(finalList);
       el.status.textContent = `Trovati: ${finalList.length} (${route ? "Percorso" : "360°"}) • Max: ${activeRadius}km • ${getCurrentTime()}`;
+      if (settings.useRealDistance && route && realDistanceAvailable) updateRealDistances(seq, loc);
     } catch (e) {
       if (seq !== requestSeq) return;
       handleSearchError(e);
@@ -497,7 +502,7 @@
 
   function applySortAndRefresh() {
     const sorted = [...currentStations].sort((a, b) =>
-      sortMode === "price" ? a.price - b.price : a.airDistanceKm - b.airDistanceKm);
+      sortMode === "price" ? a.price - b.price : bestDistance(a) - bestDistance(b));
     if (!sorted.length) { el.list.innerHTML = ""; return; }
     el.list.innerHTML = sorted.map((s, i) => {
       const url = logoUrl(s, false);
@@ -511,7 +516,7 @@
               <div class="st-sub">${esc(s.address)}</div>
             </div>
           </div>
-          <div class="st-sub">📍 ${fmtKm(s.airDistanceKm)}</div>
+          <div class="st-sub">${esc(distanceText(s))}</div>
           <div class="st-small">${esc(listUpdateText(s.lastUpdate))}</div>
           <div class="st-price">${fmtPrice(s.price)}</div>
         </div>
@@ -519,6 +524,47 @@
       </div>`;
     }).join("");
     el.list._sorted = sorted;
+  }
+
+  const bestDistance = (s) => s.routeDistanceKm ?? s.airDistanceKm ?? Number.MAX_VALUE;
+
+  // Come StationAdapter: "🚗 12,3 km • 14 min" se c'è la distanza stradale
+  function distanceText(s) {
+    if (s.routeDistanceKm != null) {
+      return s.routeDurationMin != null
+        ? `🚗 ${fmtKm(s.routeDistanceKm)} • ${s.routeDurationMin} min`
+        : `🚗 ${fmtKm(s.routeDistanceKm)} (strada)`;
+    }
+    return `📍 ${fmtKm(s.airDistanceKm)}`;
+  }
+
+  // Come MainActivity.updateRealDistances: lotti da 10 destinazioni
+  async function updateRealDistances(seq, loc) {
+    const stations = currentStations;
+    if (!stations.length) return;
+    const baseStatus = el.status.textContent;
+    el.status.textContent = `${baseStatus} • Calcolo distanze stradali...`;
+    try {
+      for (let i = 0; i < stations.length; i += 10) {
+        const batch = stations.slice(i, i + 10);
+        const dest = batch.map((s) => `${s.lat.toFixed(5)},${s.lon.toFixed(5)}`).join("|");
+        const r = await fetch(`/api/distanze?origin=${loc.lat.toFixed(5)},${loc.lon.toFixed(5)}&dest=${encodeURIComponent(dest)}`);
+        if (seq !== requestSeq) return;
+        if (!r.ok) throw new Error(String(r.status));
+        const res = await r.json();
+        batch.forEach((s, j) => {
+          const d = res[j];
+          if (d) { s.routeDistanceKm = d.distanceKm; s.routeDurationMin = d.durationMin; }
+        });
+      }
+      if (seq !== requestSeq) return;
+      applySortAndRefresh();
+      el.status.textContent = `Trovati: ${stations.length} (Percorso) • Distanze stradali calcolate`;
+    } catch (_) {
+      if (seq !== requestSeq) return;
+      el.status.textContent = baseStatus;
+      showToast("Errore nel calcolo distanze stradali");
+    }
   }
 
   function showEmpty() {
@@ -564,8 +610,9 @@
     el.dName.textContent = st.name;
     el.dAddress.textContent = st.address;
     el.dAddress.classList.toggle("hidden", !st.address);
-    el.dDistance.textContent = st.airDistanceKm > 0 ? fmtKm(st.airDistanceKm) : "";
-    el.dDistance.classList.toggle("hidden", !(st.airDistanceKm > 0));
+    const dd = bestDistance(st);
+    el.dDistance.textContent = dd > 0 ? fmtKm(dd) + (st.routeDistanceKm != null ? " (strada)" : "") : "";
+    el.dDistance.classList.toggle("hidden", !(dd > 0));
     el.dUpdate.textContent = st.lastUpdate ? formatRelativeUpdate(st.lastUpdate) : "";
     el.dUpdate.classList.toggle("hidden", !st.lastUpdate);
     el.dPrice.textContent = fmtPrice(st.price);
@@ -579,6 +626,7 @@
     title: $("sTitle"), fuelChips: $("fuelChips"), radiusLabel: $("radiusLabel"),
     radius: $("radiusSlider"), radiusValue: $("radiusValue"), max: $("maxSlider"), maxValue: $("maxValue"),
     route: $("swAlongRoute"), routeLabel: $("routeLabel"), routeInfo: $("routeInfo"),
+    real: $("swRealDistance"), realRow: $("swRealDistance").closest(".switch-row"),
     realInfo: $("realDistanceInfo"), cancel: $("sCancel"), ok: $("sOk"),
   };
   let draft = null;
@@ -609,7 +657,12 @@
       setRange(sd.max, 1, 10, 1);
       draft.maxResults = clamp(draft.maxResults, 1, 10);
       sd.max.value = draft.maxResults;
-      sd.realInfo.textContent = "Distanza stradale non disponibile nella versione web: uso la linea d'aria";
+      sd.real.disabled = !realDistanceAvailable;
+      sd.realRow.classList.toggle("disabled", !realDistanceAvailable);
+      sd.real.checked = realDistanceAvailable && draft.useRealDistance;
+      sd.realInfo.textContent = !realDistanceAvailable
+        ? "Distanza stradale non ancora configurata sul server: uso la linea d'aria"
+        : realInfoText(draft.useRealDistance);
     } else {
       setRange(sd.radius, 1, 10, 1);
       draft.lookAheadKm360 = clamp(draft.lookAheadKm360, 1, 10);
@@ -617,12 +670,22 @@
       setRange(sd.max, 5, 200, 5);
       draft.maxResults360 = clamp(Math.round(draft.maxResults360 / 5) * 5, 5, 200);
       sd.max.value = draft.maxResults360;
+      sd.real.disabled = true;
+      sd.real.checked = false;
+      sd.realRow.classList.add("disabled");
       sd.realInfo.textContent = "In modalità 360° è disponibile solo la distanza in linea d'aria";
     }
     sd.radiusValue.textContent = `${sd.radius.value} km`;
     sd.maxValue.textContent = `${sd.max.value}`;
   }
   const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+  const realInfoText = (on) => on
+    ? "Usa Google Maps per distanze stradali reali (consuma crediti API)"
+    : "Usa distanza in linea d'aria (gratuito)";
+  sd.real.addEventListener("change", () => {
+    draft.useRealDistance = sd.real.checked;
+    sd.realInfo.textContent = realInfoText(draft.useRealDistance);
+  });
   function setRange(input, min, max, step) { input.min = min; input.max = max; input.step = step; }
 
   sd.fuelChips.addEventListener("click", (e) => {
@@ -702,6 +765,10 @@
   });
 
   // ── Avvio ──────────────────────────────────────────────────────────────────
+  fetch("/api/health", { cache: "no-store" })
+    .then((r) => r.json())
+    .then((h) => { realDistanceAvailable = Boolean(h.distanzeStradali); })
+    .catch(() => {});
   startLocationUpdates();
 
   if ("serviceWorker" in navigator) {
