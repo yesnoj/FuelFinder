@@ -46,6 +46,13 @@ export default {
       return handleDistributori(url, ctx);
     }
 
+    if (url.pathname === "/api/luoghi") {
+      if (request.method !== "GET") {
+        return json({ error: "Metodo non consentito" }, 405);
+      }
+      return handleLuoghi(url, ctx);
+    }
+
     if (url.pathname === "/api/distanze") {
       if (request.method !== "GET") {
         return json({ error: "Metodo non consentito" }, 405);
@@ -56,6 +63,81 @@ export default {
     return json({ error: "Not found" }, 404);
   },
 };
+
+// ── Ricerca località (Nominatim / OpenStreetMap) ─────────────────────────────
+//
+//   GET /api/luoghi?q=Bologna
+//   → [{ name, detail, lat, lon }, ...] (max 5, solo Italia)
+//
+// Usato sia dalla PWA sia dall'app Android. Regole d'uso di Nominatim:
+// User-Agent che identifica l'app, niente ricerca "mentre scrivi" (si cerca
+// solo all'invio), cache lunga perché i luoghi non cambiano.
+
+const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
+const LUOGHI_CACHE_TTL_SEC = 7 * 24 * 3600;
+
+async function handleLuoghi(url, ctx) {
+  const q = (url.searchParams.get("q") ?? "").trim().replace(/\s+/g, " ");
+  if (q.length < 2 || q.length > 120) {
+    return json({ error: "Scrivi da 2 a 120 caratteri" }, 400);
+  }
+
+  const cacheKey = new Request(
+    `https://fuelfinder.frankprochilo.com/__cache/luoghi/${encodeURIComponent(q.toLowerCase())}`
+  );
+  const cache = caches.default;
+  const cached = await cache.match(cacheKey);
+  if (cached) return withCors(cached, "HIT");
+
+  const nUrl = new URL(NOMINATIM_URL);
+  nUrl.searchParams.set("q", q);
+  nUrl.searchParams.set("format", "jsonv2");
+  nUrl.searchParams.set("countrycodes", "it");
+  nUrl.searchParams.set("limit", "5");
+  nUrl.searchParams.set("accept-language", "it");
+
+  let data;
+  try {
+    const r = await fetch(nUrl.toString(), {
+      headers: {
+        "User-Agent": "FuelFinder/1.0 (+https://fuelfinder.frankprochilo.com)",
+        "Referer": "https://fuelfinder.frankprochilo.com/",
+        "Accept": "application/json",
+      },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!r.ok) return json({ error: "Errore dal servizio località", upstreamStatus: r.status }, 502);
+    data = await r.json();
+  } catch {
+    return json({ error: "Servizio località non raggiungibile" }, 502);
+  }
+  if (!Array.isArray(data)) return json({ error: "Formato inatteso dal servizio località" }, 502);
+
+  const out = data
+    .map((p) => {
+      const lat = parseFloat(p.lat), lon = parseFloat(p.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+      const parts = String(p.display_name ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+      const name = p.name || parts[0] || q;
+      // Dettaglio leggibile: le parti successive al nome, senza "Italia" e CAP
+      const detail = parts
+        .filter((s) => s !== name && s !== "Italia" && !/^\d{5}$/.test(s))
+        .slice(0, 3)
+        .join(", ");
+      return { name, detail, lat, lon };
+    })
+    .filter(Boolean);
+
+  const response = new Response(JSON.stringify(out), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": `public, max-age=${LUOGHI_CACHE_TTL_SEC}`,
+    },
+  });
+  if (out.length) ctx.waitUntil(cache.put(cacheKey, response.clone()));
+  return withCors(response, "MISS");
+}
 
 // ── Distanze stradali (Google Distance Matrix) ────────────────────────────────
 //

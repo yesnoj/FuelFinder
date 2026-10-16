@@ -45,6 +45,7 @@
   const el = {
     topCard: $("topCard"), modeToggle: $("modeToggle"), modeLabel: $("modeLabel"), btnSettings: $("btnSettings"),
     btnSearch: $("btnSearch"), btnExitCustom: $("btnExitCustom"), btnToggleList: $("btnToggleList"),
+    placeForm: $("placeForm"), placeInput: $("placeInput"), placeResults: $("placeResults"),
     customPin: $("customPin"), sheet: $("sheet"), sheetHandle: $("sheetHandle"), status: $("status"),
     list: $("stationList"), toast: $("toast"),
     stationDialog: $("stationDialog"), dLogo: $("dLogo"), dName: $("dName"), dAddress: $("dAddress"),
@@ -280,6 +281,8 @@
     el.modeLabel.textContent = "Posizione manuale";
     el.customPin.classList.remove("hidden");
     el.btnExitCustom.classList.remove("hidden");
+    el.placeForm.classList.remove("hidden");
+    fitSheetHeight();
     if (isLiveSearchActive) stopLiveSearch();
     setSearchFab("manual");
     hideSheet();
@@ -292,6 +295,10 @@
     el.modeLabel.textContent = "GPS";
     el.customPin.classList.add("hidden");
     el.btnExitCustom.classList.add("hidden");
+    el.placeForm.classList.add("hidden");
+    el.placeInput.value = "";
+    hidePlaceResults();
+    fitSheetHeight();
     setSearchFab("idle");
     if (currentLocation) map.flyTo([currentLocation.lat, currentLocation.lon], DEFAULT_ZOOM, { duration: 0.8 });
     clearResults();
@@ -721,6 +728,49 @@
       scheduleUpdates();
     }
   });
+
+  // ── Ricerca località (Nominatim tramite /api/luoghi) ──────────────────────
+  let placeResults = [];
+  function hidePlaceResults() {
+    el.placeResults.innerHTML = "";
+    el.placeResults.classList.add("hidden");
+    placeResults = [];
+  }
+  function showPlaceMessage(msg) {
+    el.placeResults.innerHTML = `<li class="p-msg">${esc(msg)}</li>`;
+    el.placeResults.classList.remove("hidden");
+  }
+  function goToPlace(p) {
+    hidePlaceResults();
+    el.placeInput.blur();
+    hideSheet();
+    map.flyTo([p.lat, p.lon], 14, { duration: 0.8 });
+    showToast(`${p.name}: premi la lente per cercare qui`);
+  }
+  el.placeForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const q = el.placeInput.value.trim();
+    if (q.length < 2) return;
+    showPlaceMessage("Ricerca in corso…");
+    try {
+      const r = await fetch(`/api/luoghi?q=${encodeURIComponent(q)}`);
+      if (!r.ok) throw new Error(String(r.status));
+      placeResults = await r.json();
+      if (!placeResults.length) { showPlaceMessage("Nessuna località trovata"); return; }
+      if (placeResults.length === 1) { goToPlace(placeResults[0]); return; }
+      el.placeResults.innerHTML = placeResults.map((p, i) =>
+        `<li role="option" data-i="${i}"><div class="p-name">${esc(p.name)}</div>${p.detail ? `<div class="p-detail">${esc(p.detail)}</div>` : ""}</li>`
+      ).join("");
+      el.placeResults.classList.remove("hidden");
+    } catch (_) {
+      showPlaceMessage("Ricerca non disponibile, riprova");
+    }
+  });
+  el.placeResults.addEventListener("click", (e) => {
+    const li = e.target.closest("li[data-i]");
+    if (li) goToPlace(placeResults[+li.dataset.i]);
+  });
+  el.placeInput.addEventListener("input", () => { if (!el.placeInput.value) hidePlaceResults(); });
 
   // ── Wake lock: lo schermo resta acceso durante la ricerca live ─────────────
   async function requestWakeLock() {

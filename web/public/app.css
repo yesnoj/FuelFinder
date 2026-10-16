@@ -32,8 +32,24 @@ svg { fill: currentColor; }
 #topCard {
   position: fixed; z-index: 500;
   top: calc(16px + var(--safe-top)); left: calc(16px + var(--safe-left)); right: calc(16px + var(--safe-right));
-  display: flex; align-items: center; justify-content: space-between; padding: 16px;
+  display: flex; flex-direction: column; padding: 16px;
 }
+.top-row { display: flex; align-items: center; justify-content: space-between; }
+
+/* Ricerca località */
+.place-form { display: flex; gap: 8px; margin-top: 12px; }
+.place-form input { flex: 1; min-width: 0; height: 44px; padding: 0 14px; border-radius: 22px;
+  border: 1px solid var(--divider); background: var(--card-grey); font: inherit; font-size: 16px; color: var(--text); outline: none; }
+.place-form input:focus { border-color: var(--primary); background: #fff; }
+.place-go { width: 44px; height: 44px; border-radius: 50%; background: var(--green-dark); color: #fff;
+  display: grid; place-items: center; flex: none; }
+.place-go svg { width: 22px; height: 22px; }
+.place-results { list-style: none; margin: 8px 0 0; padding: 0; max-height: 40vh; overflow-y: auto; }
+.place-results li { padding: 10px 6px; border-top: 1px solid #eee; cursor: pointer; }
+.place-results li:active, .place-results li:hover { background: #f3f3f3; }
+.place-results .p-name { font-weight: 700; font-size: 15px; }
+.place-results .p-detail { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+.place-results .p-msg { color: var(--text-2); font-size: 14px; cursor: default; }
 .mode-toggle { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 700; }
 .loc-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff;
   display: grid; place-items: center; }

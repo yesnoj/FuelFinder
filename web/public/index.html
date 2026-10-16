@@ -40,11 +40,19 @@
 
   <!-- Card superiore -->
   <header id="topCard" class="card">
-    <button id="modeToggle" class="mode-toggle" aria-label="Passa tra GPS e posizione manuale">
-      <span class="loc-circle"><svg><use href="#i-location"/></svg></span>
-      <span id="modeLabel">GPS</span>
-    </button>
-    <button id="btnSettings" class="icon-btn" aria-label="Impostazioni"><svg><use href="#i-settings"/></svg></button>
+    <div class="top-row">
+      <button id="modeToggle" class="mode-toggle" aria-label="Passa tra GPS e posizione manuale">
+        <span class="loc-circle"><svg><use href="#i-location"/></svg></span>
+        <span id="modeLabel">GPS</span>
+      </button>
+      <button id="btnSettings" class="icon-btn" aria-label="Impostazioni"><svg><use href="#i-settings"/></svg></button>
+    </div>
+    <!-- Ricerca località: solo in modalità Posizione manuale -->
+    <form id="placeForm" class="place-form hidden" role="search" autocomplete="off">
+      <input id="placeInput" type="search" enterkeyhint="search" placeholder="Cerca località o indirizzo" aria-label="Cerca località o indirizzo">
+      <button type="submit" class="place-go" aria-label="Cerca località"><svg><use href="#i-search"/></svg></button>
+    </form>
+    <ul id="placeResults" class="place-results hidden" role="listbox"></ul>
   </header>
 
   <!-- Colonna FAB -->
