@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FuelFinder</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+    pre { background: #f3f3f3; padding: 12px; overflow: auto; font-size: 13px; }
+    button { padding: 8px 14px; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <h1>FuelFinder</h1>
+  <p>Pagina di test del proxy. La PWA vera arriverà qui.</p>
+  <button id="t">Prova: gasolio, 10 km attorno a Modena</button>
+  <pre id="out">—</pre>
+  <script>
+    document.getElementById("t").onclick = async () => {
+      const out = document.getElementById("out");
+      out.textContent = "Ricerca in corso… (il primo avvio può richiedere fino a un minuto)";
+      const t0 = performance.now();
+      try {
+        const r = await fetch("/api/distributori?latitude=44.6471&longitude=10.9252&distance=10&fuel=gasolio&results=200");
+        const data = await r.json();
+        const ms = Math.round(performance.now() - t0);
+        const head = `HTTP ${r.status} · cache ${r.headers.get("X-Cache") ?? "-"} · ${ms} ms\n`;
+        if (Array.isArray(data)) {
+          const top = data.filter(d => d.prezzo).sort((a, b) => a.prezzo - b.prezzo).slice(0, 5);
+          out.textContent = head + `${data.length} distributori\n\n` +
+            top.map(d => `${d.prezzo.toFixed(3)} €  ${d.gestore ?? ""} — ${d.indirizzo ?? ""}`).join("\n");
+        } else {
+          out.textContent = head + JSON.stringify(data, null, 2);
+        }
+      } catch (e) {
+        out.textContent = "Errore: " + e;
+      }
+    };
+  </script>
+</body>
+</html>

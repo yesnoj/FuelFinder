@@ -1,0 +1,15 @@
+name = "fuelfinder"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+# Il Worker risponde direttamente su fuelfinder.frankprochilo.com.
+# Cloudflare crea da solo il record DNS al primo deploy
+# (il sottodominio non deve avere già un record esistente).
+routes = [
+  { pattern = "fuelfinder.frankprochilo.com", custom_domain = true }
+]
+
+# La PWA (file statici) vive in ./public e viene servita dallo stesso Worker.
+# Le richieste che non corrispondono a un file statico (es. /api/...) passano al codice in src/index.js.
+[assets]
+directory = "./public"
