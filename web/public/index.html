@@ -2,40 +2,146 @@
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <title>FuelFinder</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
-    pre { background: #f3f3f3; padding: 12px; overflow: auto; font-size: 13px; }
-    button { padding: 8px 14px; font-size: 15px; }
-  </style>
+  <meta name="description" content="Trova i distributori di carburante più convenienti vicino a te, con i prezzi ufficiali del MISE.">
+  <meta name="theme-color" content="#1E88E5">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="FuelFinder">
+  <link rel="stylesheet" href="/vendor/leaflet.css">
+  <link rel="stylesheet" href="/vendor/MarkerCluster.css">
+  <link rel="stylesheet" href="/app.css">
 </head>
 <body>
-  <h1>FuelFinder</h1>
-  <p>Pagina di test del proxy. La PWA vera arriverà qui.</p>
-  <button id="t">Prova: gasolio, 10 km attorno a Modena</button>
-  <pre id="out">—</pre>
-  <script>
-    document.getElementById("t").onclick = async () => {
-      const out = document.getElementById("out");
-      out.textContent = "Ricerca in corso… (il primo avvio può richiedere fino a un minuto)";
-      const t0 = performance.now();
-      try {
-        const r = await fetch("/api/distributori?latitude=44.6471&longitude=10.9252&distance=10&fuel=gasolio&results=200");
-        const data = await r.json();
-        const ms = Math.round(performance.now() - t0);
-        const head = `HTTP ${r.status} · cache ${r.headers.get("X-Cache") ?? "-"} · ${ms} ms\n`;
-        if (Array.isArray(data)) {
-          const top = data.filter(d => d.prezzo).sort((a, b) => a.prezzo - b.prezzo).slice(0, 5);
-          out.textContent = head + `${data.length} distributori\n\n` +
-            top.map(d => `${d.prezzo.toFixed(3)} €  ${d.gestore ?? ""} — ${d.indirizzo ?? ""}`).join("\n");
-        } else {
-          out.textContent = head + JSON.stringify(data, null, 2);
-        }
-      } catch (e) {
-        out.textContent = "Errore: " + e;
-      }
-    };
-  </script>
+
+  <!-- Icone (stesse dell'app Android) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-location" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zm0,9.5c-1.38,0 -2.5,-1.12 -2.5,-2.5S10.62,6.5 12,6.5s2.5,1.12 2.5,2.5S13.38,11.5 12,11.5z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04,-0.3 0.06,-0.61 0.06,-0.94c0,-0.32 -0.02,-0.64 -0.07,-0.94l2.03,-1.58c0.18,-0.14 0.23,-0.41 0.12,-0.61l-1.92,-3.32c-0.12,-0.22 -0.37,-0.29 -0.59,-0.22l-2.39,0.96c-0.5,-0.38 -1.03,-0.7 -1.62,-0.94L14.4,2.81c-0.04,-0.24 -0.24,-0.41 -0.48,-0.41h-3.84c-0.24,0 -0.43,0.17 -0.47,0.41L9.25,5.35C8.66,5.59 8.12,5.92 7.63,6.29L5.24,5.33c-0.22,-0.08 -0.47,0 -0.59,0.22L2.74,8.87C2.62,9.08 2.66,9.34 2.86,9.48l2.03,1.58C4.84,11.36 4.8,11.69 4.8,12s0.02,0.64 0.07,0.94l-2.03,1.58c-0.18,0.14 -0.23,0.41 -0.12,0.61l1.92,3.32c0.12,0.22 0.37,0.29 0.59,0.22l2.39,-0.96c0.5,0.38 1.03,0.7 1.62,0.94l0.36,2.54c0.05,0.24 0.24,0.41 0.48,0.41h3.84c0.24,0 0.44,-0.17 0.47,-0.41l0.36,-2.54c0.59,-0.24 1.13,-0.56 1.62,-0.94l2.39,0.96c0.22,0.08 0.47,0 0.59,-0.22l1.92,-3.32c0.12,-0.22 0.07,-0.47 -0.12,-0.61L19.14,12.94zM12,15.6c-1.98,0 -3.6,-1.62 -3.6,-3.6s1.62,-3.6 3.6,-3.6s3.6,1.62 3.6,3.6S13.98,15.6 12,15.6z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><path d="M15.5,14h-0.79l-0.28,-0.27C15.41,12.59 16,11.11 16,9.5 16,5.91 13.09,3 9.5,3S3,5.91 3,9.5 5.91,16 9.5,16c1.61,0 3.09,-0.59 4.23,-1.57l0.27,0.28v0.79l5,4.99L20.49,19l-4.99,-5zM9.5,14C7.01,14 5,11.99 5,9.5S7.01,5 9.5,5 14,7.01 14,9.5 11.99,14 9.5,14z"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><path d="M6,6h12v12H6z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5 12,10.59 6.41,5 5,6.41 10.59,12 5,17.59 6.41,19 12,13.41 17.59,19 19,17.59 13.41,12z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M3,18h18v-2H3v2zM3,13h18v-2H3v2zM3,6v2h18V6H3z"/></symbol>
+    <symbol id="i-nav" viewBox="0 0 24 24"><path d="M12,2L4.5,20.29l.71.71L12,18l6.79,3 .71-.71z"/></symbol>
+  </svg>
+
+  <div id="map" aria-label="Mappa"></div>
+
+  <!-- Pin fisso al centro: solo in modalità Posizione manuale -->
+  <svg id="customPin" class="hidden" viewBox="0 0 48 64" aria-hidden="true">
+    <path fill="#E65100" stroke="#BF360C" stroke-width="1.5" d="M24,2 C13.5,2 5,10.5 5,21 C5,34 24,62 24,62 C24,62 43,34 43,21 C43,10.5 34.5,2 24,2 Z"/>
+    <circle cx="24" cy="22" r="9" fill="#fff"/>
+  </svg>
+
+  <!-- Card superiore -->
+  <header id="topCard" class="card">
+    <button id="modeToggle" class="mode-toggle" aria-label="Passa tra GPS e posizione manuale">
+      <span class="loc-circle"><svg><use href="#i-location"/></svg></span>
+      <span id="modeLabel">GPS</span>
+    </button>
+    <button id="btnSettings" class="icon-btn" aria-label="Impostazioni"><svg><use href="#i-settings"/></svg></button>
+  </header>
+
+  <!-- Colonna FAB -->
+  <div id="fabColumn">
+    <button id="btnSearch" class="fab" aria-label="Avvia ricerca"><svg><use href="#i-search"/></svg></button>
+    <button id="btnExitCustom" class="fab fab-white hidden" aria-label="Esci dalla posizione manuale"><svg><use href="#i-close"/></svg></button>
+    <button id="btnToggleList" class="fab" aria-label="Mostra o nascondi la lista"><svg><use href="#i-list"/></svg></button>
+  </div>
+
+  <!-- Bottom sheet risultati -->
+  <section id="sheet" class="sheet" aria-label="Risultati">
+    <div class="sheet-handle" id="sheetHandle"></div>
+    <div class="sheet-bar">
+      <div class="chips" role="radiogroup" aria-label="Ordinamento">
+        <button class="chip checked" data-sort="price" role="radio" aria-checked="true">Prezzo</button>
+        <button class="chip" data-sort="distance" role="radio" aria-checked="false">Distanza</button>
+      </div>
+      <div id="status" class="status">In attesa ricerca…</div>
+    </div>
+    <div id="stationList" class="station-list"></div>
+  </section>
+
+  <!-- Dialog dettaglio distributore -->
+  <div id="stationDialog" class="overlay hidden">
+    <div class="dialog" role="dialog" aria-modal="true">
+      <div class="detail-head">
+        <img id="dLogo" class="detail-logo hidden" alt="">
+        <div class="detail-text">
+          <div id="dName" class="st-name"></div>
+          <div id="dAddress" class="st-sub"></div>
+        </div>
+      </div>
+      <div id="dDistance" class="st-sub detail-dist"></div>
+      <div id="dUpdate" class="st-small"></div>
+      <div id="dPrice" class="st-price detail-price"></div>
+      <button id="dNavigate" class="btn-go wide"><svg><use href="#i-nav"/></svg>VAI</button>
+    </div>
+  </div>
+
+  <!-- Dialog impostazioni -->
+  <div id="settingsDialog" class="overlay hidden">
+    <div class="dialog settings" role="dialog" aria-modal="true" aria-labelledby="sTitle">
+      <h2 id="sTitle">Impostazioni</h2>
+
+      <div class="s-label">Tipo carburante</div>
+      <div class="chips" id="fuelChips" role="radiogroup">
+        <button class="chip" data-fuel="gasolio" role="radio">Diesel</button>
+        <button class="chip" data-fuel="benzina" role="radio">Benzina</button>
+        <button class="chip" data-fuel="gpl" role="radio">GPL</button>
+        <button class="chip" data-fuel="metano" role="radio">Metano</button>
+      </div>
+
+      <div class="s-label" id="radiusLabel">Raggio di ricerca</div>
+      <div class="slider-row">
+        <input type="range" id="radiusSlider">
+        <span id="radiusValue" class="s-value"></span>
+      </div>
+
+      <div class="s-label">Numero massimo risultati</div>
+      <div class="slider-row">
+        <input type="range" id="maxSlider">
+        <span id="maxValue" class="s-value"></span>
+      </div>
+
+      <div class="s-label">Frequenza aggiornamento</div>
+      <div class="radio-row" id="freqGroup">
+        <label><input type="radio" name="freq" value="1"> 1</label>
+        <label><input type="radio" name="freq" value="3"> 3</label>
+        <label><input type="radio" name="freq" value="5"> 5</label>
+        <span class="s-unit">min</span>
+      </div>
+
+      <div class="s-label">Calcolo distanze</div>
+      <label class="switch-row disabled">
+        <span>Usa distanza stradale</span>
+        <input type="checkbox" id="swRealDistance" disabled>
+      </label>
+      <div class="s-info" id="realDistanceInfo">Usa distanza in linea d'aria (gratuito)</div>
+
+      <div class="s-label">Modalità di ricerca</div>
+      <label class="switch-row">
+        <span id="routeLabel">Modalità 360°</span>
+        <input type="checkbox" id="swAlongRoute">
+      </label>
+      <div class="s-info" id="routeInfo"></div>
+
+      <div class="dialog-actions">
+        <button id="sCancel" class="btn-text">ANNULLA</button>
+        <button id="sOk" class="btn-text primary">SALVA</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/vendor/leaflet.js"></script>
+  <script src="/vendor/leaflet.markercluster.js"></script>
+  <script src="/app.js"></script>
 </body>
 </html>

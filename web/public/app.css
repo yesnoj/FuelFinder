@@ -1,0 +1,176 @@
+/* FuelFinder web — stessi colori dell'app Android (res/values/colors.xml) */
+:root {
+  --primary: #1E88E5;
+  --primary-dark: #1565C0;
+  --green: #4CAF50;
+  --green-dark: #2E7D32;
+  --red: #F44336;
+  --teal: #00897B;
+  --text: #212121;
+  --text-2: #757575;
+  --divider: #BDBDBD;
+  --bg: #FAFAFA;
+  --card: #FFFFFF;
+  --card-grey: #EEEEEE;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--text);
+  font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+.hidden { display: none !important; }
+svg { fill: currentColor; }
+
+#map { position: fixed; inset: 0; z-index: 0; }
+
+/* ── Card superiore ─────────────────────────────────────────── */
+.card { background: var(--card); border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+#topCard {
+  position: fixed; z-index: 500;
+  top: calc(16px + var(--safe-top)); left: calc(16px + var(--safe-left)); right: calc(16px + var(--safe-right));
+  display: flex; align-items: center; justify-content: space-between; padding: 16px;
+}
+.mode-toggle { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 700; }
+.loc-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff;
+  display: grid; place-items: center; }
+.loc-circle svg { width: 24px; height: 24px; }
+.icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; color: var(--text); }
+.icon-btn svg { width: 28px; height: 28px; }
+.icon-btn:active, .mode-toggle:active { opacity: .6; }
+
+/* ── FAB ────────────────────────────────────────────────────── */
+#fabColumn { position: fixed; z-index: 500; right: calc(16px + var(--safe-right)); top: 50%;
+  transform: translateY(-50%); display: flex; flex-direction: column; gap: 16px; }
+.fab { width: 56px; height: 56px; border-radius: 16px; background: var(--primary); color: #fff;
+  display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,.28); transition: background-color .15s; }
+.fab svg { width: 24px; height: 24px; }
+.fab:active { filter: brightness(.9); }
+.fab.live { background: var(--red); }
+.fab.manual { background: var(--green-dark); }
+.fab-white { background: #fff; color: #333; }
+
+/* Pin centrale modalità manuale (stesso disegno di ic_custom_pin) */
+#customPin { position: fixed; z-index: 450; left: 50%; top: 50%; width: 48px; height: 64px;
+  transform: translate(-50%, -100%); pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+
+/* ── Bottom sheet ───────────────────────────────────────────── */
+.sheet {
+  position: fixed; z-index: 600; left: calc(12px + var(--safe-left)); right: calc(12px + var(--safe-right)); bottom: 0;
+  background: var(--card); border-radius: 20px 20px 0 0; box-shadow: 0 -4px 16px rgba(0,0,0,.2);
+  display: flex; flex-direction: column;
+  transform: translateY(105%); transition: transform .25s ease;
+  /* altezza calcolata in JS per non coprire la card superiore */
+  height: 60vh;
+}
+.sheet.open { transform: translateY(0); }
+.sheet-handle { width: 40px; height: 4px; background: var(--divider); border-radius: 2px; margin: 12px auto 8px; flex: none; }
+.sheet-bar { display: flex; align-items: center; gap: 8px; padding: 0 16px 8px; flex: none; }
+.status { flex: 1; text-align: right; font-size: 11px; color: var(--text-2); }
+.station-list { overflow-y: auto; padding: 0 16px calc(32px + var(--safe-bottom)); flex: 1; -webkit-overflow-scrolling: touch; }
+
+/* Chip: grigi, verdi quando selezionati (chip_*_selector.xml) */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { height: 32px; padding: 0 12px; border-radius: 16px; font-size: 14px;
+  background: var(--card-grey); border: 1px solid var(--divider); color: var(--text); }
+.chip.checked { background: var(--green); border-color: transparent; color: #fff; }
+
+/* Card distributore (item_station.xml) */
+.station { background: var(--card-grey); border-radius: 10px; margin: 8px 0; padding: 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,.14); cursor: pointer; }
+.st-main { min-width: 0; }
+.st-head { display: flex; gap: 8px; align-items: flex-start; }
+.st-logo { width: 40px; height: 40px; object-fit: contain; flex: none; }
+.st-name { font-weight: 700; font-size: 16px; }
+.st-sub { font-size: 13px; color: var(--text-2); margin-top: 4px; }
+.st-small { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+.st-price { color: var(--primary); font-weight: 700; font-size: 18px; margin-top: 6px; }
+.btn-go { background: var(--green); color: #fff; border-radius: 4px; padding: 0 16px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  font-weight: 500; letter-spacing: .05em; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+.btn-go svg { width: 18px; height: 18px; }
+.btn-go.wide { width: 100%; margin-top: 16px; height: 44px; }
+.empty { text-align: center; color: var(--text-2); font-size: 14px; padding: 24px 8px; }
+
+/* ── Dialog ─────────────────────────────────────────────────── */
+.overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center; padding: 16px; }
+.dialog { background: var(--card); border-radius: 16px; padding: 16px; width: 92%; max-width: 440px;
+  max-height: calc(100% - 32px); overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.detail-head { display: flex; gap: 8px; align-items: flex-start; }
+.detail-logo { width: 48px; height: 48px; object-fit: contain; flex: none; }
+.detail-text { min-width: 0; }
+.detail-dist { margin-top: 8px; }
+.detail-dist::before { content: "📍 "; }
+.detail-price { font-size: 20px; margin-top: 8px; }
+
+.settings h2 { font-size: 20px; margin: 4px 0 8px; }
+.s-label { font-size: 14px; font-weight: 700; margin: 18px 0 8px; }
+.slider-row { display: flex; align-items: center; gap: 12px; }
+.slider-row input { flex: 1; accent-color: var(--green); }
+.s-value { min-width: 52px; text-align: right; font-weight: 700; color: var(--primary); }
+.radio-row { display: flex; align-items: center; gap: 18px; }
+.radio-row input { accent-color: var(--green); width: 18px; height: 18px; vertical-align: -3px; }
+.s-unit { color: var(--text-2); }
+.switch-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; }
+.switch-row.disabled { opacity: .4; }
+.switch-row input { appearance: none; -webkit-appearance: none; width: 40px; height: 22px; border-radius: 11px;
+  background: var(--divider); position: relative; transition: background .15s; flex: none; margin: 0; }
+.switch-row input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+  border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: left .15s; }
+.switch-row input:checked { background: var(--green); }
+.switch-row input:checked::after { left: 20px; }
+.s-info { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+.btn-text { padding: 10px 14px; font-weight: 500; letter-spacing: .05em; color: var(--text-2); border-radius: 4px; }
+.btn-text.primary { color: var(--primary); }
+.btn-text:active { background: rgba(0,0,0,.06); }
+
+/* ── Toast ──────────────────────────────────────────────────── */
+.toast { position: fixed; z-index: 1100; left: 50%; bottom: calc(32px + var(--safe-bottom));
+  transform: translate(-50%, 20px); background: #323232; color: #fff; padding: 10px 16px; border-radius: 20px;
+  font-size: 14px; max-width: calc(100% - 48px); text-align: center; opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── Marker sulla mappa ─────────────────────────────────────── */
+/* Pin con logo e striscia prezzo (BrandLogoManager.buildPin) */
+.ff-pin { width: 56px; height: 70px; position: relative; filter: drop-shadow(0 2px 3px rgba(0,0,0,.25)); }
+.ff-pin .box { position: absolute; left: 0; top: 0; width: 56px; height: 56px; background: #fff;
+  border: 2px solid rgba(60,60,60,.7); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+.ff-pin .price { background: var(--green-dark); color: #fff; font-size: 9.5px; font-weight: 700; text-align: center;
+  height: 15px; line-height: 15px; flex: none; white-space: nowrap; }
+.ff-pin .logo { flex: 1; display: grid; place-items: center; }
+.ff-pin .logo img { width: 30px; height: 30px; object-fit: contain; }
+.ff-pin .logo .fallback { font-size: 20px; }
+.ff-pin .tip { position: absolute; left: 50%; top: 52px; width: 0; height: 0; transform: translateX(-50%);
+  border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 16px solid rgba(60,60,60,.7); }
+.ff-pin .tip::after { content: ""; position: absolute; left: -8px; top: -17px;
+  border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 13px solid #fff; }
+
+/* Cluster (cerchio teal con numero) */
+.ff-cluster { border-radius: 50%; background: rgba(0,0,0,.24); display: grid; place-items: center; }
+.ff-cluster span { width: calc(100% - 4px); height: calc(100% - 4px); border-radius: 50%; background: var(--teal);
+  color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+
+/* Posizione utente */
+.ff-user { width: 20px; height: 20px; border-radius: 50%; background: var(--primary); border: 3px solid #fff;
+  box-shadow: 0 0 0 6px rgba(30,136,229,.25), 0 1px 3px rgba(0,0,0,.4); }
+/* Punto di ricerca personalizzato */
+.ff-point { width: 32px; height: 43px; }
+
+/* ── Schermi larghi (tablet/computer): card e lista come pannello a sinistra ── */
+@media (min-width: 900px) {
+  #topCard { right: auto; width: 420px; }
+  .sheet { right: auto; width: 420px; left: calc(16px + var(--safe-left));
+    border-radius: 20px; bottom: 16px; transform: translateX(-120%); }
+  .sheet.open { transform: translateX(0); }
+  .leaflet-bottom.leaflet-left { left: 456px; }
+}
+
+.leaflet-control-attribution { font-size: 10px; }
+.leaflet-bottom.leaflet-right { margin-bottom: var(--safe-bottom); }
