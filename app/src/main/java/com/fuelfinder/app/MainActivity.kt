@@ -11,6 +11,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -125,6 +128,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var customModeButtons: View
     private lateinit var cardTopInfo: com.google.android.material.card.MaterialCardView
 
+    // Ricerca località (solo modalità Posizione manuale)
+    private lateinit var placeSearchRow: View
+    private lateinit var etPlaceSearch: EditText
+    private lateinit var btnPlaceSearch: ImageButton
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST = 1001
         private const val DEFAULT_ZOOM = 13f
@@ -186,6 +194,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         btnExitCustomMode = findViewById(R.id.btnExitCustomMode)
         btnToggleList     = findViewById(R.id.btnToggleList)
         customModeButtons = findViewById(R.id.customModeButtons)
+
+        placeSearchRow    = findViewById(R.id.placeSearchRow)
+        etPlaceSearch     = findViewById(R.id.etPlaceSearch)
+        btnPlaceSearch    = findViewById(R.id.btnPlaceSearch)
+        btnPlaceSearch.setOnClickListener { searchPlace() }
+        etPlaceSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) { searchPlace(); true } else false
+        }
 
         stationAdapter = StationAdapter(
             onNavigate = { station -> navigateToStation(station) },
@@ -251,9 +267,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         cardTopInfo.setCardBackgroundColor(COLOR_CARD_CUSTOM)
         tvModeLabel.text = "Posizione manuale"
 
-        // Mostra pin centrale e pulsanti overlay
+        // Mostra pin centrale, pulsanti overlay e campo di ricerca località
         ivCustomPin.visibility = View.VISIBLE
         customModeButtons.visibility = View.VISIBLE
+        placeSearchRow.visibility = View.VISIBLE
 
         // In modalità manuale il FAB diventa "cerca qui" (verde, lente)
         btnSearchHere.backgroundTintList = ContextCompat.getColorStateList(this, R.color.green_dark)
@@ -277,9 +294,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         cardTopInfo.setCardBackgroundColor(COLOR_CARD_NORMAL)
         tvModeLabel.text = "GPS"
 
-        // Nascondi overlay
+        // Nascondi overlay e ricerca località
         ivCustomPin.visibility = View.GONE
         customModeButtons.visibility = View.GONE
+        placeSearchRow.visibility = View.GONE
+        etPlaceSearch.text.clear()
+        hideKeyboard()
 
         // Ripristina FAB allo stato GPS (primario, lente)
         btnSearchHere.backgroundTintList = ContextCompat.getColorStateList(this, R.color.primary)
@@ -366,6 +386,62 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 showToast("Errore di connessione: ${t.message}")
             }
         })
+    }
+
+    // ── Ricerca località (Nominatim tramite il Worker di FuelFinder) ─────────
+
+    private fun searchPlace() {
+        val query = etPlaceSearch.text.toString().trim()
+        if (query.length < 2) {
+            showToast("Scrivi almeno 2 caratteri")
+            return
+        }
+        hideKeyboard()
+        btnPlaceSearch.isEnabled = false
+
+        ApiClient.placeService.searchPlaces(query).enqueue(object : Callback<List<PlaceDto>> {
+            override fun onResponse(call: Call<List<PlaceDto>>, response: Response<List<PlaceDto>>) {
+                btnPlaceSearch.isEnabled = true
+                if (!response.isSuccessful) {
+                    showToast("Ricerca località non disponibile (${response.code()})")
+                    return
+                }
+                val places = response.body().orEmpty().filter { it.lat != null && it.lon != null }
+                when {
+                    places.isEmpty() -> showToast("Nessuna località trovata")
+                    places.size == 1 -> goToPlace(places[0])
+                    else -> {
+                        val labels = places.map { p ->
+                            if (p.detail.isNullOrBlank()) p.name ?: "" else "${p.name}\n${p.detail}"
+                        }.toTypedArray()
+                        AlertDialog.Builder(this@MainActivity)
+                            .setTitle("Scegli la località")
+                            .setItems(labels) { d, which -> d.dismiss(); goToPlace(places[which]) }
+                            .setNegativeButton("Annulla", null)
+                            .show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<PlaceDto>>, t: Throwable) {
+                btnPlaceSearch.isEnabled = true
+                showToast("Errore di connessione")
+            }
+        })
+    }
+
+    private fun goToPlace(place: PlaceDto) {
+        val lat = place.lat ?: return
+        val lon = place.lon ?: return
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lon), 14f))
+        showToast("${place.name ?: "Località"}: premi la lente per cercare qui")
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.hideSoftInputFromWindow(etPlaceSearch.windowToken, 0)
+        etPlaceSearch.clearFocus()
     }
 
     // ── Map ready ─────────────────────────────────────────────────────────────

@@ -49,7 +49,31 @@ object ApiClient {
 
     val fuelService: FuelService = retrofit.create(FuelService::class.java)
     val directionsService: DirectionsService = retrofit.create(DirectionsService::class.java)
+
+    // Ricerca località: Worker Cloudflare di FuelFinder → Nominatim (OpenStreetMap)
+    private const val WEB_BASE_URL = "https://fuelfinder.frankprochilo.com/"
+
+    private val webRetrofit = Retrofit.Builder()
+        .baseUrl(WEB_BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+        .build()
+
+    val placeService: PlaceService = webRetrofit.create(PlaceService::class.java)
 }
+
+interface PlaceService {
+    /** Massimo 5 località in Italia; si chiama solo all'invio, non mentre si scrive. */
+    @GET("api/luoghi")
+    fun searchPlaces(@Query("q") query: String): Call<List<PlaceDto>>
+}
+
+data class PlaceDto(
+    val name: String? = null,
+    val detail: String? = null,
+    val lat: Double? = null,
+    val lon: Double? = null
+)
 
 interface FuelService {
 
