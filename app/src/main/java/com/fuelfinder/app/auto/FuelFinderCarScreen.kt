@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.content.Intent
+import android.os.Looper
 import android.text.SpannableString
 import android.text.Spannable
 import androidx.car.app.CarContext
@@ -13,9 +14,14 @@ import androidx.car.app.constraints.ConstraintManager
 import androidx.car.app.model.*
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.fuelfinder.app.*
 import com.fuelfinder.app.widget.WidgetPreferencesHelper
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
 import retrofit2.Call
@@ -44,11 +50,41 @@ class FuelFinderCarScreen(carContext: CarContext) : Screen(carContext) {
 
     private val mainScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var locationUpdatesStarted = false
+
+    private val locationRequest: LocationRequest = LocationRequest.create().apply {
+        interval = 5000
+        fastestInterval = 2000
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(result: LocationResult) {
+            val loc = result.lastLocation ?: return
+            currentLocation = loc
+            // Invalida UNA SOLA VOLTA per nascondere "Ricerca posizione GPS...".
+            // Gli aggiornamenti successivi sono silenziosi: il menu principale
+            // non mostra la posizione, quindi non c'è motivo di ridisegnare.
+            if (!locationReady) {
+                locationReady = true
+                invalidate()
+            }
+        }
+    }
 
     init {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(carContext)
         loadSettings()
-        updateLocation()
+        primeLastLocation()        // posizione immediata dalla cache, se disponibile
+        startLocationUpdates()     // flusso GPS live continuo
+
+        // Rilascio pulito quando lo Screen viene distrutto da Android Auto
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                stopLocationUpdates()
+                mainScope.cancel()
+            }
+        })
     }
 
     override fun onGetTemplate(): Template {
@@ -133,29 +169,45 @@ class FuelFinderCarScreen(carContext: CarContext) : Screen(carContext) {
         selectedFuelType = FuelType.values().find { it.value == settings.fuelType } ?: FuelType.GASOLIO
     }
 
-    private fun updateLocation() {
+    /** Prova a valorizzare la posizione dall'ultima cache del fused provider, senza attendere il primo fix live. */
+    private fun primeLastLocation() {
         if (ActivityCompat.checkSelfPermission(
                 carContext, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) return
-
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                currentLocation = location
-                locationReady = true
-                invalidate()
-            } else {
-                mainScope.launch {
-                    delay(2000)
-                    updateLocation()
+        try {
+            fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
+                if (loc != null && currentLocation == null) {
+                    currentLocation = loc
+                    if (!locationReady) {
+                        locationReady = true
+                        invalidate()
+                    }
                 }
             }
-        }.addOnFailureListener {
-            mainScope.launch {
-                delay(2000)
-                updateLocation()
-            }
-        }
+        } catch (_: SecurityException) { /* ignora */ }
+    }
+
+    private fun startLocationUpdates() {
+        if (locationUpdatesStarted) return
+        if (ActivityCompat.checkSelfPermission(
+                carContext, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
+        try {
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+            locationUpdatesStarted = true
+        } catch (_: SecurityException) { /* ignora */ }
+    }
+
+    private fun stopLocationUpdates() {
+        if (!locationUpdatesStarted) return
+        try { fusedLocationClient.removeLocationUpdates(locationCallback) } catch (_: Exception) { /* ignora */ }
+        locationUpdatesStarted = false
     }
 
     private fun buildSettingsSummary(): String {
@@ -202,8 +254,11 @@ class FuelFinderStationListScreen(
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(carContext)
 
     private val stations = mutableListOf<FuelStation>()
-    private var isLoading = false
+    private var isLoading = true               // solo per il PRIMO caricamento
+    private var isFirstLoadDone = false        // una volta true, non mostriamo più lo spinner
     private var lastGoodBearingDeg: Double? = null
+    private var locationUpdatesStarted = false
+    private var lastRenderedLocation: Location? = null
 
     private val mainScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var refreshJob: Job? = null
@@ -220,6 +275,36 @@ class FuelFinderStationListScreen(
         private const val CORRIDOR_KM = 3.0
         private const val AHEAD_MAX_ANGLE_DEG = 70.0
         private const val BEARING_ACC_MAX_DEG = 45f
+        // Soglia minima di spostamento prima di ridisegnare la UI.
+        // Evita invalidate() ad ogni singolo fix GPS (che causerebbe flicker).
+        private const val ANCHOR_MIN_DELTA_METERS = 20f
+    }
+
+    private val locationRequest: LocationRequest = LocationRequest.create().apply {
+        interval = 5000
+        fastestInterval = 2000
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(result: LocationResult) {
+            val loc = result.lastLocation ?: return
+            location = loc
+            if (loc.hasBearing() && loc.bearingAccuracyDegrees <= BEARING_ACC_MAX_DEG) {
+                lastGoodBearingDeg = loc.bearing.toDouble()
+            }
+            // Ricalcolo locale delle distanze: NESSUNA chiamata di rete.
+            recomputeAirDistances()
+
+            // Ridisegna solo se l'auto si è spostata abbastanza:
+            // evita invalidate continui (flicker) ma mantiene le distanze vive.
+            val prev = lastRenderedLocation
+            val moved = prev == null || prev.distanceTo(loc) >= ANCHOR_MIN_DELTA_METERS
+            if (moved && isFirstLoadDone) {
+                lastRenderedLocation = loc
+                invalidate()
+            }
+        }
     }
 
     init {
@@ -227,7 +312,16 @@ class FuelFinderStationListScreen(
             lastGoodBearingDeg = location.bearing.toDouble()
         }
         mainScope.launch { BrandLogoManager.init(carContext) }
+        startLocationUpdates()
         startPeriodicRefresh()
+
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                stopLocationUpdates()
+                refreshJob?.cancel()
+                mainScope.cancel()
+            }
+        })
     }
 
     override fun onGetTemplate(): Template {
@@ -334,35 +428,47 @@ class FuelFinderStationListScreen(
             .build()
     }
 
+    private fun startLocationUpdates() {
+        if (locationUpdatesStarted) return
+        if (ActivityCompat.checkSelfPermission(
+                carContext, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
+        try {
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+            locationUpdatesStarted = true
+        } catch (_: SecurityException) { /* ignora */ }
+    }
+
+    private fun stopLocationUpdates() {
+        if (!locationUpdatesStarted) return
+        try { fusedLocationClient.removeLocationUpdates(locationCallback) } catch (_: Exception) { /* ignora */ }
+        locationUpdatesStarted = false
+    }
+
     private fun startPeriodicRefresh() {
         refreshJob?.cancel()
         refreshJob = mainScope.launch {
+            // Primo caricamento: mostra lo spinner UNA sola volta
+            searchStations(showLoading = true)
             while (true) {
-                refreshLocationAndSearch()
                 delay(updateIntervalMin * 60 * 1000L)
+                // Refresh silenzioso: nessuno spinner, nessun flash di UI.
+                // La lista attuale resta visibile finché non arrivano i nuovi dati.
+                searchStations(showLoading = false)
             }
         }
     }
 
-    private suspend fun refreshLocationAndSearch() {
-        if (ActivityCompat.checkSelfPermission(
-                carContext, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            try {
-                val newLocation = com.google.android.gms.tasks.Tasks.await(
-                    fusedLocationClient.lastLocation,
-                    5, java.util.concurrent.TimeUnit.SECONDS
-                )
-                if (newLocation != null) location = newLocation
-            } catch (e: Exception) { /* usa posizione precedente */ }
+    private fun searchStations(showLoading: Boolean) {
+        if (showLoading && !isFirstLoadDone) {
+            isLoading = true
+            invalidate()
         }
-        searchStations()
-    }
-
-    private fun searchStations() {
-        isLoading = true
-        invalidate()
 
         ApiClient.fuelService.getNearbyStations(
             latitude = location.latitude,
@@ -377,25 +483,51 @@ class FuelFinderStationListScreen(
                     if (useRealDistance) {
                         mainScope.launch {
                             processStationsWithRealDistance(dtos)
-                            isLoading = false
-                            invalidate()
+                            finishLoad()
                         }
                     } else {
                         processStations(dtos)
-                        isLoading = false
-                        invalidate()
+                        finishLoad()
                     }
                 } else {
-                    isLoading = false
-                    invalidate()
+                    finishLoad()
                 }
             }
 
             override fun onFailure(call: Call<List<DistributorDto>>, t: Throwable) {
-                isLoading = false
-                invalidate()
+                finishLoad()
             }
         })
+    }
+
+    private fun finishLoad() {
+        isLoading = false
+        isFirstLoadDone = true
+        lastRenderedLocation = location
+        invalidate()
+    }
+
+    /**
+     * Ricalcola localmente (senza rete) le distanze in linea d'aria delle
+     * stazioni già caricate rispetto alla posizione corrente e riordina la lista
+     * in base al sortMode attivo. Viene chiamato ad ogni nuovo fix GPS, ma
+     * l'invalidate avviene solo se l'auto si è mossa oltre la soglia.
+     */
+    private fun recomputeAirDistances() {
+        if (stations.isEmpty()) return
+        val updated = stations.map { st ->
+            val d = haversineKm(location.latitude, location.longitude, st.latitude, st.longitude)
+            st.copy(airDistanceKm = d)
+        }
+        val sorted = when (sortMode) {
+            "PRICE" -> updated.sortedBy { it.prices.values.firstOrNull() ?: Double.MAX_VALUE }
+            else    -> updated.sortedBy {
+                if (useRealDistance) it.routeDistanceKm ?: it.airDistanceKm ?: Double.MAX_VALUE
+                else it.airDistanceKm ?: Double.MAX_VALUE
+            }
+        }
+        stations.clear()
+        stations.addAll(sorted)
     }
 
     private fun processStations(dtos: List<DistributorDto>) {

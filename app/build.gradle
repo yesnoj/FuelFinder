@@ -22,8 +22,8 @@ android {
         applicationId "com.francescoprochilo.fuelfinder"
         minSdk 24
         targetSdk 35
-        versionCode 58
-        versionName "1.0.58"
+        versionCode 59
+        versionName "1.0.59"
         manifestPlaceholders = [ MAPS_API_KEY: MAPS_KEY ]
         buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${MAPS_KEY}\""
         buildConfigField "String", "BASE_URL", "\"${BASE_URL_VAL}\""
