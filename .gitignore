@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# File generati dalla compilazione: non vanno nel repository
+build/
+app/build/
+**/.DS_Store
