@@ -46,6 +46,10 @@ export default {
       return handleDistributori(url, ctx);
     }
 
+    if (url.pathname === "/api/test-mimit") {
+      return handleTestMimit();
+    }
+
     if (url.pathname === "/api/luoghi") {
       if (request.method !== "GET") {
         return json({ error: "Metodo non consentito" }, 405);
@@ -371,4 +375,37 @@ function json(obj, status = 200) {
       ...corsHeaders(),
     },
   });
+}
+
+// ── Test temporaneo: Cloudflare riesce a scaricare i CSV del MIMIT? ───────────
+// Scarica solo i primi ~2 KB di ciascun file (Range) e riporta esito e prime righe.
+const MIMIT_FILES = {
+  anagrafica: "https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv",
+  prezzi: "https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv",
+};
+const MIMIT_UA = "FuelFinder/1.0 (+https://fuelfinder.frankprochilo.com)";
+
+async function handleTestMimit() {
+  const out = {};
+  for (const [name, fileUrl] of Object.entries(MIMIT_FILES)) {
+    const t0 = Date.now();
+    try {
+      const r = await fetch(fileUrl, {
+        headers: { "User-Agent": MIMIT_UA, "Range": "bytes=0-2047" },
+        signal: AbortSignal.timeout(30000),
+      });
+      const text = await r.text();
+      out[name] = {
+        status: r.status,
+        ms: Date.now() - t0,
+        contentType: r.headers.get("content-type"),
+        lastModified: r.headers.get("last-modified"),
+        contentRange: r.headers.get("content-range"),
+        firstLines: text.split(/\r?\n/).slice(0, 4),
+      };
+    } catch (e) {
+      out[name] = { error: String(e && e.name || e), ms: Date.now() - t0 };
+    }
+  }
+  return json(out);
 }
