@@ -379,6 +379,7 @@ function json(obj, status = 200) {
 
 // ── Test temporaneo: Cloudflare riesce a scaricare i CSV del MIMIT? ───────────
 // Scarica solo i primi ~2 KB di ciascun file (Range) e riporta esito e prime righe.
+// Da togliere quando il Worker leggerà i dati direttamente dal MIMIT.
 const MIMIT_FILES = {
   anagrafica: "https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv",
   prezzi: "https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv",
