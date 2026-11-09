@@ -13,6 +13,11 @@ on:
     - cron: "20 8 * * *"    # 9:20 / 10:20 ora italiana
     - cron: "20 11 * * *"   # secondo giro, nel caso il primo fallisca o i file arrivino tardi
   workflow_dispatch:
+  push:                     # e subito quando cambia lo script o questo workflow
+    branches: [main]
+    paths:
+      - scripts/build_price_tiles.py
+      - .github/workflows/dati-prezzi.yml
 
 permissions:
   contents: write
