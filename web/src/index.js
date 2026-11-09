@@ -1,24 +1,24 @@
-// FuelFinder — Worker proxy per fuelfinder.frankprochilo.com
+// FuelFinder — Worker di fuelfinder.frankprochilo.com
 //
-// Espone la stessa API che usa l'app Android:
 //   GET /api/distributori?latitude=..&longitude=..&distance=..&fuel=..&results=..
-// e la inoltra al wrapper prezzi-carburante (dati MISE), aggiungendo:
-//   - CORS, così la PWA può chiamarla dal browser
-//   - cache di qualche minuto per zona, che assorbe anche il "cold start" di Render
-//   - validazione dei parametri
-//
-// Endpoint di servizio:
-//   GET /api/health
+//       Distributori vicini con il prezzo del carburante scelto, stessa risposta
+//       del vecchio wrapper prezzi-carburante (usata da sito e app Android).
+//       I dati vengono dai CSV ufficiali del MIMIT: il workflow GitHub
+//       "Dati prezzi MIMIT" li prepara ogni giorno in tile da 0,5° nel branch
+//       dati-prezzi del repository, e qui si leggono solo i tile vicini.
+//   GET /api/luoghi?q=...        ricerca località (Nominatim)
+//   GET /api/distanze?...        distanze stradali (Google Distance Matrix)
+//   GET /api/health              stato del servizio e data dei dati
 
-const UPSTREAM = "https://prezzi-carburante.onrender.com/api/distributori";
+const DATA_BASE = "https://raw.githubusercontent.com/yesnoj/FuelFinder/dati-prezzi";
+const TILE_DEG = 0.5;
+const TILE_CACHE_SEC = 3600;       // i dati cambiano una volta al giorno
+const RESPONSE_CACHE_SEC = 300;
+const MAX_PRICE_AGE_DAYS = 15;     // come il wrapper: prezzi più vecchi non sono affidabili
 
 const FUELS = new Set(["gasolio", "benzina", "gpl", "metano"]);
-
-const CACHE_TTL_SEC = 600;         // 10 minuti: i prezzi MISE non cambiano più spesso di così
-const GRID = 100;                  // arrotonda le coordinate a 0.01° (~1 km) per condividere la cache
-const GRID_MARGIN_KM = 1;          // compensa lo spostamento del centro dovuto all'arrotondamento
 const MAX_DISTANCE_KM = 50;        // stesso limite dell'app Android
-const UPSTREAM_TIMEOUT_MS = 60000; // Render free può impiegare decine di secondi a svegliarsi
+const MAX_RESULTS = 200;
 
 // Riquadro largo attorno all'Italia: scarta coordinate chiaramente sbagliate
 const LAT_MIN = 35, LAT_MAX = 48, LON_MIN = 6, LON_MAX = 19;
@@ -32,10 +32,16 @@ export default {
     }
 
     if (url.pathname === "/api/health") {
+      const meta = await fetchData("meta.json");
       return json({
         ok: true,
         time: new Date().toISOString(),
         distanzeStradali: Boolean(env && env.GOOGLE_MAPS_KEY),
+        datiPrezzi: meta ? {
+          estrazione: meta.estrazionePrezzi,
+          generato: meta.generato,
+          impianti: meta.impiantiConPrezzi,
+        } : null,
       });
     }
 
@@ -44,10 +50,6 @@ export default {
         return json({ error: "Metodo non consentito" }, 405);
       }
       return handleDistributori(url, ctx);
-    }
-
-    if (url.pathname === "/api/test-mimit") {
-      return handleTestMimit();
     }
 
     if (url.pathname === "/api/luoghi") {
@@ -255,9 +257,9 @@ async function handleDistributori(url, ctx) {
 
   const lat = parseFloat(p.get("latitude"));
   const lon = parseFloat(p.get("longitude"));
-  const distance = parseInt(p.get("distance") ?? "10", 10);
+  const distance = parseFloat(p.get("distance") ?? "10");
   const fuel = (p.get("fuel") ?? "").toLowerCase();
-  const results = Math.min(parseInt(p.get("results") ?? "200", 10) || 200, 200);
+  const limit = Math.min(Math.max(parseInt(p.get("results") ?? "", 10) || MAX_RESULTS, 1), MAX_RESULTS);
 
   // --- Validazione ---
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
@@ -266,86 +268,91 @@ async function handleDistributori(url, ctx) {
   if (lat < LAT_MIN || lat > LAT_MAX || lon < LON_MIN || lon > LON_MAX) {
     return json({ error: "Coordinate fuori dall'Italia" }, 400);
   }
-  if (!Number.isFinite(distance) || distance < 1 || distance > MAX_DISTANCE_KM) {
+  if (!Number.isFinite(distance) || distance <= 0 || distance > MAX_DISTANCE_KM) {
     return json({ error: `distance deve essere tra 1 e ${MAX_DISTANCE_KM} km` }, 400);
   }
   if (!FUELS.has(fuel)) {
-    // Promemoria: il MISE vuole "gasolio", non "diesel"
+    // Promemoria: il MIMIT usa "gasolio", non "diesel"
     return json({ error: `fuel deve essere uno tra: ${[...FUELS].join(", ")}` }, 400);
   }
 
-  // --- Chiave di cache per zona ---
-  // Il centro viene arrotondato, quindi il raggio viene allargato di un margine:
-  // il client filtra comunque per distanza reale dal suo punto esatto (come fa già l'app).
-  const snapLat = Math.round(lat * GRID) / GRID;
-  const snapLon = Math.round(lon * GRID) / GRID;
-  const upstreamDistance = distance + GRID_MARGIN_KM;
-
-  const cacheKey = new Request(
-    `https://fuelfinder.frankprochilo.com/__cache/distributori/${fuel}/${snapLat}/${snapLon}/${upstreamDistance}/${results}`
-  );
-  const cache = caches.default;
-
-  const cached = await cache.match(cacheKey);
-  if (cached) {
-    return withCors(cached, "HIT");
+  // --- Tile che coprono il cerchio di ricerca ---
+  const dLat = distance / 111.2;
+  const dLon = distance / (111.2 * Math.cos((lat * Math.PI) / 180));
+  const keys = [];
+  for (let i = Math.floor((lat - dLat) / TILE_DEG); i <= Math.floor((lat + dLat) / TILE_DEG); i++) {
+    for (let j = Math.floor((lon - dLon) / TILE_DEG); j <= Math.floor((lon + dLon) / TILE_DEG); j++) {
+      keys.push(`${i}_${j}`);
+    }
   }
 
-  // --- Chiamata al wrapper ---
-  const upstreamUrl = new URL(UPSTREAM);
-  upstreamUrl.searchParams.set("latitude", String(snapLat));
-  upstreamUrl.searchParams.set("longitude", String(snapLon));
-  upstreamUrl.searchParams.set("distance", String(upstreamDistance));
-  upstreamUrl.searchParams.set("fuel", fuel);
-  upstreamUrl.searchParams.set("results", String(results));
-
-  let upstreamResp;
-  try {
-    upstreamResp = await fetch(upstreamUrl.toString(), {
-      headers: {
-        "Accept": "application/json",
-        "User-Agent": "FuelFinder-Web/1.0 (+https://fuelfinder.frankprochilo.com)",
-      },
-      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
-    });
-  } catch (e) {
-    const isTimeout = e && (e.name === "TimeoutError" || e.name === "AbortError");
-    return json(
-      { error: isTimeout ? "Il servizio prezzi non ha risposto in tempo" : "Servizio prezzi non raggiungibile" },
-      isTimeout ? 504 : 502
-    );
+  const tiles = await Promise.all(keys.map((k) => fetchData(`tiles/${k}.json`, true)));
+  if (tiles.every((t) => t === null)) {
+    return json({ error: "Dati prezzi non disponibili, riprova tra poco" }, 503);
   }
 
-  if (!upstreamResp.ok) {
-    return json({ error: "Errore dal servizio prezzi", upstreamStatus: upstreamResp.status }, 502);
+  // --- Filtro: carburante, età del prezzo, distanza ---
+  const notBefore = Date.now() / 1000 - MAX_PRICE_AGE_DAYS * 86400;
+  const matches = [];
+  for (const tile of tiles) {
+    if (!tile || !Array.isArray(tile.s)) continue;
+    for (const [id, gestore, nome, indirizzo, sLat, sLon, prezzi] of tile.s) {
+      const pr = prezzi[fuel];
+      if (!pr || pr[3] < notBefore) continue;
+      const d = haversineKm(lat, lon, sLat, sLon);
+      if (d > distance) continue;
+      matches.push({ id, gestore, nome, indirizzo, sLat, sLon, pr, d });
+    }
   }
 
-  let data;
-  try {
-    data = await upstreamResp.json();
-  } catch {
-    return json({ error: "Risposta non valida dal servizio prezzi" }, 502);
-  }
-  if (!Array.isArray(data)) {
-    return json({ error: "Formato inatteso dal servizio prezzi" }, 502);
-  }
+  // Prezzo più basso prima, a parità di prezzo il più vicino (come il wrapper)
+  matches.sort((a, b) => a.pr[0] - b.pr[0] || a.d - b.d);
+  const out = matches.slice(0, limit).map((m, i) => ({
+    ranking: i + 1,
+    gestore: m.gestore,
+    indirizzo: m.indirizzo,
+    prezzo: m.pr[0],
+    self: m.pr[1] === 1,
+    data: m.pr[2],
+    distanza: m.d.toFixed(2),
+    latitudine: m.sLat,
+    longitudine: m.sLon,
+    id: m.id,
+    nome: m.nome,
+  }));
 
-  const response = new Response(JSON.stringify(data), {
+  return new Response(JSON.stringify(out), {
     status: 200,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": `public, max-age=${CACHE_TTL_SEC}`,
+      "Cache-Control": `public, max-age=${RESPONSE_CACHE_SEC}`,
+      ...corsHeaders(),
     },
   });
+}
 
-  // Salva in cache senza far aspettare il client.
-  // Nota: la Cache API funziona sul dominio personalizzato, non su *.workers.dev.
-  // Le liste vuote non vengono messe in cache: potrebbero essere un errore temporaneo a monte.
-  if (data.length > 0) {
-    ctx.waitUntil(cache.put(cacheKey, response.clone()));
+// Legge un file dei dati prezzi (branch dati-prezzi), con cache sul bordo di Cloudflare.
+// Restituisce l'oggetto JSON, {s: []} per un tile che non esiste (mare, estero) o null se
+// il file non è raggiungibile.
+async function fetchData(path, isTile = false) {
+  try {
+    const r = await fetch(`${DATA_BASE}/${path}`, {
+      cf: { cacheTtl: TILE_CACHE_SEC, cacheEverything: true },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (r.status === 404 && isTile) return { s: [] };
+    if (!r.ok) return null;
+    return await r.json();
+  } catch {
+    return null;
   }
+}
 
-  return withCors(response, "MISS");
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const toRad = (x) => (x * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 // --- Helper ---
@@ -377,36 +384,3 @@ function json(obj, status = 200) {
   });
 }
 
-// ── Test temporaneo: Cloudflare riesce a scaricare i CSV del MIMIT? ───────────
-// Scarica solo i primi ~2 KB di ciascun file (Range) e riporta esito e prime righe.
-// Da togliere quando il Worker leggerà i dati direttamente dal MIMIT.
-const MIMIT_FILES = {
-  anagrafica: "https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv",
-  prezzi: "https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv",
-};
-const MIMIT_UA = "FuelFinder/1.0 (+https://fuelfinder.frankprochilo.com)";
-
-async function handleTestMimit() {
-  const out = {};
-  for (const [name, fileUrl] of Object.entries(MIMIT_FILES)) {
-    const t0 = Date.now();
-    try {
-      const r = await fetch(fileUrl, {
-        headers: { "User-Agent": MIMIT_UA, "Range": "bytes=0-2047" },
-        signal: AbortSignal.timeout(30000),
-      });
-      const text = await r.text();
-      out[name] = {
-        status: r.status,
-        ms: Date.now() - t0,
-        contentType: r.headers.get("content-type"),
-        lastModified: r.headers.get("last-modified"),
-        contentRange: r.headers.get("content-range"),
-        firstLines: text.split(/\r?\n/).slice(0, 4),
-      };
-    } catch (e) {
-      out[name] = { error: String(e && e.name || e), ms: Date.now() - t0 };
-    }
-  }
-  return json(out);
-}
