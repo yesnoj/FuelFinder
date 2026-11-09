@@ -5,6 +5,8 @@ on:
     branches: [ main, master ]
     paths-ignore:
       - 'web/**'
+      - 'scripts/**'
+      - '.github/workflows/dati-prezzi.yml'
   workflow_dispatch:
 
 jobs:

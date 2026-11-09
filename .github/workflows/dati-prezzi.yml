@@ -1,0 +1,48 @@
+# Aggiorna i dati prezzi di FuelFinder dai CSV ufficiali del MIMIT.
+#
+# Il MIMIT pubblica i file una volta al giorno (circa alle 8:45 ora italiana).
+# Lo script li unisce e li divide in tile per zona; il risultato viene salvato
+# nel branch "dati-prezzi" (un solo commit, sovrascritto ogni volta, così il
+# repository non cresce). Il Worker di fuelfinder.frankprochilo.com legge i tile
+# da lì: sito e app Android non dipendono più da servizi esterni.
+
+name: Dati prezzi MIMIT
+
+on:
+  schedule:
+    - cron: "20 8 * * *"    # 9:20 / 10:20 ora italiana
+    - cron: "20 11 * * *"   # secondo giro, nel caso il primo fallisca o i file arrivino tardi
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dati-prezzi
+  cancel-in-progress: false
+
+jobs:
+  aggiorna:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Scarica i CSV del MIMIT e prepara i tile
+        run: python3 scripts/build_price_tiles.py "$RUNNER_TEMP/dati"
+
+      - name: Pubblica nel branch dati-prezzi
+        run: |
+          cd "$RUNNER_TEMP/dati"
+          git init -q -b dati-prezzi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Dati prezzi MIMIT $(python3 -c 'import json;m=json.load(open("meta.json"));print(m["estrazionePrezzi"], "-", m["impiantiConPrezzi"], "impianti")')"
+          git push -q --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" dati-prezzi
