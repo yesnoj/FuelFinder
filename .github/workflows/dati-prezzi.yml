@@ -9,9 +9,12 @@
 name: Dati prezzi MIMIT
 
 on:
-  schedule:
-    - cron: "20 8 * * *"    # 9:20 / 10:20 ora italiana
-    - cron: "20 11 * * *"   # secondo giro, nel caso il primo fallisca o i file arrivino tardi
+  # Esecuzione giornaliera sospesa: dai server di GitHub il sito del MIMIT non risponde
+  # (timeout). Da riattivare quando la preparazione dei dati gira da un punto che il
+  # MIMIT accetta.
+  # schedule:
+  #   - cron: "20 8 * * *"
+  #   - cron: "20 11 * * *"
   workflow_dispatch:
   push:                     # e subito quando cambia lo script o questo workflow
     branches: [main]
